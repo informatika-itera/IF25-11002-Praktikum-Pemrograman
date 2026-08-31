@@ -1,4 +1,4 @@
-# Praktikum Pemrograman (IF25-11002)
+# IF25-11002-Praktikum-Pemrograman
 
 Mata kuliah Praktikum Pemrograman mengimplementasikan konsep algoritma dan logika pemrograman mahasiswa Teknik Informatika ke dalam bahasa C++ secara *hands-on*, sebagai pasangan sinergi dari mata kuliah [**Algoritma Pemrograman (IF25-11001)**](https://github.com/informatika-itera/IF25-11001-Algoritma-Pemrograman) yang membangun fondasi *computational thinking*, pseudocode, dan flowchart-nya.
 
