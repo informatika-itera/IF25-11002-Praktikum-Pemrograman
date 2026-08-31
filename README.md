@@ -45,8 +45,8 @@ Penilaian mengacu pada dua CPMK yang dinilai paralel pada **setiap instrumen** �
 | Komponen | Bobot | CPMK0607 | CPMK0608 |
 |---|---|---|---|
 | Exit Ticket (P1–P7, P9–P15) | 25% | 12,5 | 12,5 |
-| Tugas Mingguan (P1–P7, P9–P15) | 25% | 10 | 10 |
-| UTS (P8) | 25% | 10 | 10 |
+| Tugas Mingguan (P1–P7, P9–P15) | 25% | 12,5 | 12,5 |
+| UTS (P8) | 25% | 12,5 | 12,5 |
 | UAS (P16) | 25% | 12,5 | 12,5 |
 | **TOTAL** | **100%** | **50** | **50** |
 
