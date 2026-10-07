@@ -1,0 +1,328 @@
+{
+  "version": 1,
+  "jobId": "6a7cb436-6be2-43a9-95eb-20e0310a0f2d",
+  "sessionId": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+  "scopeKey": "33ef21b4a28004266f7f24fc91d5536867c9e83c29dbfdc1c8b856fbd8d4525d",
+  "revision": 44,
+  "createdAt": "2026-10-07T04:24:54.807Z",
+  "updatedAt": "2026-10-07T04:24:55.981Z",
+  "producerGraceExpiresAt": "2026-10-07T04:25:24.807Z",
+  "bestEffortDeadlineAt": "2026-10-07T04:26:15.807Z",
+  "producers": {
+    "core": {
+      "state": "sealed",
+      "intentKey": "14705ade09d842cd948cbfb2d1aa411d6b01b7cf4173e547c4c091f635b3017b",
+      "payloadDigest": "14705ade09d842cd948cbfb2d1aa411d6b01b7cf4173e547c4c091f635b3017b",
+      "sealedAt": "2026-10-07T04:24:54.939Z",
+      "sealedBy": "foreground"
+    },
+    "wiki": {
+      "state": "no-op",
+      "sealedAt": "2026-10-07T04:24:54.807Z",
+      "sealedBy": "wiki-producer"
+    }
+  },
+  "actions": {
+    "foreground-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 0,
+      "idempotencyKey": "febf6dba2f2536433960a07f7cedce72e946b43ced0896570df80f017b8914d2",
+      "payload": {
+        "transcriptPath": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+        "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+        "reason": "logout",
+        "input": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "transcript_path": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+          "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+          "prompt_id": "f55b4a7f-848b-4bb7-97d7-04cb3e5b0e55",
+          "hook_event_name": "SessionEnd",
+          "reason": "logout"
+        },
+        "metrics": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "ended_at": "2026-10-07T04:24:54.806Z",
+          "reason": "logout",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {},
+        "foregroundResult": {
+          "removedTransientFiles": 1,
+          "completedAt": "2026-10-07T04:24:54.938Z"
+        }
+      },
+      "budgetMs": 9000,
+      "completedAt": "2026-10-07T04:24:54.939Z",
+      "lastOutcomeCode": "completed"
+    },
+    "wiki-capture": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 0,
+      "idempotencyKey": "1719cd1ef5b51e0269b78c4cb8c9308c9c1f7b82fd1c067fc034c060f23863f5",
+      "payload": {},
+      "budgetMs": 9000,
+      "completedAt": "2026-10-07T04:24:54.807Z"
+    },
+    "team-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "cee6ac31df545408e1e822247ac249b3f8182a98a5fe8e448ae3b251e55bdee1",
+      "payload": {
+        "transcriptPath": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+        "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+        "reason": "logout",
+        "input": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "transcript_path": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+          "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+          "prompt_id": "f55b4a7f-848b-4bb7-97d7-04cb3e5b0e55",
+          "hook_event_name": "SessionEnd",
+          "reason": "logout"
+        },
+        "metrics": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "ended_at": "2026-10-07T04:24:54.806Z",
+          "reason": "logout",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 9000,
+      "claimedAt": "2026-10-07T04:24:55.018Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "9158b2ae-8239-4ea9-ac3d-dab2dd3a4063",
+        "phase": "terminal",
+        "deadlineAt": "2026-10-07T04:25:04.979Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-10-07T04:24:55.153Z"
+    },
+    "python-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "1f1370c4ac056606059d517e2f106b602d8cbcb04587b3fcc5f3b9f89e649cd0",
+      "payload": {
+        "transcriptPath": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+        "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+        "reason": "logout",
+        "input": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "transcript_path": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+          "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+          "prompt_id": "f55b4a7f-848b-4bb7-97d7-04cb3e5b0e55",
+          "hook_event_name": "SessionEnd",
+          "reason": "logout"
+        },
+        "metrics": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "ended_at": "2026-10-07T04:24:54.806Z",
+          "reason": "logout",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 9000,
+      "claimedAt": "2026-10-07T04:24:55.175Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "e85feeed-00d7-45c3-ba22-7bc160791c88",
+        "phase": "terminal",
+        "deadlineAt": "2026-10-07T04:25:04.979Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-10-07T04:24:55.324Z"
+    },
+    "reply-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "0b3a8b47c28b26d56aca004d4f572b96c118f16819c0d35162418816f9a5420a",
+      "payload": {
+        "transcriptPath": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+        "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+        "reason": "logout",
+        "input": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "transcript_path": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+          "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+          "prompt_id": "f55b4a7f-848b-4bb7-97d7-04cb3e5b0e55",
+          "hook_event_name": "SessionEnd",
+          "reason": "logout"
+        },
+        "metrics": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "ended_at": "2026-10-07T04:24:54.806Z",
+          "reason": "logout",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 9000,
+      "claimedAt": "2026-10-07T04:24:55.345Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "b1b4f808-e624-47ef-9871-b4a2437ea2cb",
+        "phase": "terminal",
+        "deadlineAt": "2026-10-07T04:25:04.979Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-10-07T04:24:55.483Z"
+    },
+    "callback": {
+      "class": "best-effort",
+      "phase": "deferred-best-effort",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "d068ede2655bf89e0c0950e087d0603d7dcf45538e94f20a654d08c6f4841895",
+      "payload": {
+        "transcriptPath": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+        "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+        "reason": "logout",
+        "input": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "transcript_path": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+          "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+          "prompt_id": "f55b4a7f-848b-4bb7-97d7-04cb3e5b0e55",
+          "hook_event_name": "SessionEnd",
+          "reason": "logout"
+        },
+        "metrics": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "ended_at": "2026-10-07T04:24:54.806Z",
+          "reason": "logout",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 2000,
+      "claimedAt": "2026-10-07T04:24:55.503Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "fd325d2a-8db3-40d9-b645-b3df0f819136",
+        "phase": "terminal",
+        "deadlineAt": "2026-10-07T04:25:04.979Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-10-07T04:24:55.638Z"
+    },
+    "notification": {
+      "class": "best-effort",
+      "phase": "deferred-best-effort",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "89c0438ff63097ce04beb60efb87292ff68a7af350a0ee331f3de9dbf42d62fc",
+      "payload": {
+        "transcriptPath": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+        "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+        "reason": "logout",
+        "input": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "transcript_path": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+          "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+          "prompt_id": "f55b4a7f-848b-4bb7-97d7-04cb3e5b0e55",
+          "hook_event_name": "SessionEnd",
+          "reason": "logout"
+        },
+        "metrics": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "ended_at": "2026-10-07T04:24:54.806Z",
+          "reason": "logout",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 2000,
+      "claimedAt": "2026-10-07T04:24:55.659Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "d1e9ddb2-aea1-4e6d-999c-bd6387a5511d",
+        "phase": "terminal",
+        "deadlineAt": "2026-10-07T04:25:04.979Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-10-07T04:24:55.790Z"
+    },
+    "openclaw": {
+      "class": "best-effort",
+      "phase": "deferred-best-effort",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "31fe8f6e1cf204e27006de511df257326fdd98655122ca437013e8779ffc735b",
+      "payload": {
+        "transcriptPath": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+        "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+        "reason": "logout",
+        "input": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "transcript_path": "/Users/habib/.claude/projects/-Users-habib-Kuliah-IF25-11002-Praktikum-Pemrograman/d695ba17-99e9-4ce7-bfb6-89107b9ac813.jsonl",
+          "cwd": "/Users/habib/Kuliah/IF25-11002-Praktikum-Pemrograman",
+          "prompt_id": "f55b4a7f-848b-4bb7-97d7-04cb3e5b0e55",
+          "hook_event_name": "SessionEnd",
+          "reason": "logout"
+        },
+        "metrics": {
+          "session_id": "d695ba17-99e9-4ce7-bfb6-89107b9ac813",
+          "ended_at": "2026-10-07T04:24:54.806Z",
+          "reason": "logout",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 2000,
+      "claimedAt": "2026-10-07T04:24:55.809Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "ab92e56b-9094-4105-8c44-7184c9afbfa3",
+        "phase": "terminal",
+        "deadlineAt": "2026-10-07T04:25:04.979Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-10-07T04:24:55.941Z"
+    }
+  },
+  "owner": null,
+  "phase": "complete",
+  "completion": {
+    "completedAt": "2026-10-07T04:24:55.961Z",
+    "terminalDigest": "a60c7bc3a8896b0714d5b1262abdbfa49bed82182a6979ab679b9f8b0beade68",
+    "terminalRevision": 43
+  }
+}

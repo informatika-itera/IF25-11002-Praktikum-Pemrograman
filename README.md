@@ -16,8 +16,20 @@ Setiap pertemuan punya tiga bahan yang saling melengkapi: slide di `01 Slide/` u
 | Mata kuliah pasangan | IF25-11001 Algoritma Pemrograman |
 | Program Studi | S1 Teknik Informatika, Institut Teknologi Sumatera |
 | Bahasa dan alat | C++17; GDB Online di kelas, g++ di komputer sendiri (pilihan) |
-| Tim pengajar | Tim Pengajar Praktikum Pemrograman, Program Studi Teknik Informatika ITERA |
+| Tim pengajar | Lihat [Tim Pengajar](#tim-pengajar) |
 | Tahun | 2026 |
+
+## Tim Pengajar
+
+| No | Nama | Gelar |
+|---|---|---|
+| 1 | I Wayan Wiprayoga Wisesa | S.Kom., M.Kom. |
+| 2 | Eko Dwi Nugroho | S.Kom., M.Cs. |
+| 3 | Arkham Zahri Rakhman | S.Kom., M.Eng. |
+| 4 | Leslie Anggraini | S.Kom., M.Cs. |
+| 5 | Muhammad Habib Algifari | S.Kom., M.T.I. |
+
+Dosen Program Studi Teknik Informatika, Institut Teknologi Sumatera ([daftar staf](https://if.itera.ac.id/staff/)).
 
 ## Capaian Pembelajaran
 
@@ -53,7 +65,7 @@ Peta ini disamakan dengan Algoritma Pemrograman agar pasangan topik jatuh di min
 | P5 | Perulangan Bagian 1 | Perulangan Bagian 1 | Tugas 5: Program Statistik Nilai |
 | P6 | Perulangan Bagian 2 dan Pola | Perulangan Bagian 2 dan Pattern | Tugas 6: Pattern Generator |
 | P7 | Review dan Simulasi UTS | Review dan Simulasi UTS | tanpa tugas (simulasi ujian) |
-| P8 | **Ujian Tengah Semester** | UTS | contoh soal, kisi-kisi, kunci di-gitignore |
+| P8 | **Ujian Tengah Semester** | UTS | contoh soal dan kisi-kisi |
 | P9 | Array Satu Dimensi | Array 1D | Tugas 9: Sistem Nilai Mahasiswa |
 | P10 | Array Dua Dimensi dan String | Array 2D dan String | Tugas 10: Sistem Nilai Kelas |
 | P11 | Searching | Searching | Tugas 11: Direktori Kontak |
@@ -61,7 +73,7 @@ Peta ini disamakan dengan Algoritma Pemrograman agar pasangan topik jatuh di min
 | P13 | Fungsi dan Modularitas | Fungsi dan Modularitas | Tugas 13: Library Matematika |
 | P14 | Rekursi dan Struct | Rekursi dan Struct | Tugas 14: Perpustakaan Mini dengan Struct dan Rekursi |
 | P15 | Review dan Simulasi UAS | Review dan Simulasi UAS | tanpa tugas (simulasi ujian) |
-| P16 | **Ujian Akhir Semester** | UAS | contoh soal, kisi-kisi, kunci di-gitignore |
+| P16 | **Ujian Akhir Semester** | UAS | contoh soal dan kisi-kisi |
 
 ## Penilaian
 
@@ -100,7 +112,7 @@ Karena setiap komponen selalu memberi setengah poinnya ke tiap CPMK, kontribusi 
 | P15 | `01 Slide/P15 Review dan Simulasi UAS.pdf` | `02 Hands-on/P15 - Review UAS - Hands-on/` | `03 Modul/Modul 15 - Review dan Simulasi UAS.pdf` |
 | P16 | `01 Slide/P16 Ujian Akhir Semester.pdf` | `02 Hands-on/P16 - UAS - Contoh Soal - Hands-on/` | `03 Modul/Modul 16 - Ujian Akhir Semester.pdf` |
 
-Setiap slide punya pasangan `... - Catatan Pembicara.pdf` untuk tim pengajar.
+Catatan pembicara untuk tim pengajar tersimpan sebagai `\note{}` di sumber Beamer `01 Slide/src/PNN.tex`.
 
 ## Struktur Repo
 
@@ -109,30 +121,29 @@ Setiap slide punya pasangan `... - Catatan Pembicara.pdf` untuk tim pengajar.
 ├── README.md
 ├── Rencana Pembelajaran Semester.pdf
 ├── Kontrak Kuliah.pdf
-├── 01 Slide/          # slide PDF dan catatan pembicara; sumber Beamer di src/
-├── 02 Hands-on/       # satu folder per pertemuan: latihan/, expected/, input/, cek.sh, README
-├── 03 Modul/          # modul belajar mandiri PDF; sumber LaTeX di src/
-└── tools/             # generator: data per pertemuan, build.py, dokumen.py, pptx_render.js
+├── 01 Slide/          # 16 slide PDF
+│   └── src/           # sumber Beamer P01–P16.tex, tema ITERA, logo, keluaran/ (hasil run program per pertemuan)
+├── 02 Hands-on/       # satu folder per pertemuan: latihan/, expected/, input/, solusi/, cek.sh, README.md
+└── 03 Modul/          # 16 modul belajar mandiri PDF dan README.md
+    └── src/           # sumber LaTeX Modul01–16.tex, RPS.tex, Kontrak.tex, modulITERA.sty, logo
 ```
 
-Folder `solusi/` di setiap hands-on dan berkas `tools/konten/**/*.solusi.cpp` berisi kunci dan tercantum di `.gitignore`, sehingga tidak ikut ter-commit.
+Folder `solusi/` di setiap hands-on berisi kunci jawaban latihan.
 
 ## Cara Kerja Hands-on
 
-Setiap folder hands-on berisi `latihan/` (file dengan bagian `TODO`), `expected/` (keluaran yang benar), `input/` (masukan uji bila program membaca `cin`), dan `cek.sh`. Jalankan `bash cek.sh` untuk mengompilasi setiap latihan dengan `-std=c++17 -Wall -Werror`, memberi masukan dari `input/`, dan mencocokkan keluarannya dengan `expected/`. Di GDB Online, bandingkan keluaran secara manual.
+Setiap folder hands-on berisi `latihan/` (file dengan bagian `TODO`), `expected/` (keluaran yang benar), `input/` (masukan uji bila program membaca `cin`; P1 tidak punya karena belum ada input), `solusi/`, dan `cek.sh`. Jalankan `bash cek.sh` untuk mengompilasi setiap latihan dengan `-std=c++17 -Wall -Werror`, memberi masukan dari `input/`, dan mencocokkan keluarannya dengan `expected/`. Di GDB Online, bandingkan keluaran secara manual.
 
 ## Memperbarui Bahan
 
-Semua bahan dihasilkan dari satu sumber data per pertemuan di `tools/konten/pNN.py` beserta kode hands-on di `tools/konten/pNN/`. Ubah datanya, lalu bangun ulang:
+Sumber slide ada di `01 Slide/src/PNN.tex` (Beamer, tema `beamerthemeITERA.sty`), sumber modul di `03 Modul/src/ModulNN.tex` (gaya `modulITERA.sty`), serta RPS dan Kontrak Kuliah di `03 Modul/src/RPS.tex` dan `03 Modul/src/Kontrak.tex`. Kompilasi dengan XeLaTeX dari folder `src/` masing-masing, lalu salin PDF hasilnya ke folder induknya, misalnya:
 
 ```bash
-python3 tools/build.py 5          # slide, catatan, modul, dan hands-on Pertemuan 5
-python3 tools/build.py            # semua pertemuan
-python3 tools/dokumen.py          # RPS dan Kontrak Kuliah
-python3 tools/build.py --spec /tmp/spec && node tools/pptx_render.js /tmp/spec "keluaran-pptx"   # versi PPTX
+(cd "01 Slide/src" && xelatex P05.tex)
+(cd "03 Modul/src" && xelatex Modul05.tex)
 ```
 
-Generator menjamin konsistensi: semua keluaran program dan pesan error di slide dan modul diambil dari kompilasi g++ yang sebenarnya, solusi hands-on harus lulus `cek.sh` sebelum bahan dibuat, dan contoh kode yang terlalu panjang untuk satu slide ditolak. Kebutuhan: Python 3, g++, XeLaTeX (TeX Live), Node.js dengan `pptxgenjs`, serta font Poppins, Open Sans, dan JetBrains Mono (semuanya gratis di Google Fonts). Font yang sama perlu terpasang untuk membuka versi PPTX dengan tampilan yang sesuai.
+Kebutuhan: g++ (C++17), XeLaTeX (TeX Live), serta font Poppins, Open Sans, dan JetBrains Mono (gratis di Google Fonts). Jika kode contoh di slide atau modul diubah, perbarui juga keluarannya di `01 Slide/src/keluaran/PNN/` dan pastikan solusi hands-on tetap lulus `bash cek.sh`.
 
 ## Referensi
 
