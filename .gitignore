@@ -1,4 +1,3 @@
 src/
-
-# State lokal oh-my-claudecode
 .omc/
+.DS_Store
