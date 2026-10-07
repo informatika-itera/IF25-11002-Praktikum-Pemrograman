@@ -1,0 +1,7 @@
+Saldo: 500000
+Setor 150000 berhasil
+Harus kelipatan 50000
+Tarik 600000 berhasil
+Saldo tidak cukup
+Saldo: 50000
+Terima kasih

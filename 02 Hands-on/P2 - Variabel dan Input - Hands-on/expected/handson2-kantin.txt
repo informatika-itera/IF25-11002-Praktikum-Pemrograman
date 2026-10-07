@@ -1,0 +1,5 @@
+Barang: Harga: Jumlah: 
+=== STRUK KANTIN ===
+Nasi
+12000 x 3
+Total: 36000

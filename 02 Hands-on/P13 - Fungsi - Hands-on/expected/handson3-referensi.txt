@@ -1,0 +1,3 @@
+Sesudah tukar: 9 4
+Rata-rata: 77.5
+Dibatasi: 0 100 65

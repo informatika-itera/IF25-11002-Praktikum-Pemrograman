@@ -1,0 +1,4 @@
+Panjang : 29
+Vokal   : 11
+Kata    : 6
+Kapital : BELAJAR C++ DI ITERA ITU SERU

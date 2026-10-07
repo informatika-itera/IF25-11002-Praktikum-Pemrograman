@@ -1,0 +1,3 @@
+Rata-rata   : 76.67
+Tertinggi   : 90 (indeks 3)
+Di atas rata: 3

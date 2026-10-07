@@ -1,0 +1,560 @@
+% Pertemuan 3 Praktikum Pemrograman (IF25-11002). Dihasilkan oleh tools/build.py dari tools/konten/p03.py.
+% Kompilasi: xelatex P03.tex (dua kali). Catatan: xelatex -jobname=P03-catatan "\def\catatan{1}\input{P03.tex}"
+\documentclass[t]{beamer}
+\usetheme{ITERA}
+\input{catatan-preamble.tex}
+\renewcommand\ITERAmeeting{Pertemuan 3}
+\begin{document}
+\SlideJudul{IF25-11002 PRAKTIKUM PEMROGRAMAN}{Pertemuan 3\\Operator dan Precedence}{Sisa bagi, urutan operasi, penugasan majemuk, serta operator relasional dan logika}{Tim Pengajar}{Tahun 2026. Sejajar dengan Pertemuan 3 Algoritma Pemrograman: Operator dan Precedence.}
+\note{Buka dengan menanyakan satu hal dari pertemuan lalu yang masih membingungkan.}
+
+\begin{frame}{Dua mata kuliah, satu minggu}
+\framesubtitle{Sebelum mulai}
+Topik minggu ini sama di dua mata kuliah, dengan peran yang berbeda.
+\vspace{10pt}
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Algoritma: Operator dan Precedence}
+Jenis operator, urutan pengerjaan (precedence), dan evaluasi ekspresi langkah demi langkah.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Praktikum: Operator}
+Menulis ekspresi C++ yang benar urutannya, memakai \texttt{\%}, \texttt{+=}, \texttt{++}, serta operator relasional dan logika.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\note{Tanyakan apa yang sudah dibahas di Algoritma minggu ini. Gunakan jawabannya sebagai jembatan ke praktikum.}
+\end{frame}
+
+\begin{frame}{Saat pulang nanti, kalian bisa}
+\framesubtitle{Target hari ini}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{1}{Menerapkan}
+Menulis program yang memakai operator aritmetika termasuk \texttt{\%}, operator penugasan majemuk, increment, serta operator relasional dan logika untuk menyelesaikan perhitungan
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 3.1, CPMK0607}
+\end{Langkah}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{2}{Menjelaskan}
+Menjelaskan urutan evaluasi sebuah ekspresi berdasarkan precedence dan asosiativitas, serta nilai yang dihasilkan pada setiap langkah
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 3.2, CPMK0608}
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{Catatan}
+Dua kemampuan ini dinilai sama berat di Exit Ticket, tugas, UTS, dan UAS.
+\end{Catatan}
+\note{Bacakan target dengan pelan. Kata kuncinya menerapkan dan menjelaskan.}
+\end{frame}
+
+\begin{frame}{Ingat minggu lalu}
+\framesubtitle{Review, 5 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Tipe apa yang tepat untuk suhu 36.6?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Berapa hasil \texttt{7 / 2} di C++, dan mengapa?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Kapan perlu \texttt{cin.ignore()} sebelum \texttt{getline}?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Jawab di kertas dulu, lalu cocokkan dengan teman sebelah.\note{Pilih dua mahasiswa untuk menjawab. Koreksi singkat, jangan mengajar ulang.}
+\end{frame}
+
+\Bagian{1}{Masalah pembuka}{Durasi lagu di playlist}
+\note{Masalah pembuka 10 menit.}
+
+\begin{frame}[fragile]{Durasi lagu di playlist}
+\framesubtitle{Masalah minggu ini}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+{Aplikasi musik menyimpan durasi playlist dalam detik, misalnya 3725 detik. Pengguna ingin melihatnya sebagai jam, menit, dan detik.
+
+\vspace{6pt}
+Pembagian biasa memberi 1.03 jam, yang tidak membantu. Kita perlu cara mengambil bagian bulat dan sisanya.\par}
+\vspace{6pt}
+\begin{Catatan}
+\textbf{Diskusi 2 menit.} Bagaimana kalian menghitung ini dengan tangan? Operasi apa yang dipakai untuk mendapat angka 5 di akhir?
+\end{Catatan}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[]
+Durasi: 3725 detik
+= 1 jam 2 menit 5 detik
+\end{Keluaran}
+\end{column}
+\end{columns}
+\note{Tampung beberapa jawaban tanpa menilai benar salah.}
+\end{frame}
+
+\begin{frame}{Dari langkah ke instruksi}
+\framesubtitle{Sambungan dengan Algoritma}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Pecah}
+Ambil jam, lalu sisa detiknya, lalu menit, lalu sisa lagi.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Rumuskan}
+Jam adalah hasil bagi bulat; sisa adalah sisa bagi.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Terjemahkan}
+Pakai \texttt{/} untuk hasil bagi bulat dan \texttt{\%} untuk sisa.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Langkah 1 dan 2 dilatih di Algoritma. Langkah 3 kita kerjakan hari ini dengan C++.\note{Hubungkan eksplisit ke Algoritma minggu ini.}
+\end{frame}
+
+\Bagian{2}{Coba dulu, baru dijelaskan}{25 menit eksperimen di GDB Online}
+\note{Struggle 25 menit. Berkeliling, jangan menjelaskan materi dulu.}
+
+\begin{frame}{Misi kalian}
+\framesubtitle{Struggle, 25 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Hitung}
+Tampilkan \texttt{3725 / 3600} dan \texttt{3725 \% 3600}. Apa artinya?
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Urutkan}
+Tebak lalu jalankan \texttt{cout << 2 + 3 * 4;} dan \texttt{cout << 10 - 4 - 3;}.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Bandingkan}
+Tampilkan \texttt{5 > 3} dan \texttt{5 == 3}. Apa yang muncul?
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Boleh}
+Bertanya ke teman, mengubah apa saja, sengaja membuat error.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokAlert}{Belum dulu}
+Mencari jawaban jadi di internet atau AI.
+\end{BlokAlert}
+\end{column}
+\end{columns}
+\note{Catat kesalahan yang sering muncul untuk dibahas di debrief.}
+\end{frame}
+
+\begin{frame}{Apa yang kalian temukan?}
+\framesubtitle{Debrief struggle}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Apa arti hasil \texttt{3725 \% 3600}?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Mengapa \texttt{2 + 3 * 4} bukan 20?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Mengapa perbandingan tampil sebagai 1 atau 0?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Jawaban kalian akan kita uji di bagian berikutnya.\note{Tulis jawaban di papan; buktikan atau patahkan di bagian materi.}
+\end{frame}
+
+\Bagian{3}{Mengolah nilai dengan operator}{Aritmetika, urutan operasi, penugasan, perbandingan, dan logika}
+\note{Materi 40 menit. Tunjukkan setiap contoh langsung di GDB Online.}
+
+\begin{frame}[fragile]{Sisa bagi dengan \%}
+\framesubtitle{Operator modulo}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{modulo.cpp}
+int total = 3725;
+int jam = total / 3600;
+int menit = total % 3600 / 60;
+int detik = total % 60;
+cout << jam << " " << menit << " " << detik << endl;
+cout << 17 % 5 << " " << 20 % 4 << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P03/k001.txt}
+\begin{Catatan}
+\texttt{\%} hanya untuk bilangan bulat. \texttt{a \% b == 0} berarti a habis dibagi b.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}{Urutan pengerjaan operator}
+\framesubtitle{Precedence}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{104pt}>{\raggedright\arraybackslash}p{274pt}>{\raggedright\arraybackslash}p{170pt}>{\raggedright\arraybackslash}p{302pt}@{}}
+\kepala{Tingkat} & \kepala{Operator} & \kepala{Arah} & \kepala{Contoh}\\
+1 (pertama) & \texttt{()} & dalam ke luar & \texttt{(2 + 3) * 4} = 20\\
+\barisgenap 2 & \texttt{++ -- !} dan cast & kanan ke kiri & \texttt{!true} = false\\
+3 & \texttt{* / \%} & kiri ke kanan & \texttt{20 / 4 * 2} = 10\\
+\barisgenap 4 & \texttt{+ -} & kiri ke kanan & \texttt{10 - 4 - 3} = 3\\
+5 & \texttt{< <= > >=} lalu \texttt{== !=} & kiri ke kanan & \texttt{3 < 5 == true}\\
+\barisgenap 6 & \texttt{\&\&} lalu \texttt{||} & kiri ke kanan & \texttt{a || b \&\& c}\\
+7 (terakhir) & \texttt{= += -= *= /= \%=} & kanan ke kiri & \texttt{a = b = 0}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Ragu? Tambahkan kurung. Kurung tidak membuat program lambat, tetapi membuatnya mudah dibaca.
+\end{frame}
+
+\begin{frame}[fragile]{Menelusuri urutan operasi}
+\framesubtitle{Evaluasi ekspresi}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{urutan.cpp}
+cout << 2 + 3 * 4 << endl;
+cout << (2 + 3) * 4 << endl;
+cout << 20 / 4 * 2 << endl;
+cout << 10 - 4 - 3 << endl;
+cout << 7 + 10 % 4 * 2 << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P03/k002.txt}
+\begin{Catatan}
+Baris terakhir: \texttt{10 \% 4} = 2, lalu \texttt{2 * 2} = 4, lalu \texttt{7 + 4} = 11.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+{\small Di Bagian B, tuliskan langkahnya satu per satu, bukan hanya hasil akhirnya.}
+\note<1>{Kerjakan baris terakhir di papan langkah demi langkah dengan garis bawah pada operasi yang dikerjakan.}
+\end{frame}
+
+\begin{frame}[fragile]{Penugasan majemuk dan increment}
+\framesubtitle{Menyingkat penugasan}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{majemuk.cpp}
+int x = 5;
+x += 3;
+x *= 2;
+x--;
+int a = x++;
+int b = ++x;
+cout << a << " " << b << " " << x << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P03/k003.txt}
+\begin{Catatan}
+\texttt{x++} memakai nilai lama dulu, lalu menambah. \texttt{++x} menambah dulu, lalu memakai nilai baru.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Trace table: x 5, 8, 16, 15; a = 15 lalu x 16; x 17 lalu b = 17.}
+\end{frame}
+
+\begin{frame}[fragile]{Membandingkan dan menggabungkan kondisi}
+\framesubtitle{Relasional dan logika}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{logika.cpp}
+int nilai = 78, hadir = 12;
+bool lulus = nilai >= 60;
+bool aktif = hadir >= 11;
+cout << boolalpha;
+cout << lulus << " " << aktif << endl;
+cout << (lulus && aktif) << endl;
+cout << (nilai >= 85 || hadir == 14) << endl;
+cout << !lulus << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P03/k004.txt}
+\begin{Catatan}
+\texttt{==} membandingkan, \texttt{=} menugaskan. Tanpa \texttt{boolalpha}, true dan false tampil sebagai 1 dan 0.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Konversi tipe dan fungsi matematika}
+\framesubtitle{Cast dan cmath}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{konversi.cpp}
+double d = 3.99;
+int i = (int) d;
+cout << i << endl;
+cout << (double) 7 / 2 << endl;
+cout << sqrt(16.0) << " " << pow(2, 10) << endl;
+cout << round(2.5) << " " << floor(2.7) << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P03/k005.txt}
+\begin{Catatan}
+Cast ke \texttt{int} memotong, tidak membulatkan. Fungsi matematika perlu \texttt{\#include <cmath>}.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya}
+\framesubtitle{Latihan menjelaskan, 3 menit}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int a = 9, b = 4;
+int c = a % b + a / b * 2;
+a += c;
+b = a-- - b;
+cout << c << " " << a << " " << b << endl;
+cout << (a > b && c != 5) << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Catatan}
+Tulis keluarannya di kertas, karakter demi karakter. Jangan dijalankan dulu.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Contoh soal Bagian B. Beri waktu 3 menit sebelum slide jawaban.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya: jawaban}
+\framesubtitle{Latihan menjelaskan}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int a = 9, b = 4;
+int c = a % b + a / b * 2;
+a += c;
+b = a-- - b;
+cout << c << " " << a << " " << b << endl;
+cout << (a > b && c != 5) << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Keluaran}[]
+5 13 10
+0
+\end{Keluaran}
+\begin{Catatan}
+\texttt{c} = 1 + 2 × 2 = 5. \texttt{a} menjadi 14. \texttt{b} dihitung dengan nilai lama \texttt{a} (14 − 4 = 10), lalu \texttt{a} turun ke 13. Karena \texttt{c} = 5, kondisi terakhir bernilai 0.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Tanyakan jawaban yang paling sering salah, lalu telusuri bersama.}
+\end{frame}
+
+\begin{frame}{Error yang sering muncul minggu ini}
+\framesubtitle{Pesan diambil langsung dari g++}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{208pt}>{\raggedright\arraybackslash}p{256pt}>{\raggedright\arraybackslash}p{398pt}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+\% pada bilangan pecahan & \texttt{5.5 \% 2} & \texttt{error: invalid operands of types 'double' and 'int' to binary 'operator\%'}\\
+\barisgenap Ruas kiri bukan variabel & \texttt{5 = x;} & \texttt{error: lvalue required as left operand of assignment}\\
+Pembagian dengan nol & \texttt{int y = 10 / 0;} & \texttt{warning: division by zero}\\
+\barisgenap Perbandingan tanpa kurung di cout & \texttt{cout << 3 > 2;} & \texttt{error: no match for 'operator>'}\\
+== yang tidak dipakai & \texttt{x == 5;} & \texttt{warning: statement has no effect}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Pesan di tabel ini dihasilkan dengan g++ dan opsi -Wall, sama seperti di cek.sh.}
+\note{Minta mahasiswa memotret slide ini.}
+\end{frame}
+
+\Bagian{4}{Hands-on bertingkat}{45 menit, dari dasar sampai tantangan}
+\note{Mahasiswa membuka folder 02 Hands-on/P3 - Operator - Hands-on.}
+
+\begin{frame}{Peta hands-on}
+\framesubtitle{Folder 02 Hands-on/P3 - Operator - Hands-on}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{36pt}>{\raggedright\arraybackslash}p{267pt}>{\raggedright\arraybackslash}p{110pt}>{\raggedright\arraybackslash}p{83pt}>{\raggedright\arraybackslash}p{341pt}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Waktu} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-waktu.cpp} & Dasar & 10' & \texttt{/} dan \texttt{\%} untuk memecah satuan\\
+\barisgenap 2 & \texttt{handson2-kembalian.cpp} & Menengah & 15' & \texttt{\%=} dan pembagian bulat berulang\\
+3 & \texttt{handson3-rumus.cpp} & Tantangan & 20' & telusuri precedence, perbaiki tiga rumus\\
+\barisgenap + & \texttt{bonus-genap.cpp} & Pengayaan & sisa & relasional, \texttt{\&\&}, \texttt{boolalpha}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Kerjakan berurutan. Cocokkan keluaran dengan folder \texttt{expected/}; latihan yang membaca masukan memakai data di folder \texttt{input/}.\note{Saat berkeliling, minta mahasiswa yang mengerjakan latihan tantangan menjelaskan blok PENJELASAN mereka.}
+\end{frame}
+
+\begin{frame}{Cara mengecek dan aturannya}
+\framesubtitle{Hands-on}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Di GDB Online}
+Salin isi file latihan, lengkapi TODO, klik Run. Bila program membaca masukan, ketik isi file di \texttt{input/}. Bandingkan dengan \texttt{expected/}.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Di komputer sendiri}
+Jalankan \texttt{bash cek.sh}. Skrip mengompilasi dengan \texttt{-Wall -Werror}, memberi masukan dari \texttt{input/}, lalu mencocokkan keluaran.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{6pt}
+\begin{Catatan}
+AI boleh untuk memahami pesan error, tidak untuk meminta solusi utuh. Exit Ticket dikerjakan tanpa bantuan apa pun.
+\end{Catatan}
+\note{Hands-on tidak dinilai langsung; yang dinilai Exit Ticket dan tugas.}
+\end{frame}
+
+\Bagian{5}{Exit Ticket dan tugas}{25 menit terakhir, lalu pekerjaan rumah}
+\note{Mulai Exit Ticket tepat waktu.}
+
+\begin{frame}{Exit Ticket 3}
+\framesubtitle{Individual, 25 menit, tanpa AI dan internet}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{60pt}>{\raggedright\arraybackslash}p{560pt}>{\raggedright\arraybackslash}p{80pt}>{\raggedright\arraybackslash}p{150pt}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang memecah sebuah bilangan tiga digit menjadi ratusan, puluhan, dan satuan & 25 & CPMK0607\\
+\barisgenap A2 & Tulis ekspresi logika untuk syarat yang diberikan dan tampilkan hasilnya & 25 & CPMK0607\\
+B1 & Tunjukkan langkah evaluasi sebuah ekspresi campuran sesuai precedence & 20 & CPMK0608\\
+\barisgenap B2 & Telusuri nilai variabel setelah penugasan majemuk dan increment & 20 & CPMK0608\\
+B3 & Jelaskan beda \texttt{x++} dan \texttt{++x} dengan contoh & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Soal A dinilai dari keluaran yang tepat sama. Soal B dinilai dari ketepatan dan alasan. Pelanggaran aturan membuat nilai Exit Ticket ini 0.}
+\note{Soal lengkap dibagikan terpisah dan tidak disimpan di repo publik.}
+\end{frame}
+
+\begin{frame}{Tugas 3: Kalkulator Lengkap dengan Validasi}
+\framesubtitle{Dikumpulkan sebelum Pertemuan 4}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Bagian A, program, 50 poin}
+Buat program kalkulator yang membaca dua angka desimal, lalu menampilkan hasil berikut. Ketentuannya di slide berikut.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Bagian B, penjelasan, 50 poin}
+Komentar maksimal 150 kata: urutan evaluasi ekspresi syarat terakhir langkah demi langkah, alasan perlu cast sebelum \texttt{\%}, dan satu kesalahan precedence atau pembagian yang kalian temui.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+{\small Data di tugas adalah data kalian sendiri. Rubrik lengkap ada di Modul Belajar 3.}
+\note{Ingatkan bahwa penjelasan disalin dari AI mudah dikenali karena tidak menyebut pengalaman mereka sendiri.}
+\end{frame}
+
+\begin{frame}{Ketentuan Tugas 3}
+\framesubtitle{Kalkulator Lengkap dengan Validasi}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{87pt}>{\raggedright\arraybackslash}p{788pt}@{}}
+\kepala{No} & \kepala{Ketentuan Bagian A}\\
+1 & Masukan dua angka bertipe \texttt{double}\\
+\barisgenap 2 & Hasil \texttt{+}, \texttt{-}, \texttt{*}, dan \texttt{/}\\
+3 & Sisa bagi \texttt{\%} dari bagian bulat kedua angka (cast ke \texttt{int})\\
+\barisgenap 4 & Sebelum membagi, periksa apakah pembagi nol; tampilkan pesan dengan operator ternary \texttt{?:}\\
+5 & Nilai \texttt{bool}: apakah angka pertama lebih besar\\
+\barisgenap 6 & Nilai \texttt{bool}: apakah hasil penjumlahan > 100 dan hasil kali > 50\\
+Bonus & Tampilkan apakah bagian bulat masing-masing angka ganjil atau genap.\\
+\garisdasar
+\end{tabular}
+\note{Bacakan ketentuan satu per satu dan tanyakan apakah ada yang belum jelas.}
+\end{frame}
+
+\begin{frame}{Rubrik Tugas 3}
+\framesubtitle{Empat level, sama di semua instrumen}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{44pt}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{156pt}>{\raggedright\arraybackslash}p{146pt}>{\raggedright\arraybackslash}p{146pt}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85--100} & \kepala{Baik 70--84} & \kepala{Cukup 55--69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\
+\barisgenap A2 Kelengkapan operasi & 15 & semua operasi dan validasi & satu operasi kurang & dua kurang & tiga atau lebih kurang\\
+A3 Validasi dan logika & 15 & pembagi nol dan dua bool tepat & satu salah & dua salah & tidak ada validasi\\
+\barisgenap B1 Langkah evaluasi & 30 & urutan tepat dan beralasan & satu langkah keliru & hanya hasil akhir & tidak ada atau disalin\\
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}
+\vspace{8pt}
+
+{\small Nilai kriteria = poin × skor level. Bagian A total 50, Bagian B total 50.}
+\note{Rubrik ini sama strukturnya setiap minggu; yang berubah hanya isi kriteria A2, A3, dan B1.}
+\end{frame}
+
+\begin{frame}{Sebelum Pertemuan 4}
+\framesubtitle{Persiapan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Selesaikan}
+Hands-on yang belum lulus \texttt{cek.sh}, terutama latihan tantangan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Kumpulkan}
+Tugas 3 sebelum Pertemuan 4 dimulai.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Baca}
+Modul Belajar 3 untuk mengulang, lalu bagian awal modul berikutnya.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Pertemuan 4 membahas percabangan dengan \texttt{if}, \texttt{else if}, dan \texttt{switch}, memakai ekspresi relasional dan logika dari minggu ini.\note{Tanyakan satu hal yang paling membingungkan hari ini untuk dibuka di review minggu depan.}
+\end{frame}
+
+\SlidePenutup{Terima kasih}{Sampai jumpa di Pertemuan 4: percabangan}
+\note{Slide penutup.}
+\end{document}

@@ -1,0 +1,8 @@
+========================
+    KARTU MAHASISWA
+========================
+Nama  : Rani Puspita
+NIM   : 126140001
+Prodi : Teknik Informatika
+	Motto: "Belajar dari error"
+========================

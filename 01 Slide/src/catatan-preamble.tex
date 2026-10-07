@@ -1,0 +1,9 @@
+% Mode catatan pembicara: aktif bila \catatan didefinisikan sebelum \input.
+\ifdefined\catatan
+  \setbeameroption{show only notes}
+  \setbeamertemplate{note page}{\vspace*{20pt}\hspace*{4pt}\begin{minipage}{900pt}
+    {\ITERAKickerFont\fontsize{11pt}{14pt}\selectfont\color{ITERAGoldText}CATATAN PEMBICARA \ \ |\ \ SLIDE \insertframenumber}\par\vspace{4pt}
+    {\ITERADisplay\bfseries\fontsize{22pt}{28pt}\selectfont\color{ITERAStructure}\insertframetitle}\par\vspace{12pt}
+    \fontsize{15pt}{23pt}\selectfont\insertnote\end{minipage}}
+\fi
+\tikzset{fase/.style={draw=none,fill=#1,rounded corners=3pt,minimum width=158pt,minimum height=118pt,text width=146pt,align=center}}

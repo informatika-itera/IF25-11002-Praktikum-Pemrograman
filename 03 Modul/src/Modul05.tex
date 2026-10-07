@@ -1,0 +1,344 @@
+% Modul Belajar 5, dihasilkan oleh tools/build.py dari tools/konten/p05.py
+\documentclass[a4paper]{article}
+\usepackage{modulITERA}
+\begin{document}
+\Sampul{5}{Perulangan Bagian 1}{for, while, dan do-while dengan pola pencacah, akumulator, dan sentinel}{CPMK0607 (menerapkan) dan CPMK0608 (menjelaskan) pada konsep dasar algoritma dan sistem komputer}{sekitar 3 jam belajar mandiri, ditambah 150 menit di kelas}{\texttt{02 Hands-on/P5 - Perulangan 1 - Hands-on/}}
+\Bagian{Modul 5}{Peta belajar}
+Ikuti urutan ini dari atas ke bawah. Setiap bagian memakai apa yang sudah dibahas di bagian sebelumnya.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.140\textwidth}>{\raggedright\arraybackslash}p{0.840\textwidth}@{}}
+\kepala{Urutan} & \kepala{Bagian}\\
+1 & Tentang modul ini\\\garis
+2 & Masalah pembuka: Rata-rata nilai satu kelas\\\garis
+3 & Langkah 1: Perulangan for\\\garis
+4 & Langkah 2: Pencacah dan akumulator\\\garis
+5 & Langkah 3: Perulangan while\\\garis
+6 & Langkah 4: Nilai sentinel\\\garis
+7 & Langkah 5: Perulangan do-while\\\garis
+8 & Langkah 6: Memilih jenis perulangan\\\garis
+9 & Pesan error yang sering muncul\\\garis
+10 & Latihan mandiri\\\garis
+11 & Rangkuman\\\garis
+12 & Cek pemahaman\\\garis
+13 & Exit Ticket dan tugas\\\garis
+14 & Bacaan lanjut dan persiapan minggu depan\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Pembuka}{Tentang modul ini}
+Modul ini mendampingi Pertemuan 5. Program kita sudah bisa memilih. Minggu ini program belajar mengulang: menjalankan blok yang sama berkali-kali tanpa menulis ulang kodenya, sambil mengumpulkan hasil di setiap putaran.
+
+Isinya sama dengan slide di kelas, tetapi ditulis lebih pelan dan lebih lengkap, supaya kalian bisa mengulang sendiri di rumah tanpa harus menebak maksud slide.
+
+\Sub{Setelah menyelesaikan modul ini, kalian bisa}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.680\textwidth}>{\raggedright\arraybackslash}p{0.230\textwidth}@{}}
+\kepala{No} & \kepala{Kemampuan} & \kepala{Dibahas di}\\
+1 & Menulis program yang mengulang proses dengan \texttt{for}, \texttt{while}, dan \texttt{do-while}, memakai pola pencacah, akumulator, dan nilai sentinel (Sub-CPMK 5.1, CPMK0607) & Langkah 1 sampai 6\\\garis
+2 & Menelusuri perulangan dengan trace table, menentukan berapa kali badan perulangan dijalankan, dan menjelaskan penyebab off-by-one atau perulangan tak berhenti (Sub-CPMK 5.2, CPMK0608) & kotak Tebak dulu, Latihan 3\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Karena setiap instrumen penilaian dibagi rata antara Bagian A (menulis kode) dan Bagian B (menelusuri dan menjelaskan), yang dinilai bukan hanya program kalian jalan, tetapi juga kalian bisa menjelaskan mengapa program itu jalan.
+
+\Sub{Cara memakai modul ini}
+Setiap langkah punya pola yang sama: penjelasan konsep, kadang contoh dari kehidupan sehari-hari, lalu kode yang bisa langsung kalian ketik. Sesudah kode ada kotak \textbf{Tebak dulu}. Tulis tebakan kalian di kertas sebelum membaca \textbf{Jawaban} di bawahnya. Kebiasaan menebak lalu membuktikan inilah yang membuat konsep menempel, bukan sekadar membaca.
+
+\begin{Penting}[Ketik, jangan salin]
+Ketik ulang setiap contoh di GDB Online atau editor kalian, jangan disalin-tempel. Saat mengetik, kalian akan membuat salah ketik, membaca pesan error, dan memperbaikinya. Itu bagian dari belajar.
+\end{Penting}
+\Sub{Yang perlu disiapkan}
+Peramban dengan akses ke onlinegdb.com, atau g++ di komputer kalian sendiri. Kertas dan alat tulis untuk menebak keluaran dan membuat trace table. Folder hands-on pertemuan ini dari repo mata kuliah.
+
+\Bagian{Pembuka}{Masalah pembuka: Rata-rata nilai satu kelas}
+Asisten praktikum harus menghitung rata-rata nilai Exit Ticket. Jumlah mahasiswa berbeda di setiap kelas, kadang 30, kadang 45.
+
+Menulis \texttt{cin} sebanyak 45 kali jelas tidak masuk akal. Lagi pula banyaknya data baru diketahui saat program berjalan.
+
+\begin{MKeluaran}[title={Tampilan yang diinginkan}]
+Masukkan nilai (-1 untuk selesai):
+70 85 60 90 -1
+Banyak    : 4
+Tertinggi : 90
+Rata-rata : 76.25
+\end{MKeluaran}
+\begin{Tebak}[Coba pikirkan]
+Langkah apa yang terus diulang untuk setiap nilai? Bagaimana program tahu kapan berhenti?
+\end{Tebak}
+\begin{Jawaban}[Cara memecahnya]
+Temukan yang berulang: Baca satu nilai, tambahkan ke total, tambah pencacah. Tentukan kapan berhenti: Berhenti saat bertemu -1, atau setelah n kali. Terjemahkan: \texttt{while} untuk syarat berhenti, \texttt{for} untuk banyak putaran yang sudah diketahui.
+\end{Jawaban}
+\Bagian{Langkah 1}{Perulangan for}
+\texttt{for (awal; syarat; perubahan)} cocok bila banyak putaran sudah diketahui. Urutannya: jalankan bagian awal sekali, periksa syarat, jalankan badan, jalankan perubahan, periksa syarat lagi, dan seterusnya sampai syaratnya salah.
+
+Variabel \texttt{i} yang dideklarasikan di dalam \texttt{for} hanya hidup di dalam perulangan itu.
+
+\begin{MKode}{for.cpp}
+for (int i = 1; i <= 5; i++) {
+    cout << i << " ";
+}
+cout << endl;
+for (int i = 10; i > 0; i -= 3) {
+    cout << i << " ";
+}
+cout << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+1 2 3 4 5 
+10 7 4 1 
+\end{MKeluaran}
+Tiga bagian \texttt{for}: nilai awal; syarat lanjut; perubahan. Syarat diperiksa sebelum setiap putaran.
+\end{Jawaban}
+\Bagian{Langkah 2}{Pencacah dan akumulator}
+Dua pola paling sering dipakai. Akumulator mengumpulkan nilai (\texttt{jumlah += i}), pencacah menghitung kejadian (\texttt{genap++}). Keduanya harus diberi nilai awal sebelum perulangan. Bila diberi nilai awal di dalam perulangan, nilainya ter-reset di setiap putaran.
+
+\begin{MKode}{akumulator.cpp}
+int jumlah = 0, genap = 0;
+for (int i = 1; i <= 10; i++) {
+    jumlah += i;
+    if (i % 2 == 0) {
+        genap++;
+    }
+}
+cout << "Jumlah: " << jumlah << endl;
+cout << "Genap : " << genap << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Jumlah: 55
+Genap : 5
+\end{MKeluaran}
+Akumulator dan pencacah selalu diberi nilai awal sebelum perulangan, bukan di dalamnya.
+\end{Jawaban}
+\Bagian{Langkah 3}{Perulangan while}
+\texttt{while (syarat)} cocok bila banyak putaran belum diketahui, hanya syarat berhentinya. Syarat diperiksa sebelum setiap putaran, sehingga badan bisa saja tidak dijalankan sama sekali.
+
+Pastikan ada pernyataan di dalam badan yang membuat syaratnya suatu saat salah. Bila lupa, perulangan tidak berhenti. Di GDB Online, tekan Stop untuk menghentikannya.
+
+\begin{MKode}{while.cpp}
+int saldo = 100000, bulan = 0;
+while (saldo < 500000) {
+    saldo += 150000;
+    bulan++;
+}
+cout << bulan << " bulan, saldo " << saldo << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+3 bulan, saldo 550000
+\end{MKeluaran}
+Sesuatu di dalam badan harus mengubah syarat. Bila tidak, perulangan tidak pernah berhenti.
+\end{Jawaban}
+\Bagian{Langkah 4}{Nilai sentinel}
+Sentinel adalah nilai khusus yang menandai akhir data, misalnya -1 untuk nilai ujian. Polanya: baca satu nilai sebelum perulangan, periksa di syarat \texttt{while}, proses, lalu baca nilai berikutnya di akhir badan. Urutan ini menjamin sentinel tidak ikut diproses.
+
+\begin{MKode}{sentinel.cpp}
+int nilai, banyak = 0, total = 0;
+cin >> nilai;
+while (nilai != -1) {
+    banyak++;
+    total += nilai;
+    cin >> nilai;
+}
+cout << banyak << " data, total " << total << endl;
+\end{MKode}
+\begin{MKeluaran}[title={Masukan}]
+70 85 60 90 -1
+\end{MKeluaran}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+4 data, total 305
+\end{MKeluaran}
+Baca sekali sebelum perulangan, lalu baca lagi di akhir badan. Dengan begitu -1 tidak ikut dihitung.
+\end{Jawaban}
+\Bagian{Langkah 5}{Perulangan do-while}
+\texttt{do \{ ... \} while (syarat);} menjalankan badan dulu, baru memeriksa syarat. Badannya pasti jalan minimal sekali, sehingga cocok untuk menu dan validasi masukan.
+
+\begin{MKode}{dowhile.cpp}
+int pin, coba = 0;
+do {
+    cin >> pin;
+    coba++;
+} while (pin != 1234 && coba < 3);
+cout << (pin == 1234 ? "Masuk" : "Terkunci");
+cout << " setelah " << coba << " kali" << endl;
+\end{MKode}
+\begin{MKeluaran}[title={Masukan}]
+1111 1234
+\end{MKeluaran}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Masuk setelah 2 kali
+\end{MKeluaran}
+Syarat diperiksa sesudah badan. Jangan lupa titik koma setelah \texttt{while (...)}.
+\end{Jawaban}
+\Bagian{Langkah 6}{Memilih jenis perulangan}
+Secara teknis ketiga perulangan bisa saling menggantikan. Pilihan yang tepat membuat maksud program langsung terbaca.
+
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.414\textwidth}>{\raggedright\arraybackslash}p{0.174\textwidth}>{\raggedright\arraybackslash}p{0.392\textwidth}@{}}
+\kepala{Situasi} & \kepala{Pilihan} & \kepala{Contoh}\\
+Banyak putaran diketahui & \texttt{for} & tampilkan 1 sampai n\\\garis
+Berhenti karena syarat, bisa nol putaran & \texttt{while} & baca sampai sentinel\\\garis
+Badan harus jalan minimal sekali & \texttt{do-while} & menu, validasi PIN\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\begin{Penting}[]
+Ketiganya bisa saling menggantikan. Pilih yang paling jelas menyatakan maksud kalian.
+\end{Penting}
+\Bagian{Waspada}{Pesan error yang sering muncul}
+Semua pesan di tabel ini dihasilkan g++ dengan opsi \texttt{-Wall}, sama seperti yang dipakai \texttt{cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.270\textwidth}>{\raggedright\arraybackslash}p{0.470\textwidth}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Koma di header for & \texttt{for (int i = 0, i < 5, i++)} & \texttt{error: expected ';' before '<' token}\\\garis
+Variabel di luar jangkauan & \texttt{cout << i; sesudah for} & \texttt{error: 'i' was not declared in this scope}\\\garis
+Lupa ; sesudah do-while & \texttt{\} while (x < 5)} & \texttt{error: expected ';' before 'cout'}\\\garis
+Perbandingan bertipe beda & \texttt{i < s.length() dengan int} & \texttt{warning: comparison of integer expressions of different signedness: 'int' and ...}\\\garis
+Badan for kosong & \texttt{for (...);} & \texttt{warning: this 'for' clause does not guard...}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Off-by-one (kelebihan atau kekurangan satu putaran) dan perulangan tak berhenti tidak dilaporkan compiler. Keduanya hanya ketahuan lewat trace table atau pengujian, karena itu latihan tantangan minggu ini adalah menelusuri perulangan.
+
+\Bagian{Latihan}{Latihan mandiri}
+Latihan ini sama dengan hands-on di kelas. Semua file ada di \texttt{02 Hands-on/P5 - Perulangan 1 - Hands-on/latihan/}. Kerjakan berurutan, lalu cocokkan dengan \texttt{expected/} atau jalankan \texttt{bash cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.360\textwidth}>{\raggedright\arraybackslash}p{0.150\textwidth}>{\raggedright\arraybackslash}p{0.400\textwidth}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-deret.cpp} & Dasar & \texttt{for}, akumulator\\\garis
+2 & \texttt{handson2-tabungan.cpp} & Menengah & \texttt{while} dengan syarat berhenti\\\garis
+3 & \texttt{handson3-rerata.cpp} & Tantangan & trace table, perbaiki tiga kesalahan sentinel\\\garis
++ & \texttt{bonus-faktorial.cpp} & Pengayaan & \texttt{do-while} untuk menu, \texttt{long long}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Sub{Latihan 1: handson1-deret.cpp}
+Tampilkan 1 sampai n dan jumlahnya. Masukan uji: \texttt{6}.
+
+\Sub{Latihan 2: handson2-tabungan.cpp}
+Simulasikan saldo tabungan per bulan sampai mencapai target.
+
+\Sub{Latihan 3: handson3-rerata.cpp}
+Program rata-rata dengan sentinel -1 memberi hasil salah. Buat trace table, perbaiki, dan jelaskan.
+
+\Sub{Bonus: bonus-faktorial.cpp}
+Menu berulang untuk faktorial dan jumlah deret sampai pengguna memilih 0.
+
+\Sub{Latihan menelusuri}
+\begin{MKode}{tebak.cpp}
+int x = 0;
+for (int i = 0; i < 4; i++) {
+    x += i * 2;
+}
+int k = 1;
+while (k < 20) {
+    k *= 3;
+}
+cout << x << " " << k << endl;
+\end{MKode}
+\begin{Tebak}[]
+Tulis keluarannya di kertas tanpa menjalankan program. Buat trace table bila perlu.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+12 27
+\end{MKeluaran}
+\texttt{x} = 0 + 2 + 4 + 6 = 12. \texttt{k} menjadi 3, 9, 27; berhenti saat 27 tidak lagi kurang dari 20.
+\end{Jawaban}
+\Bagian{Penutup}{Rangkuman}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.320\textwidth}>{\raggedright\arraybackslash}p{0.660\textwidth}@{}}
+\kepala{Konsep} & \kepala{Yang perlu diingat}\\
+Perulangan for & Tiga bagian \texttt{for}: nilai awal; syarat lanjut; perubahan.\\\garis
+Pencacah dan akumulator & Akumulator dan pencacah selalu diberi nilai awal sebelum perulangan, bukan di dalamnya.\\\garis
+Perulangan while & Sesuatu di dalam badan harus mengubah syarat.\\\garis
+Nilai sentinel & Baca sekali sebelum perulangan, lalu baca lagi di akhir badan.\\\garis
+Perulangan do-while & Syarat diperiksa sesudah badan.\\\garis
+Memilih jenis perulangan & Ketiganya bisa saling menggantikan.\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penutup}{Cek pemahaman}
+Jawab tanpa menjalankan program, lalu periksa dengan menjalankannya.
+\begin{enumerate}
+\item Berapa kali badan \texttt{for (int i = 2; i < 10; i += 2)} dijalankan?
+\item Mengapa \texttt{int total = 0;} harus di luar perulangan?
+\item Apa beda \texttt{while} dan \texttt{do-while} bila syaratnya sejak awal salah?
+\item Apa keluaran \texttt{int k = 1; while (k < 50) k *= 2; cout << k;}?
+\item Pada pola sentinel, mengapa \texttt{cin} ditulis di akhir badan?
+\end{enumerate}
+\begin{Jawaban}[]
+\begin{enumerate}[leftmargin=16pt]
+\item 4 kali (i = 2, 4, 6, 8).
+\item Bila di dalam, total di-reset di setiap putaran.
+\item \texttt{while} tidak menjalankan badan; \texttt{do-while} menjalankannya sekali.
+\item 64.
+\item Agar sentinel diperiksa di syarat sebelum sempat diproses.
+\end{enumerate}
+\end{Jawaban}
+\Bagian{Penilaian}{Exit Ticket 5}
+Dikerjakan di 25 menit terakhir kelas, sendiri, tanpa AI, internet, atau diskusi. Exit Ticket 5 adalah satu dari 14 Exit Ticket; rata-ratanya menjadi komponen berbobot 25\%.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.080\textwidth}>{\raggedright\arraybackslash}p{0.600\textwidth}>{\raggedright\arraybackslash}p{0.100\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang menampilkan kelipatan k dari 1 sampai n beserta banyaknya & 25 & CPMK0607\\\garis
+A2 & Tulis program yang membaca bilangan sampai 0 lalu menampilkan jumlah bilangan positif & 25 & CPMK0607\\\garis
+B1 & Buat trace table sebuah perulangan dan tentukan keluarannya & 20 & CPMK0608\\\garis
+B2 & Jelaskan mengapa sebuah perulangan tidak berhenti dan cara memperbaikinya & 20 & CPMK0608\\\garis
+B3 & Tentukan berapa kali badan perulangan dijalankan dan jelaskan alasannya & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penilaian}{Tugas 5: Program Statistik Nilai}
+Kumpulkan sebelum Pertemuan 6 lewat kanal pengumpulan yang diumumkan dosen.
+
+\Sub{Bagian A: program (50 poin)}
+Buat program statistik nilai dengan ketentuan berikut.
+\begin{enumerate}
+\item Baca jumlah siswa n, ulangi sampai n > 0
+\item Baca nilai n siswa; setiap nilai harus 0 sampai 100, ulangi bila tidak valid
+\item Tampilkan nilai tertinggi, nilai terendah, dan rata-rata kelas
+\item Tampilkan jumlah siswa LULUS (nilai 75 ke atas) dan TIDAK LULUS
+\item Menu \texttt{do-while} untuk mengulang atau keluar
+\end{enumerate}
+\begin{Contoh}[Bonus, tidak wajib]
+Tampilkan persentase kelulusan dengan dua desimal.
+\end{Contoh}
+\Sub{Bagian B: penjelasan (50 poin)}
+Komentar maksimal 150 kata dan trace table untuk n = 3 dengan nilai 80, 70, 90. Jelaskan alasan memilih \texttt{for}, \texttt{while}, atau \texttt{do-while} di setiap bagian, dan satu kesalahan off-by-one atau perulangan tak berhenti yang kalian temui.
+
+\Sub{Rubrik Tugas 5}
+\par\vspace{4pt}\noindent{\fontsize{8.5pt}{11.5pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.190\textwidth}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}>{\raggedright\arraybackslash}p{0.180\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85–100} & \kepala{Baik 70–84} & \kepala{Cukup 55–69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\\garis
+A2 Validasi dan perulangan & 15 & validasi n dan nilai, menu berulang & satu validasi kurang & dua kurang & tanpa validasi\\\garis
+A3 Ketepatan statistik & 15 & semua tepat termasuk n = 1 & satu salah & dua salah & sebagian besar salah\\\garis
+B1 Trace table dan alasan & 30 & trace lengkap dan alasan tepat & satu baris trace salah & trace tidak lengkap & tidak ada atau disalin\\\garis
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Nilai kriteria = poin × skor level. Contoh: A1 di level Baik dengan skor 80 memberi 20 × 0,80 = 16 poin.
+
+\Bagian{Penutup}{Bacaan lanjut dan persiapan minggu depan}
+\begin{enumerate}
+\item Deitel, P. dan Deitel, H. C++ How to Program, edisi ke-10, Bab 4 dan 5.
+\item learncpp.com, Bab 8 (loops).
+\item Gaddis, T. Starting Out with C++, Bab 5.
+\item Slide \texttt{01 Slide/P5 Perulangan Bagian 1.pdf} dan hands-on di \texttt{02 Hands-on/P5 - Perulangan 1 - Hands-on/}.
+\end{enumerate}
+\begin{Penting}[Minggu depan]
+Pertemuan 6 membahas perulangan bersarang, \texttt{break}, \texttt{continue}, dan pola bintang, sejalan dengan Algoritma Pertemuan 6.
+\end{Penting}
+\end{document}

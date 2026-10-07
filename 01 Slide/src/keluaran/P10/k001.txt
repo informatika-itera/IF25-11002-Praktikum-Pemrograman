@@ -1,0 +1,4 @@
+65
+Baris 0: 330
+Baris 1: 267
+Baris 2: 365

@@ -1,0 +1,2 @@
+Posisi: 1 4 6
+Rani muncul 3 kali

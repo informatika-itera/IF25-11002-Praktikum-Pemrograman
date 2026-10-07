@@ -1,0 +1,568 @@
+% Pertemuan 6 Praktikum Pemrograman (IF25-11002). Dihasilkan oleh tools/build.py dari tools/konten/p06.py.
+% Kompilasi: xelatex P06.tex (dua kali). Catatan: xelatex -jobname=P06-catatan "\def\catatan{1}\input{P06.tex}"
+\documentclass[t]{beamer}
+\usetheme{ITERA}
+\input{catatan-preamble.tex}
+\renewcommand\ITERAmeeting{Pertemuan 6}
+\begin{document}
+\SlideJudul{IF25-11002 PRAKTIKUM PEMROGRAMAN}{Pertemuan 6\\Perulangan Bagian 2 dan Pola}{Perulangan bersarang, break dan continue, serta menurunkan rumus pola}{Tim Pengajar}{Tahun 2026. Sejajar dengan Pertemuan 6 Algoritma Pemrograman: Perulangan Bagian 2 dan Pattern.}
+\note{Buka dengan menanyakan satu hal dari pertemuan lalu yang masih membingungkan.}
+
+\begin{frame}{Dua mata kuliah, satu minggu}
+\framesubtitle{Sebelum mulai}
+Topik minggu ini sama di dua mata kuliah, dengan peran yang berbeda.
+\vspace{10pt}
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Algoritma: Perulangan Bagian 2 dan Pattern}
+Perulangan bersarang, menganalisis pola baris dan kolom, serta kendali break dan continue.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Praktikum: Perulangan 2}
+Menulis perulangan bersarang di C++, menurunkan rumus banyak isi per baris, dan memakai \texttt{break} serta \texttt{continue}.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\note{Tanyakan apa yang sudah dibahas di Algoritma minggu ini. Gunakan jawabannya sebagai jembatan ke praktikum.}
+\end{frame}
+
+\begin{frame}{Saat pulang nanti, kalian bisa}
+\framesubtitle{Target hari ini}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{1}{Menerapkan}
+Menulis program dengan perulangan bersarang, \texttt{break}, dan \texttt{continue} untuk menghasilkan pola dan memproses data dua dimensi
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 6.1, CPMK0607}
+\end{Langkah}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{2}{Menjelaskan}
+Menurunkan hubungan antara nomor baris dan banyak isi pada sebuah pola, serta menelusuri perulangan bersarang untuk menentukan keluarannya
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 6.2, CPMK0608}
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{Catatan}
+Dua kemampuan ini dinilai sama berat di Exit Ticket, tugas, UTS, dan UAS.
+\end{Catatan}
+\note{Bacakan target dengan pelan. Kata kuncinya menerapkan dan menjelaskan.}
+\end{frame}
+
+\begin{frame}{Ingat minggu lalu}
+\framesubtitle{Review, 5 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Berapa kali badan \texttt{for (int i = 1; i < 10; i += 3)} dijalankan?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Di mana akumulator harus diberi nilai awal?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Kapan memilih \texttt{do-while}?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Jawab di kertas dulu, lalu cocokkan dengan teman sebelah.\note{Pilih dua mahasiswa untuk menjawab. Koreksi singkat, jangan mengajar ulang.}
+\end{frame}
+
+\Bagian{1}{Masalah pembuka}{Denah kursi bioskop}
+\note{Masalah pembuka 10 menit.}
+
+\begin{frame}[fragile]{Denah kursi bioskop}
+\framesubtitle{Masalah minggu ini}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+{Bioskop ingin menampilkan denah kursi: 5 baris, tiap baris 8 kursi, dengan nomor seperti A1 sampai E8.
+
+\vspace{6pt}
+Satu perulangan cukup untuk satu baris kursi. Untuk semua baris, perulangan itu harus diulang lagi.\par}
+\vspace{6pt}
+\begin{Catatan}
+\textbf{Diskusi 2 menit.} Mana yang berubah lebih cepat, huruf baris atau nomor kursi? Apa artinya bagi susunan perulangannya?
+\end{Catatan}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[]
+A1 A2 A3 A4 A5 A6 A7 A8
+B1 B2 B3 B4 B5 B6 B7 B8
+C1 C2 C3 C4 C5 C6 C7 C8
+D1 D2 D3 D4 D5 D6 D7 D8
+E1 E2 E3 E4 E5 E6 E7 E8
+\end{Keluaran}
+\end{column}
+\end{columns}
+\note{Tampung beberapa jawaban tanpa menilai benar salah.}
+\end{frame}
+
+\begin{frame}{Dari langkah ke instruksi}
+\framesubtitle{Sambungan dengan Algoritma}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Pisahkan dimensi}
+Baris berganti lebih lambat, kolom berganti lebih cepat.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Rumuskan}
+Untuk setiap baris, ulangi semua kolom; lalu pindah baris.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Terjemahkan}
+\texttt{for} luar untuk baris, \texttt{for} dalam untuk kolom.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Langkah 1 dan 2 dilatih di Algoritma. Langkah 3 kita kerjakan hari ini dengan C++.\note{Hubungkan eksplisit ke Algoritma minggu ini.}
+\end{frame}
+
+\Bagian{2}{Coba dulu, baru dijelaskan}{25 menit eksperimen di GDB Online}
+\note{Struggle 25 menit. Berkeliling, jangan menjelaskan materi dulu.}
+
+\begin{frame}{Misi kalian}
+\framesubtitle{Struggle, 25 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Satu baris}
+Tampilkan 8 bintang dalam satu baris.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Banyak baris}
+Ulangi baris itu 5 kali tanpa menyalin kode.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Segitiga}
+Ubah agar baris ke-b berisi b bintang.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Boleh}
+Bertanya ke teman, mengubah apa saja, sengaja membuat error.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokAlert}{Belum dulu}
+Mencari jawaban jadi di internet atau AI.
+\end{BlokAlert}
+\end{column}
+\end{columns}
+\note{Catat kesalahan yang sering muncul untuk dibahas di debrief.}
+\end{frame}
+
+\begin{frame}{Apa yang kalian temukan?}
+\framesubtitle{Debrief struggle}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Di mana \texttt{cout << endl} harus diletakkan?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Apa yang berubah ketika batas \texttt{for} dalam memakai variabel \texttt{for} luar?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Berapa total bintang untuk 5 baris kali 8?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Jawaban kalian akan kita uji di bagian berikutnya.\note{Tulis jawaban di papan; buktikan atau patahkan di bagian materi.}
+\end{frame}
+
+\Bagian{3}{Perulangan di dalam perulangan}{Bersarang, pola, break, dan continue}
+\note{Materi 40 menit. Tunjukkan setiap contoh langsung di GDB Online.}
+
+\begin{frame}[fragile]{Perulangan bersarang}
+\framesubtitle{Baris dan kolom}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{denah.cpp}
+for (char b = 'A'; b <= 'C'; b++) {
+    for (int k = 1; k <= 4; k++) {
+        cout << b << k << " ";
+    }
+    cout << endl;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P06/k001.txt}
+\begin{Catatan}
+Untuk setiap satu putaran \texttt{for} luar, \texttt{for} dalam berjalan penuh. Total putaran dalam: 3 × 4 = 12.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Batas dalam bergantung pada baris}
+\framesubtitle{Segitiga}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{segitiga.cpp}
+int n = 4;
+for (int b = 1; b <= n; b++) {
+    for (int k = 1; k <= b; k++) {
+        cout << "*";
+    }
+    cout << endl;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P06/k002.txt}
+\begin{Catatan}
+Batas \texttt{for} dalam memakai \texttt{b}. Itulah yang membuat setiap baris berbeda panjang.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}{Menurunkan rumus pola}
+\framesubtitle{Tabel baris dan isi}
+Untuk piramida tinggi 4, tulis dulu tabelnya, baru cari rumusnya.
+\vspace{8pt}
+
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{132pt}>{\raggedright\arraybackslash}p{151pt}>{\raggedright\arraybackslash}p{151pt}>{\raggedright\arraybackslash}p{416pt}@{}}
+\kepala{Baris b} & \kepala{Spasi} & \kepala{Bintang} & \kepala{Tampilan}\\
+1 & 3 & 1 & \texttt{   *}\\
+\barisgenap 2 & 2 & 3 & \texttt{  ***}\\
+3 & 1 & 5 & \texttt{ *****}\\
+\barisgenap 4 & 0 & 7 & \texttt{*******}\\
+Rumus & n − b & 2b − 1 & dua \texttt{for} dalam berurutan\\
+\garisdasar
+\end{tabular}
+\end{frame}
+
+\begin{frame}[fragile]{Piramida dari rumus}
+\framesubtitle{Menerjemahkan tabel}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{piramida.cpp}
+int n = 4;
+for (int b = 1; b <= n; b++) {
+    for (int s = 1; s <= n - b; s++) {
+        cout << " ";
+    }
+    for (int k = 1; k <= 2 * b - 1; k++) {
+        cout << "*";
+    }
+    cout << endl;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P06/k003.txt}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{break dan continue}
+\framesubtitle{Mengendalikan perulangan}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{breakcontinue.cpp}
+for (int i = 1; i <= 10; i++) {
+    if (i % 3 == 0) {
+        continue;
+    }
+    if (i > 7) {
+        break;
+    }
+    cout << i << " ";
+}
+cout << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P06/k004.txt}
+\begin{Catatan}
+\texttt{continue} melompat ke putaran berikutnya. \texttt{break} keluar dari perulangan terdekat saja, bukan semua perulangan.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Mencari dengan break}
+\framesubtitle{Berhenti saat ketemu}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{prima.cpp}
+int x = 91;
+bool prima = true;
+for (int d = 2; d * d <= x; d++) {
+    if (x % d == 0) {
+        cout << "Habis dibagi " << d << endl;
+        prima = false;
+        break;
+    }
+}
+cout << (prima ? "prima" : "bukan prima") << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P06/k005.txt}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya}
+\framesubtitle{Latihan menjelaskan, 3 menit}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int hitung = 0;
+for (int i = 1; i <= 3; i++) {
+    for (int j = i; j <= 3; j++) {
+        cout << i << j << " ";
+        hitung++;
+    }
+}
+cout << endl << hitung << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Catatan}
+Tulis keluarannya di kertas, karakter demi karakter. Jangan dijalankan dulu.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Contoh soal Bagian B. Beri waktu 3 menit sebelum slide jawaban.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya: jawaban}
+\framesubtitle{Latihan menjelaskan}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int hitung = 0;
+for (int i = 1; i <= 3; i++) {
+    for (int j = i; j <= 3; j++) {
+        cout << i << j << " ";
+        hitung++;
+    }
+}
+cout << endl << hitung << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Keluaran}[]
+11 12 13 22 23 33 
+6
+\end{Keluaran}
+\begin{Catatan}
+\texttt{j} mulai dari \texttt{i}, jadi baris luar ke-1 menghasilkan 3 pasangan, ke-2 dua, ke-3 satu. Total 6.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Tanyakan jawaban yang paling sering salah, lalu telusuri bersama.}
+\end{frame}
+
+\begin{frame}{Error yang sering muncul minggu ini}
+\framesubtitle{Pesan diambil langsung dari g++}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{208pt}>{\raggedright\arraybackslash}p{256pt}>{\raggedright\arraybackslash}p{398pt}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Variabel luar dideklarasi ulang & \texttt{for (int i...) for (int i...)} & \texttt{error: redeclaration of 'int i'}\\
+\barisgenap break di luar perulangan & \texttt{if (x) break;} & \texttt{error: break statement not within loop or switch}\\
+continue di luar perulangan & \texttt{continue; di main} & \texttt{error: continue statement not within a loop}\\
+\barisgenap Kurung kurawal kurang & \texttt{for \{ for \{ \}} & \texttt{error: expected '\}' at end of input}\\
+Pencacah dalam tak terpakai & \texttt{int baris; tak dipakai} & \texttt{warning: unused variable 'baris'}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Pesan di tabel ini dihasilkan dengan g++ dan opsi -Wall, sama seperti di cek.sh.}
+\note{Minta mahasiswa memotret slide ini.}
+\end{frame}
+
+\Bagian{4}{Hands-on bertingkat}{45 menit, dari dasar sampai tantangan}
+\note{Mahasiswa membuka folder 02 Hands-on/P6 - Perulangan 2 dan Pola - Hands-on.}
+
+\begin{frame}{Peta hands-on}
+\framesubtitle{Folder 02 Hands-on/P6 - Perulangan 2 dan Pola - Hands-on}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{36pt}>{\raggedright\arraybackslash}p{267pt}>{\raggedright\arraybackslash}p{110pt}>{\raggedright\arraybackslash}p{83pt}>{\raggedright\arraybackslash}p{341pt}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Waktu} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-persegi.cpp} & Dasar & 10' & \texttt{for} bersarang dengan batas tetap\\
+\barisgenap 2 & \texttt{handson2-segitiga.cpp} & Menengah & 15' & batas dalam bergantung pada baris\\
+3 & \texttt{handson3-piramida.cpp} & Tantangan & 20' & tabel baris-isi, perbaiki tiga batas\\
+\barisgenap + & \texttt{bonus-prima.cpp} & Pengayaan & sisa & bersarang dengan \texttt{break}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Kerjakan berurutan. Cocokkan keluaran dengan folder \texttt{expected/}; latihan yang membaca masukan memakai data di folder \texttt{input/}.\note{Saat berkeliling, minta mahasiswa yang mengerjakan latihan tantangan menjelaskan blok PENJELASAN mereka.}
+\end{frame}
+
+\begin{frame}{Cara mengecek dan aturannya}
+\framesubtitle{Hands-on}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Di GDB Online}
+Salin isi file latihan, lengkapi TODO, klik Run. Bila program membaca masukan, ketik isi file di \texttt{input/}. Bandingkan dengan \texttt{expected/}.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Di komputer sendiri}
+Jalankan \texttt{bash cek.sh}. Skrip mengompilasi dengan \texttt{-Wall -Werror}, memberi masukan dari \texttt{input/}, lalu mencocokkan keluaran.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{6pt}
+\begin{Catatan}
+AI boleh untuk memahami pesan error, tidak untuk meminta solusi utuh. Exit Ticket dikerjakan tanpa bantuan apa pun.
+\end{Catatan}
+\note{Hands-on tidak dinilai langsung; yang dinilai Exit Ticket dan tugas.}
+\end{frame}
+
+\Bagian{5}{Exit Ticket dan tugas}{25 menit terakhir, lalu pekerjaan rumah}
+\note{Mulai Exit Ticket tepat waktu.}
+
+\begin{frame}{Exit Ticket 6}
+\framesubtitle{Individual, 25 menit, tanpa AI dan internet}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{60pt}>{\raggedright\arraybackslash}p{560pt}>{\raggedright\arraybackslash}p{80pt}>{\raggedright\arraybackslash}p{150pt}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang menampilkan pola yang diberikan untuk n masukan & 25 & CPMK0607\\
+\barisgenap A2 & Tulis program yang memakai \texttt{break} untuk berhenti saat data dicari ditemukan & 25 & CPMK0607\\
+B1 & Tentukan keluaran perulangan bersarang yang diberikan & 20 & CPMK0608\\
+\barisgenap B2 & Turunkan rumus banyak isi per baris dari sebuah pola dan jelaskan & 20 & CPMK0608\\
+B3 & Jelaskan perbedaan efek \texttt{break} dan \texttt{continue} pada potongan kode & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Soal A dinilai dari keluaran yang tepat sama. Soal B dinilai dari ketepatan dan alasan. Pelanggaran aturan membuat nilai Exit Ticket ini 0.}
+\note{Soal lengkap dibagikan terpisah dan tidak disimpan di repo publik.}
+\end{frame}
+
+\begin{frame}{Tugas 6: Pattern Generator}
+\framesubtitle{Dikumpulkan sebelum Pertemuan 7}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Bagian A, program, 50 poin}
+Buat program Pattern Generator dengan ketentuan berikut. Ketentuannya di slide berikut.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Bagian B, penjelasan, 50 poin}
+Komentar maksimal 150 kata dan tabel baris, spasi, dan isi untuk pola piramida dan berlian dengan n = 4, beserta rumus yang diturunkan dari tabel itu. Jelaskan satu kesalahan batas perulangan yang kalian temui.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+{\small Data di tugas adalah data kalian sendiri. Rubrik lengkap ada di Modul Belajar 6.}
+\note{Ingatkan bahwa penjelasan disalin dari AI mudah dikenali karena tidak menyebut pengalaman mereka sendiri.}
+\end{frame}
+
+\begin{frame}{Ketentuan Tugas 6}
+\framesubtitle{Pattern Generator}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{87pt}>{\raggedright\arraybackslash}p{788pt}@{}}
+\kepala{No} & \kepala{Ketentuan Bagian A}\\
+1 & Menu pola dengan \texttt{switch}: 1 segitiga kiri, 2 segitiga kanan, 3 piramida, 4 berlian, 5 persegi berongga, 0 keluar\\
+\barisgenap 2 & Baca jumlah baris n\\
+3 & Tampilkan pola sesuai pilihan\\
+\barisgenap 4 & Program berulang sampai pengguna memilih 0\\
+5 & Validasi: n harus 1 sampai 20, pilihan harus 0 sampai 5\\
+\barisgenap Bonus & Tambahkan pola huruf inisial nama kalian, atau pola kreasi sendiri.\\
+\garisdasar
+\end{tabular}
+\note{Bacakan ketentuan satu per satu dan tanyakan apakah ada yang belum jelas.}
+\end{frame}
+
+\begin{frame}{Rubrik Tugas 6}
+\framesubtitle{Empat level, sama di semua instrumen}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{44pt}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{156pt}>{\raggedright\arraybackslash}p{146pt}>{\raggedright\arraybackslash}p{146pt}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85--100} & \kepala{Baik 70--84} & \kepala{Cukup 55--69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\
+\barisgenap A2 Menu dan validasi & 15 & lima pola, menu berulang, validasi & satu pola kurang & dua pola kurang & menu tidak berulang\\
+A3 Ketepatan bentuk & 15 & semua pola tepat untuk n = 1, 4, 7 & satu pola meleset & dua meleset & sebagian besar meleset\\
+\barisgenap B1 Tabel dan rumus & 30 & dua tabel dan rumus tepat & satu rumus kurang tepat & tabel tanpa rumus & tidak ada atau disalin\\
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}
+\vspace{8pt}
+
+{\small Nilai kriteria = poin × skor level. Bagian A total 50, Bagian B total 50.}
+\note{Rubrik ini sama strukturnya setiap minggu; yang berubah hanya isi kriteria A2, A3, dan B1.}
+\end{frame}
+
+\begin{frame}{Sebelum Pertemuan 7}
+\framesubtitle{Persiapan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Selesaikan}
+Hands-on yang belum lulus \texttt{cek.sh}, terutama latihan tantangan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Kumpulkan}
+Tugas 6 sebelum Pertemuan 7 dimulai.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Baca}
+Modul Belajar 6 untuk mengulang, lalu bagian awal modul berikutnya.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Pertemuan 7 adalah review dan simulasi UTS untuk materi Pertemuan 1 sampai 6. Bawa catatan dan daftar hal yang masih membingungkan.\note{Tanyakan satu hal yang paling membingungkan hari ini untuk dibuka di review minggu depan.}
+\end{frame}
+
+\SlidePenutup{Terima kasih}{Sampai jumpa di Pertemuan 7: review dan simulasi UTS}
+\note{Slide penutup.}
+\end{document}

@@ -1,0 +1,333 @@
+% Modul Belajar 12, dihasilkan oleh tools/build.py dari tools/konten/p12.py
+\documentclass[a4paper]{article}
+\usepackage{modulITERA}
+\begin{document}
+\Sampul{12}{Sorting}{Mengurutkan data dengan bubble sort dan selection sort, serta menelusuri setiap putarannya}{CPMK0607 (menerapkan) dan CPMK0608 (menjelaskan) pada konsep dasar algoritma dan sistem komputer}{sekitar 3 jam belajar mandiri, ditambah 150 menit di kelas}{\texttt{02 Hands-on/P12 - Sorting - Hands-on/}}
+\Bagian{Modul 12}{Peta belajar}
+Ikuti urutan ini dari atas ke bawah. Setiap bagian memakai apa yang sudah dibahas di bagian sebelumnya.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.140\textwidth}>{\raggedright\arraybackslash}p{0.840\textwidth}@{}}
+\kepala{Urutan} & \kepala{Bagian}\\
+1 & Tentang modul ini\\\garis
+2 & Masalah pembuka: Papan peringkat lomba coding\\\garis
+3 & Langkah 1: Menukar dua nilai\\\garis
+4 & Langkah 2: Bubble sort: satu putaran\\\garis
+5 & Langkah 3: Bubble sort di C++\\\garis
+6 & Langkah 4: Selection sort\\\garis
+7 & Langkah 5: Mengurutkan dua array sejajar\\\garis
+8 & Pesan error yang sering muncul\\\garis
+9 & Latihan mandiri\\\garis
+10 & Rangkuman\\\garis
+11 & Cek pemahaman\\\garis
+12 & Exit Ticket dan tugas\\\garis
+13 & Bacaan lanjut dan persiapan minggu depan\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Pembuka}{Tentang modul ini}
+Modul ini mendampingi Pertemuan 12. Minggu lalu kalian melihat bahwa binary search jauh lebih cepat, asalkan datanya terurut. Minggu ini kalian belajar mengurutkan data sendiri dengan dua algoritma klasik, dan menelusuri apa yang terjadi di setiap putarannya.
+
+Isinya sama dengan slide di kelas, tetapi ditulis lebih pelan dan lebih lengkap, supaya kalian bisa mengulang sendiri di rumah tanpa harus menebak maksud slide.
+
+\Sub{Setelah menyelesaikan modul ini, kalian bisa}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.680\textwidth}>{\raggedright\arraybackslash}p{0.230\textwidth}@{}}
+\kepala{No} & \kepala{Kemampuan} & \kepala{Dibahas di}\\
+1 & Menulis program yang mengurutkan array naik maupun turun dengan bubble sort dan selection sort, termasuk mengurutkan dua array sejajar sekaligus (Sub-CPMK 12.1, CPMK0607) & Langkah 1 sampai 5\\\garis
+2 & Menelusuri isi array sesudah setiap putaran pengurutan dan menjelaskan banyak perbandingan serta pertukaran yang terjadi (Sub-CPMK 12.2, CPMK0608) & kotak Tebak dulu, Latihan 3\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Karena setiap instrumen penilaian dibagi rata antara Bagian A (menulis kode) dan Bagian B (menelusuri dan menjelaskan), yang dinilai bukan hanya program kalian jalan, tetapi juga kalian bisa menjelaskan mengapa program itu jalan.
+
+\Sub{Cara memakai modul ini}
+Setiap langkah punya pola yang sama: penjelasan konsep, kadang contoh dari kehidupan sehari-hari, lalu kode yang bisa langsung kalian ketik. Sesudah kode ada kotak \textbf{Tebak dulu}. Tulis tebakan kalian di kertas sebelum membaca \textbf{Jawaban} di bawahnya. Kebiasaan menebak lalu membuktikan inilah yang membuat konsep menempel, bukan sekadar membaca.
+
+\begin{Penting}[Ketik, jangan salin]
+Ketik ulang setiap contoh di GDB Online atau editor kalian, jangan disalin-tempel. Saat mengetik, kalian akan membuat salah ketik, membaca pesan error, dan memperbaikinya. Itu bagian dari belajar.
+\end{Penting}
+\Sub{Yang perlu disiapkan}
+Peramban dengan akses ke onlinegdb.com, atau g++ di komputer kalian sendiri. Kertas dan alat tulis untuk menebak keluaran dan membuat trace table. Folder hands-on pertemuan ini dari repo mata kuliah.
+
+\Bagian{Pembuka}{Masalah pembuka: Papan peringkat lomba coding}
+Panitia lomba coding mencatat skor peserta sesuai urutan pendaftaran. Di akhir lomba, papan peringkat harus menampilkan peserta dari skor tertinggi.
+
+Mencari skor tertinggi sudah bisa sejak Pertemuan 9. Tantangannya sekarang adalah menyusun semua peserta, dan nama harus tetap menempel pada skornya.
+
+\begin{MKeluaran}[title={Tampilan yang diinginkan}]
+1. Siti 95
+2. Andi 88
+3. Rani 82
+4. Budi 75
+5. Doni 70
+\end{MKeluaran}
+\begin{Tebak}[Coba pikirkan]
+Bagaimana kalian mengurutkan lima kartu skor di atas meja dengan tangan? Langkah apa yang terus kalian ulang?
+\end{Tebak}
+\begin{Jawaban}[Cara memecahnya]
+Pilih caranya: Tukar pasangan bersebelahan yang terbalik, atau cari yang terbesar lalu taruh di depan. Ulangi per putaran: Setiap putaran memastikan satu elemen sudah di tempat akhirnya. Terjemahkan: Pertukaran tiga baris dan dua \texttt{for} bersarang.
+\end{Jawaban}
+\Bagian{Langkah 1}{Menukar dua nilai}
+Hampir semua algoritma pengurutan memakai pertukaran dua elemen. Pertukaran butuh variabel sementara: simpan nilai pertama, timpa yang pertama dengan yang kedua, lalu isi yang kedua dengan nilai yang tadi disimpan.
+
+\begin{Contoh}[Contoh sehari-hari]
+Menukar isi dua gelas, teh dan kopi, butuh gelas ketiga yang kosong. Tanpa gelas ketiga, salah satu minuman tumpah.
+\end{Contoh}
+\begin{MKode}{tukar.cpp}
+int a = 7, b = 3;
+int t = a;
+a = b;
+b = t;
+cout << a << " " << b << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+3 7
+\end{MKeluaran}
+Tanpa \texttt{t}, nilai lama \texttt{a} hilang begitu ditimpa.
+\end{Jawaban}
+\Bagian{Langkah 2}{Bubble sort: satu putaran}
+Bubble sort membandingkan setiap pasangan bersebelahan dari kiri ke kanan dan menukarnya bila urutannya terbalik. Setelah satu putaran, elemen terbesar terdorong ke ujung kanan. Putaran berikutnya tidak perlu memeriksa ujung itu lagi.
+
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.196\textwidth}>{\raggedright\arraybackslash}p{0.370\textwidth}>{\raggedright\arraybackslash}p{0.414\textwidth}@{}}
+\kepala{Pasangan} & \kepala{Isi array sesudahnya} & \kepala{Keterangan}\\
+a[0], a[1] & 1 5 4 2 8 & 5 > 1, tukar\\\garis
+a[1], a[2] & 1 4 5 2 8 & 5 > 4, tukar\\\garis
+a[2], a[3] & 1 4 2 5 8 & 5 > 2, tukar\\\garis
+a[3], a[4] & 1 4 2 5 8 & 5 < 8, tetap\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\begin{Penting}[]
+Sesudah putaran pertama, elemen terbesar pasti sudah di ujung kanan, seperti gelembung yang naik ke permukaan.
+\end{Penting}
+\Bagian{Langkah 3}{Bubble sort di C++}
+Perulangan luar menghitung putaran, perulangan dalam menjalankan satu putaran. Batas dalam \texttt{j < n - 1 - i} punya dua alasan: \texttt{a[j + 1]} tidak boleh keluar batas, dan i elemen terakhir sudah final.
+
+\begin{MKode}{bubble.cpp}
+int a[5] = {5, 1, 4, 2, 8};
+int n = 5;
+for (int i = 0; i < n - 1; i++) {
+    for (int j = 0; j < n - 1 - i; j++) {
+        if (a[j] > a[j + 1]) {
+            int t = a[j]; a[j] = a[j + 1]; a[j + 1] = t;
+        }
+    }
+}
+for (int k = 0; k < n; k++) cout << a[k] << " ";
+cout << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+1 2 4 5 8 
+\end{MKeluaran}
+Batas dalam \texttt{n - 1 - i}: setiap putaran, satu elemen di ujung sudah final. \texttt{j + 1} tidak boleh melewati n − 1.
+\end{Jawaban}
+\Bagian{Langkah 4}{Selection sort}
+Selection sort bekerja dengan cara lain: di setiap putaran, cari elemen terkecil dari bagian yang belum terurut, lalu tukar ke depan. Pencariannya memakai pola indeks minimum dari Pertemuan 9.
+
+Bedanya dengan bubble sort: selection sort hanya melakukan paling banyak satu pertukaran per putaran, sedangkan bubble sort bisa menukar berkali-kali.
+
+\begin{Contoh}[Contoh sehari-hari]
+Memilih pemain untuk tim: dari sisa pemain, pilih yang terbaik, taruh di urutan berikutnya, lalu ulangi dari sisanya.
+\end{Contoh}
+\begin{MKode}{selection.cpp}
+int a[5] = {29, 10, 14, 37, 13};
+for (int i = 0; i < 4; i++) {
+    int iMin = i;
+    for (int j = i + 1; j < 5; j++) {
+        if (a[j] < a[iMin]) iMin = j;
+    }
+    int t = a[i]; a[i] = a[iMin]; a[iMin] = t;
+}
+for (int k = 0; k < 5; k++) cout << a[k] << " ";
+cout << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+10 13 14 29 37 
+\end{MKeluaran}
+Paling banyak satu pertukaran per putaran. Untuk urutan turun, cari yang terbesar.
+\end{Jawaban}
+\Bagian{Langkah 5}{Mengurutkan dua array sejajar}
+Data sungguhan jarang berupa satu array. Bila nama dan skor disimpan di dua array sejajar, keduanya harus ditukar bersamaan; kalau tidak, nama tidak lagi sesuai dengan skornya.
+
+Fungsi \texttt{swap(x, y)} dari pustaka standar menukar dua variabel dan menggantikan tiga baris pertukaran manual.
+
+\begin{MKode}{sejajar.cpp}
+string nama[4] = {"Rani", "Budi", "Siti", "Andi"};
+int skor[4] = {82, 75, 95, 88};
+for (int i = 0; i < 3; i++) {
+    int iMaks = i;
+    for (int j = i + 1; j < 4; j++)
+        if (skor[j] > skor[iMaks]) iMaks = j;
+    swap(skor[i], skor[iMaks]);
+    swap(nama[i], nama[iMaks]);
+}
+for (int i = 0; i < 4; i++)
+    cout << nama[i] << " " << skor[i] << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Siti 95
+Andi 88
+Rani 82
+Budi 75
+\end{MKeluaran}
+Setiap pertukaran pada array kunci harus diikuti pertukaran yang sama pada array pasangannya. \texttt{swap} dari pustaka standar menukar dua nilai.
+\end{Jawaban}
+\Bagian{Waspada}{Pesan error yang sering muncul}
+Semua pesan di tabel ini dihasilkan g++ dengan opsi \texttt{-Wall}, sama seperti yang dipakai \texttt{cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.270\textwidth}>{\raggedright\arraybackslash}p{0.470\textwidth}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+swap tanpa nilai yang bisa diubah & \texttt{swap(a[0], 5)} & \texttt{error: no matching function for call to 'swap(int\&, int)'}\\\garis
+Tukar string dengan int & \texttt{swap(nama[i], skor[i])} & \texttt{error: no matching function for call to 'swap(std::string\&, int\&)'}\\\garis
+Variabel sementara tak dipakai & \texttt{int t; tidak dipakai} & \texttt{warning: unused variable 't'}\\\garis
+Indeks bukan bilangan bulat & \texttt{a[j + 0.5]} & \texttt{error: invalid types 'int [3][double]' for array subscript}\\\garis
+Ukuran array tidak cocok & \texttt{int a[3] = \{1, 2, 3, 4\}} & \texttt{error: too many initializers for 'int [3]'}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Kesalahan pengurutan yang paling sering, yaitu menukar tanpa variabel sementara, arah perbandingan terbalik, dan kekurangan putaran, tidak memunculkan pesan apa pun. Tuliskan isi array sesudah setiap putaran untuk menemukannya.
+
+\Bagian{Latihan}{Latihan mandiri}
+Latihan ini sama dengan hands-on di kelas. Semua file ada di \texttt{02 Hands-on/P12 - Sorting - Hands-on/latihan/}. Kerjakan berurutan, lalu cocokkan dengan \texttt{expected/} atau jalankan \texttt{bash cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.360\textwidth}>{\raggedright\arraybackslash}p{0.150\textwidth}>{\raggedright\arraybackslash}p{0.400\textwidth}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-bubble.cpp} & Dasar & bubble sort naik dengan jejak per putaran\\\garis
+2 & \texttt{handson2-peringkat.cpp} & Menengah & selection sort turun, dua array sejajar\\\garis
+3 & \texttt{handson3-tukar.cpp} & Tantangan & telusuri pertukaran, perbaiki tiga kesalahan\\\garis
++ & \texttt{bonus-hitung.cpp} & Pengayaan & bubble sort berhenti dini, hitung kerja\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Sub{Latihan 1: handson1-bubble.cpp}
+Urutkan naik dengan bubble sort dan tampilkan isi array sesudah setiap putaran.
+
+\Sub{Latihan 2: handson2-peringkat.cpp}
+Papan peringkat: urutkan skor turun dan nama ikut tertukar.
+
+\Sub{Latihan 3: handson3-tukar.cpp}
+Bubble sort dengan tiga kesalahan. Tulis isi array sesudah setiap pertukaran di putaran pertama, perbaiki, dan jelaskan.
+
+\Sub{Bonus: bonus-hitung.cpp}
+Hitung perbandingan dan pertukaran bubble sort berhenti dini untuk data terurut, terbalik, dan acak.
+
+\Sub{Latihan menelusuri}
+\begin{MKode}{tebak.cpp}
+int a[4] = {4, 3, 2, 1};
+int tukar = 0;
+for (int i = 0; i < 1; i++) {
+    for (int j = 0; j < 3 - i; j++) {
+        if (a[j] > a[j + 1]) {
+            swap(a[j], a[j + 1]);
+            tukar++;
+        }
+    }
+}
+for (int k = 0; k < 4; k++) cout << a[k];
+cout << " " << tukar << endl;
+\end{MKode}
+\begin{Tebak}[]
+Tulis keluarannya di kertas tanpa menjalankan program. Buat trace table bila perlu.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+3214 3
+\end{MKeluaran}
+Hanya satu putaran (i = 0). Angka 4 terdorong ke ujung lewat tiga pertukaran, tetapi sisanya belum terurut: 3 2 1 4.
+\end{Jawaban}
+\Bagian{Penutup}{Rangkuman}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.320\textwidth}>{\raggedright\arraybackslash}p{0.660\textwidth}@{}}
+\kepala{Konsep} & \kepala{Yang perlu diingat}\\
+Menukar dua nilai & Tanpa \texttt{t}, nilai lama \texttt{a} hilang begitu ditimpa.\\\garis
+Bubble sort: satu putaran & Sesudah putaran pertama, elemen terbesar pasti sudah di ujung kanan, seperti gelembung yang naik ke permukaan.\\\garis
+Bubble sort di C++ & Batas dalam \texttt{n - 1 - i}: setiap putaran, satu elemen di ujung sudah final.\\\garis
+Selection sort & Paling banyak satu pertukaran per putaran.\\\garis
+Mengurutkan dua array sejajar & Setiap pertukaran pada array kunci harus diikuti pertukaran yang sama pada array pasangannya.\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penutup}{Cek pemahaman}
+Jawab tanpa menjalankan program, lalu periksa dengan menjalankannya.
+\begin{enumerate}
+\item Mengapa pertukaran butuh variabel sementara?
+\item Sesudah putaran pertama bubble sort naik, elemen apa yang pasti sudah final?
+\item Berapa putaran maksimum bubble sort untuk 8 data?
+\item Berapa pertukaran paling banyak per putaran pada selection sort?
+\item Pada dua array sejajar, apa yang terjadi bila hanya array skor yang ditukar?
+\end{enumerate}
+\begin{Jawaban}[]
+\begin{enumerate}[leftmargin=16pt]
+\item Tanpa itu, nilai pertama hilang saat ditimpa.
+\item Elemen terbesar, di ujung kanan.
+\item 7 putaran.
+\item Satu.
+\item Nama tidak lagi sesuai dengan skornya.
+\end{enumerate}
+\end{Jawaban}
+\Bagian{Penilaian}{Exit Ticket 12}
+Dikerjakan di 25 menit terakhir kelas, sendiri, tanpa AI, internet, atau diskusi. Exit Ticket 12 adalah satu dari 14 Exit Ticket; rata-ratanya menjadi komponen berbobot 25\%.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.080\textwidth}>{\raggedright\arraybackslash}p{0.600\textwidth}>{\raggedright\arraybackslash}p{0.100\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis bubble sort yang mengurutkan array turun & 25 & CPMK0607\\\garis
+A2 & Urutkan dua array sejajar (nama dan nilai) berdasarkan nilai & 25 & CPMK0607\\\garis
+B1 & Tuliskan isi array sesudah setiap putaran selection sort & 20 & CPMK0608\\\garis
+B2 & Jelaskan kesalahan pada potongan kode pertukaran & 20 & CPMK0608\\\garis
+B3 & Bandingkan banyak pertukaran bubble dan selection sort untuk data yang diberikan & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penilaian}{Tugas 12: Sistem Leaderboard}
+Kumpulkan sebelum Pertemuan 13 lewat kanal pengumpulan yang diumumkan dosen.
+
+\Sub{Bagian A: program (50 poin)}
+Buat program leaderboard dengan menu berikut untuk maksimal 10 data (nama satu kata dan nilai).
+\begin{enumerate}
+\item Tambah data peserta dengan validasi nilai 0 sampai 100
+\item Urutkan berdasarkan nilai turun dengan selection sort, lalu tampilkan leaderboard
+\item Urutkan berdasarkan nama (abjad) dengan bubble sort
+\item Cari nama dengan linear search; tampilkan peringkat dan nilainya
+\item Cari nama dengan binary search pada data yang sudah urut abjad
+\item Tampilkan banyak perbandingan dan pertukaran setiap algoritma yang dipakai, lalu keluar
+\end{enumerate}
+\begin{Contoh}[Bonus, tidak wajib]
+Bandingkan banyak langkah linear dan binary search untuk data yang sama, dan tampilkan dalam satu tabel.
+\end{Contoh}
+\Sub{Bagian B: penjelasan (50 poin)}
+Komentar maksimal 150 kata dan tabel isi array sesudah setiap putaran selection sort untuk lima data contoh. Jelaskan mengapa nama harus ikut ditukar, dan mengapa binary search hanya dipakai sesudah pengurutan abjad.
+
+\Sub{Rubrik Tugas 12}
+\par\vspace{4pt}\noindent{\fontsize{8.5pt}{11.5pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.190\textwidth}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}>{\raggedright\arraybackslash}p{0.180\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85–100} & \kepala{Baik 70–84} & \kepala{Cukup 55–69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\\garis
+A2 Kelengkapan menu & 15 & dua sort, dua search, penghitung & satu fitur kurang & dua kurang & tiga atau lebih kurang\\\garis
+A3 Ketepatan urutan dan pencarian & 15 & semua tepat termasuk nilai sama & satu kasus salah & dua salah & sebagian besar salah\\\garis
+B1 Jejak putaran dan alasan & 30 & tabel tepat dan alasan jelas & satu putaran keliru & tanpa alasan & tidak ada atau disalin\\\garis
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Nilai kriteria = poin × skor level. Contoh: A1 di level Baik dengan skor 80 memberi 20 × 0,80 = 16 poin.
+
+\Bagian{Penutup}{Bacaan lanjut dan persiapan minggu depan}
+\begin{enumerate}
+\item Deitel, P. dan Deitel, H. C++ How to Program, edisi ke-10, Bab 8 (sorting).
+\item learncpp.com, Bab 18 (sorting an array using selection sort).
+\item Visualgo.net, modul Sorting.
+\item Slide \texttt{01 Slide/P12 Sorting.pdf} dan hands-on di \texttt{02 Hands-on/P12 - Sorting - Hands-on/}.
+\end{enumerate}
+\begin{Penting}[Minggu depan]
+Pertemuan 13 membahas fungsi: memecah program menjadi bagian bernama yang bisa dipanggil berulang, termasuk fungsi pengurutan dan pencarian.
+\end{Penting}
+\end{document}

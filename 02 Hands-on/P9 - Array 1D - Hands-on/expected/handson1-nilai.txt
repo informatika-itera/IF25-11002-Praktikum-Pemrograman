@@ -1,0 +1,6 @@
+nilai[0] = 78
+nilai[1] = 92
+nilai[2] = 65
+nilai[3] = 88
+nilai[4] = 71
+Terbalik: 71 88 65 92 78

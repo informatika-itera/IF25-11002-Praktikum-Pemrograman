@@ -1,0 +1,5 @@
+Bulan 1: 250000
+Bulan 2: 400000
+Bulan 3: 550000
+Bulan 4: 700000
+Target tercapai dalam 4 bulan

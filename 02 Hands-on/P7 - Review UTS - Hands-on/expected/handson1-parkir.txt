@@ -1,0 +1,3 @@
+2 jam, tarif 3000
+3 jam, tarif 11000
+Jenis tidak dikenal

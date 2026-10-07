@@ -1,0 +1,596 @@
+% Pertemuan 13 Praktikum Pemrograman (IF25-11002). Dihasilkan oleh tools/build.py dari tools/konten/p13.py.
+% Kompilasi: xelatex P13.tex (dua kali). Catatan: xelatex -jobname=P13-catatan "\def\catatan{1}\input{P13.tex}"
+\documentclass[t]{beamer}
+\usetheme{ITERA}
+\input{catatan-preamble.tex}
+\renewcommand\ITERAmeeting{Pertemuan 13}
+\begin{document}
+\SlideJudul{IF25-11002 PRAKTIKUM PEMROGRAMAN}{Pertemuan 13\\Fungsi dan Modularitas}{Memecah program menjadi bagian bernama: parameter, nilai kembali, prototipe, dan referensi}{Tim Pengajar}{Tahun 2026. Sejajar dengan Pertemuan 13 Algoritma Pemrograman: Fungsi dan Modularitas.}
+\note{Buka dengan menanyakan satu hal dari pertemuan lalu yang masih membingungkan.}
+
+\begin{frame}{Dua mata kuliah, satu minggu}
+\framesubtitle{Sebelum mulai}
+Topik minggu ini sama di dua mata kuliah, dengan peran yang berbeda.
+\vspace{10pt}
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Algoritma: Fungsi dan Modularitas}
+Dekomposisi masalah menjadi subprogram, prosedur dan fungsi, parameter masukan dan keluaran.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Praktikum: Fungsi}
+Mendefinisikan dan memanggil fungsi C++, memilih tipe kembali, memakai prototipe, pass by value dan by reference, serta array sebagai parameter.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\note{Tanyakan apa yang sudah dibahas di Algoritma minggu ini. Gunakan jawabannya sebagai jembatan ke praktikum.}
+\end{frame}
+
+\begin{frame}{Saat pulang nanti, kalian bisa}
+\framesubtitle{Target hari ini}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{1}{Menerapkan}
+Menulis program yang dipecah menjadi fungsi dengan parameter dan nilai kembali yang tepat, termasuk fungsi \texttt{void}, fungsi \texttt{bool}, parameter referensi, dan parameter array
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 13.1, CPMK0607}
+\end{Langkah}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{2}{Menjelaskan}
+Menelusuri aliran nilai pada pemanggilan fungsi dan menjelaskan perbedaan pass by value dan pass by reference serta jangkauan variabel lokal
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 13.2, CPMK0608}
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{Catatan}
+Dua kemampuan ini dinilai sama berat di Exit Ticket, tugas, UTS, dan UAS.
+\end{Catatan}
+\note{Bacakan target dengan pelan. Kata kuncinya menerapkan dan menjelaskan.}
+\end{frame}
+
+\begin{frame}{Ingat minggu lalu}
+\framesubtitle{Review, 5 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Mengapa pertukaran butuh variabel sementara?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Elemen mana yang final sesudah satu putaran bubble sort?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Apa beda bubble sort dan selection sort?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Jawab di kertas dulu, lalu cocokkan dengan teman sebelah.\note{Pilih dua mahasiswa untuk menjawab. Koreksi singkat, jangan mengajar ulang.}
+\end{frame}
+
+\Bagian{1}{Masalah pembuka}{Kode yang disalin berulang}
+\note{Masalah pembuka 10 menit.}
+
+\begin{frame}[fragile]{Kode yang disalin berulang}
+\framesubtitle{Masalah minggu ini}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+{Program nilai kelas seorang asisten berisi kode mencari maksimum yang disalin empat kali: untuk kuis, tugas, UTS, dan UAS. Suatu hari ia menemukan kesalahan di kode itu.
+
+\vspace{6pt}
+Sekarang ia harus memperbaiki empat tempat, dan berharap tidak ada yang terlewat.\par}
+\vspace{6pt}
+\begin{Catatan}
+\textbf{Diskusi 2 menit.} Bagaimana caranya menulis kode mencari maksimum cukup sekali, lalu memakainya untuk empat array berbeda?
+\end{Catatan}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[]
+Maks kuis  : 95
+Maks tugas : 90
+Maks UTS   : 88
+Maks UAS   : 92
+\end{Keluaran}
+\end{column}
+\end{columns}
+\note{Tampung beberapa jawaban tanpa menilai benar salah.}
+\end{frame}
+
+\begin{frame}{Dari langkah ke instruksi}
+\framesubtitle{Sambungan dengan Algoritma}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Temukan yang berulang}
+Mencari maksimum dilakukan empat kali dengan data berbeda.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Beri nama}
+Jadikan satu subprogram dengan masukan array dan keluaran nilai maksimum.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Terjemahkan}
+Satu fungsi \texttt{int maksimum(int a[], int n)}, dipanggil empat kali.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Langkah 1 dan 2 dilatih di Algoritma. Langkah 3 kita kerjakan hari ini dengan C++.\note{Hubungkan eksplisit ke Algoritma minggu ini.}
+\end{frame}
+
+\Bagian{2}{Coba dulu, baru dijelaskan}{25 menit eksperimen di GDB Online}
+\note{Struggle 25 menit. Berkeliling, jangan menjelaskan materi dulu.}
+
+\begin{frame}{Misi kalian}
+\framesubtitle{Struggle, 25 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Namai}
+Pindahkan kode menampilkan garis \texttt{--------} ke luar \texttt{main} dan beri nama.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Beri masukan}
+Ubah agar panjang garis bisa diatur saat dipanggil.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Kembalikan}
+Buat bagian yang menerima dua bilangan dan memberikan yang terbesar.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Boleh}
+Bertanya ke teman, mengubah apa saja, sengaja membuat error.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokAlert}{Belum dulu}
+Mencari jawaban jadi di internet atau AI.
+\end{BlokAlert}
+\end{column}
+\end{columns}
+\note{Catat kesalahan yang sering muncul untuk dibahas di debrief.}
+\end{frame}
+
+\begin{frame}{Apa yang kalian temukan?}
+\framesubtitle{Debrief struggle}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Di mana bagian bernama itu harus ditulis agar \texttt{main} mengenalnya?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Apa beda bagian yang menampilkan dan bagian yang memberikan nilai?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Apa yang terjadi pada variabel di dalam bagian itu setelah selesai?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Jawaban kalian akan kita uji di bagian berikutnya.\note{Tulis jawaban di papan; buktikan atau patahkan di bagian materi.}
+\end{frame}
+
+\Bagian{3}{Memecah program menjadi fungsi}{Definisi, parameter, nilai kembali, prototipe, dan referensi}
+\note{Materi 40 menit. Tunjukkan setiap contoh langsung di GDB Online.}
+
+\begin{frame}[fragile]{Fungsi void dan pemanggilannya}
+\framesubtitle{Fungsi tanpa nilai kembali}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{void.cpp}
+#include <iostream>
+using namespace std;
+void garis(int n) {
+    for (int i = 0; i < n; i++) cout << "-";
+    cout << endl;
+}
+int main() {
+    garis(10);
+    cout << "Laporan Nilai" << endl;
+    garis(10);
+    return 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P13/k001.txt}
+\begin{Catatan}
+\texttt{void} berarti fungsi tidak mengembalikan nilai. \texttt{n} adalah parameter; 10 adalah argumen.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Parameter dan nilai kembali}
+\framesubtitle{return}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{return.cpp}
+double luasLingkaran(double r) {
+    return 3.14 * r * r;
+}
+int lebihBesar(int a, int b) {
+    return (a > b) ? a : b;
+}
+int main() {
+    cout << luasLingkaran(10) << endl;
+    int m = lebihBesar(7, 12);
+    cout << m << " " << lebihBesar(m, 5) << endl;
+    return 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P13/k002.txt}
+\begin{Catatan}
+\texttt{return} mengirim nilai ke pemanggil dan langsung mengakhiri fungsi. Setiap jalur fungsi non-void harus berakhir dengan \texttt{return}.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Prototipe fungsi}
+\framesubtitle{Deklarasi di atas main}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeMini}]{prototipe.cpp}
+#include <iostream>
+using namespace std;
+bool genap(int x);
+int main() {
+    for (int i = 1; i <= 4; i++) {
+        bool g = genap(i);
+        cout << i << (g ? " genap" : " ganjil") << endl;
+    }
+    return 0;
+}
+bool genap(int x) {
+    return x % 2 == 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P13/k003.txt}
+\begin{Catatan}
+Prototipe memberi tahu compiler nama, tipe kembali, dan parameter fungsi, sehingga definisinya boleh di bawah \texttt{main}.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Pass by value dan by reference}
+\framesubtitle{Salinan atau aslinya}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{referensi.cpp}
+void tambahNilai(int x) { x += 10; }
+void tambahRef(int &x) { x += 10; }
+
+int main() {
+    int a = 5, b = 5;
+    tambahNilai(a);
+    tambahRef(b);
+    cout << a << " " << b << endl;
+    return 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P13/k004.txt}
+\begin{Catatan}
+Tanpa \texttt{\&}, fungsi menerima salinan. Dengan \texttt{\&}, fungsi bekerja langsung pada variabel aslinya.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Array sebagai parameter}
+\framesubtitle{Array selalu diteruskan aslinya}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeMini}]{arrayparam.cpp}
+int maksimum(int a[], int n) {
+    int m = a[0];
+    for (int i = 1; i < n; i++)
+        if (a[i] > m) m = a[i];
+    return m;
+}
+int main() {
+    int kuis[4] = {80, 95, 70, 85};
+    int uts[3] = {88, 76, 90};
+    cout << maksimum(kuis, 4) << endl;
+    cout << maksimum(uts, 3) << endl;
+    return 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P13/k005.txt}
+\begin{Catatan}
+Panjang array dikirim lewat parameter terpisah. Perubahan elemen di dalam fungsi mengenai array aslinya.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}{Variabel lokal dan jangkauannya}
+\framesubtitle{Scope}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{151pt}>{\raggedright\arraybackslash}p{227pt}>{\raggedright\arraybackslash}p{227pt}>{\raggedright\arraybackslash}p{246pt}@{}}
+\kepala{Jenis} & \kepala{Dideklarasikan di} & \kepala{Hidup sampai} & \kepala{Contoh}\\
+Parameter & kurung fungsi & fungsi selesai & \texttt{n} pada \texttt{garis(int n)}\\
+\barisgenap Lokal fungsi & badan fungsi & fungsi selesai & \texttt{m} pada \texttt{maksimum}\\
+Lokal blok & di dalam \texttt{\{ \}} & blok selesai & \texttt{i} pada \texttt{for}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Variabel \texttt{i} di \texttt{main} dan \texttt{i} di fungsi lain adalah dua variabel berbeda, walaupun namanya sama.
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya}
+\framesubtitle{Latihan menjelaskan, 3 menit}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{tebak.cpp}
+int f(int x, int &y) {
+    x = x * 2;
+    y = y + x;
+    return x + y;
+}
+
+int main() {
+    int a = 3, b = 4;
+    int c = f(a, b);
+    cout << a << " " << b << " " << c << endl;
+    return 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Catatan}
+Tulis keluarannya di kertas, karakter demi karakter. Jangan dijalankan dulu.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Contoh soal Bagian B. Beri waktu 3 menit sebelum slide jawaban.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya: jawaban}
+\framesubtitle{Latihan menjelaskan}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{tebak.cpp}
+int f(int x, int &y) {
+    x = x * 2;
+    y = y + x;
+    return x + y;
+}
+
+int main() {
+    int a = 3, b = 4;
+    int c = f(a, b);
+    cout << a << " " << b << " " << c << endl;
+    return 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Keluaran}[]
+3 10 16
+\end{Keluaran}
+\begin{Catatan}
+\texttt{x} salinan dari \texttt{a} menjadi 6, tetapi \texttt{a} tetap 3. \texttt{y} adalah referensi ke \texttt{b}, jadi \texttt{b} menjadi 4 + 6 = 10. Nilai kembali 6 + 10 = 16.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Tanyakan jawaban yang paling sering salah, lalu telusuri bersama.}
+\end{frame}
+
+\begin{frame}{Error yang sering muncul minggu ini}
+\framesubtitle{Pesan diambil langsung dari g++}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{208pt}>{\raggedright\arraybackslash}p{256pt}>{\raggedright\arraybackslash}p{398pt}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Fungsi dipanggil sebelum dikenal & \texttt{panggil sebelum definisi} & \texttt{error: 'kuadrat' was not declared in this scope}\\
+\barisgenap Tidak ada return di semua jalur & \texttt{int f() tanpa return akhir} & \texttt{warning: control reaches end of non-void function}\\
+Banyak argumen tidak cocok & \texttt{lebihBesar(1, 2, 3)} & \texttt{error: too many arguments to function 'int lebihBesar(int, int)'}\\
+\barisgenap Literal ke parameter referensi & \texttt{tukar(a, 5)} & \texttt{error: cannot bind non-const lvalue reference of type 'int\&' to an rvalue of ...}\\
+Nilai void dipakai & \texttt{int x = garis(5);} & \texttt{error: void value not ignored as it ought to be}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Pesan di tabel ini dihasilkan dengan g++ dan opsi -Wall, sama seperti di cek.sh.}
+\note{Minta mahasiswa memotret slide ini.}
+\end{frame}
+
+\Bagian{4}{Hands-on bertingkat}{45 menit, dari dasar sampai tantangan}
+\note{Mahasiswa membuka folder 02 Hands-on/P13 - Fungsi - Hands-on.}
+
+\begin{frame}{Peta hands-on}
+\framesubtitle{Folder 02 Hands-on/P13 - Fungsi - Hands-on}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{36pt}>{\raggedright\arraybackslash}p{267pt}>{\raggedright\arraybackslash}p{110pt}>{\raggedright\arraybackslash}p{83pt}>{\raggedright\arraybackslash}p{341pt}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Waktu} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-bangun.cpp} & Dasar & 10' & fungsi \texttt{void} dan fungsi dengan \texttt{return}\\
+\barisgenap 2 & \texttt{handson2-prima.cpp} & Menengah & 15' & fungsi \texttt{bool}, prototipe, array sebagai parameter\\
+3 & \texttt{handson3-referensi.cpp} & Tantangan & 20' & telusuri parameter, perbaiki tiga kesalahan fungsi\\
+\barisgenap + & \texttt{bonus-statistik.cpp} & Pengayaan & sisa & pustaka fungsi untuk array\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Kerjakan berurutan. Cocokkan keluaran dengan folder \texttt{expected/}; latihan yang membaca masukan memakai data di folder \texttt{input/}.\note{Saat berkeliling, minta mahasiswa yang mengerjakan latihan tantangan menjelaskan blok PENJELASAN mereka.}
+\end{frame}
+
+\begin{frame}{Cara mengecek dan aturannya}
+\framesubtitle{Hands-on}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Di GDB Online}
+Salin isi file latihan, lengkapi TODO, klik Run. Bila program membaca masukan, ketik isi file di \texttt{input/}. Bandingkan dengan \texttt{expected/}.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Di komputer sendiri}
+Jalankan \texttt{bash cek.sh}. Skrip mengompilasi dengan \texttt{-Wall -Werror}, memberi masukan dari \texttt{input/}, lalu mencocokkan keluaran.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{6pt}
+\begin{Catatan}
+AI boleh untuk memahami pesan error, tidak untuk meminta solusi utuh. Exit Ticket dikerjakan tanpa bantuan apa pun.
+\end{Catatan}
+\note{Hands-on tidak dinilai langsung; yang dinilai Exit Ticket dan tugas.}
+\end{frame}
+
+\Bagian{5}{Exit Ticket dan tugas}{25 menit terakhir, lalu pekerjaan rumah}
+\note{Mulai Exit Ticket tepat waktu.}
+
+\begin{frame}{Exit Ticket 13}
+\framesubtitle{Individual, 25 menit, tanpa AI dan internet}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{60pt}>{\raggedright\arraybackslash}p{560pt}>{\raggedright\arraybackslash}p{80pt}>{\raggedright\arraybackslash}p{150pt}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis fungsi yang mengembalikan nilai terbesar dari tiga bilangan & 25 & CPMK0607\\
+\barisgenap A2 & Tulis fungsi \texttt{void} yang mengubah array menjadi kuadrat setiap elemennya & 25 & CPMK0607\\
+B1 & Telusuri nilai variabel sebelum dan sesudah pemanggilan fungsi dengan referensi & 20 & CPMK0608\\
+\barisgenap B2 & Jelaskan mengapa sebuah fungsi tukar tidak bekerja & 20 & CPMK0608\\
+B3 & Jelaskan jangkauan variabel pada potongan kode yang diberikan & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Soal A dinilai dari keluaran yang tepat sama. Soal B dinilai dari ketepatan dan alasan. Pelanggaran aturan membuat nilai Exit Ticket ini 0.}
+\note{Soal lengkap dibagikan terpisah dan tidak disimpan di repo publik.}
+\end{frame}
+
+\begin{frame}{Tugas 13: Library Matematika}
+\framesubtitle{Dikumpulkan sebelum Pertemuan 14}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Bagian A, program, 50 poin}
+Buat program berisi kumpulan fungsi matematika berikut dengan prototipe di atas \texttt{main}, lalu buat menu interaktif untuk memilih dan menguji setiap fungsi dengan validasi masukan. Ketentuannya di slide berikut.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Bagian B, penjelasan, 50 poin}
+Komentar maksimal 150 kata: telusuri pemanggilan \texttt{lcm(4, 6)} sampai ke \texttt{gcd}, jelaskan kapan memakai \texttt{void} dan kapan memakai tipe kembali, dan beri satu contoh perbedaan pass by value dan pass by reference dari program kalian.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+{\small Data di tugas adalah data kalian sendiri. Rubrik lengkap ada di Modul Belajar 13.}
+\note{Ingatkan bahwa penjelasan disalin dari AI mudah dikenali karena tidak menyebut pengalaman mereka sendiri.}
+\end{frame}
+
+\begin{frame}{Ketentuan Tugas 13}
+\framesubtitle{Library Matematika}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{87pt}>{\raggedright\arraybackslash}p{788pt}@{}}
+\kepala{No} & \kepala{Ketentuan Bagian A}\\
+1 & \texttt{int faktorial(int n)} dan \texttt{int pangkat(int basis, int eksponen)}\\
+\barisgenap 2 & \texttt{bool isPrima(int n)}\\
+3 & \texttt{int gcd(int a, int b)} dan \texttt{int lcm(int a, int b)}\\
+\barisgenap 4 & \texttt{double luasSegitiga(double alas, double tinggi)} dan \texttt{double kelilingLingkaran(double r)}\\
+5 & \texttt{void tampilkanDeret(int n)} yang mencetak 1 sampai n\\
+\barisgenap 6 & Menu berulang dengan pilihan keluar\\
+Bonus & Tambahkan fungsi \texttt{void tukar(int \&a, int \&b)} dan tunjukkan bedanya dengan versi tanpa \texttt{\&}.\\
+\garisdasar
+\end{tabular}
+\note{Bacakan ketentuan satu per satu dan tanyakan apakah ada yang belum jelas.}
+\end{frame}
+
+\begin{frame}{Rubrik Tugas 13}
+\framesubtitle{Empat level, sama di semua instrumen}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{44pt}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{156pt}>{\raggedright\arraybackslash}p{146pt}>{\raggedright\arraybackslash}p{146pt}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85--100} & \kepala{Baik 70--84} & \kepala{Cukup 55--69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\
+\barisgenap A2 Kelengkapan fungsi & 15 & delapan fungsi dan menu & satu fungsi kurang & dua kurang & tiga atau lebih kurang\\
+A3 Ketepatan dan validasi & 15 & semua hasil tepat dan masukan divalidasi & satu salah & dua salah & sebagian besar salah\\
+\barisgenap B1 Penelusuran pemanggilan & 30 & jejak lcm ke gcd tepat, alasan jelas & satu langkah keliru & tanpa jejak & tidak ada atau disalin\\
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}
+\vspace{8pt}
+
+{\small Nilai kriteria = poin × skor level. Bagian A total 50, Bagian B total 50.}
+\note{Rubrik ini sama strukturnya setiap minggu; yang berubah hanya isi kriteria A2, A3, dan B1.}
+\end{frame}
+
+\begin{frame}{Sebelum Pertemuan 14}
+\framesubtitle{Persiapan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Selesaikan}
+Hands-on yang belum lulus \texttt{cek.sh}, terutama latihan tantangan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Kumpulkan}
+Tugas 13 sebelum Pertemuan 14 dimulai.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Baca}
+Modul Belajar 13 untuk mengulang, lalu bagian awal modul berikutnya.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Pertemuan 14 membahas rekursi, yaitu fungsi yang memanggil dirinya sendiri, dan struct untuk mengelompokkan data berbeda tipe.\note{Tanyakan satu hal yang paling membingungkan hari ini untuk dibuka di review minggu depan.}
+\end{frame}
+
+\SlidePenutup{Terima kasih}{Sampai jumpa di Pertemuan 14: rekursi dan struct}
+\note{Slide penutup.}
+\end{document}

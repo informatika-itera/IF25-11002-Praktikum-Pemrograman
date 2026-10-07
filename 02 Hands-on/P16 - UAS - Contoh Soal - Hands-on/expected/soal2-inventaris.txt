@@ -1,0 +1,9 @@
+L01 Laptop 20
+L02 Monitor 18
+L03 Keyboard 25
+L04 Proyektor 3
+L05 Router 4
+L03: Keyboard 25
+L06: tidak ada
+L01: Laptop 20
+Total alat: 70

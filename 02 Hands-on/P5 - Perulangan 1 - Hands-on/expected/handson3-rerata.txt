@@ -1,0 +1,3 @@
+Banyak    : 4
+Tertinggi : 95
+Rata-rata : 82.5

@@ -1,0 +1,3 @@
+terurut: perbandingan 5, tukar 0
+terbalik: perbandingan 15, tukar 15
+acak: perbandingan 14, tukar 8

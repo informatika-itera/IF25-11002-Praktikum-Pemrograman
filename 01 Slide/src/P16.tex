@@ -1,0 +1,122 @@
+% Pertemuan 16 (UAS) Praktikum Pemrograman. Dihasilkan oleh tools/build.py dari tools/konten/p16.py.
+\documentclass[t]{beamer}
+\usetheme{ITERA}
+\input{catatan-preamble.tex}
+\renewcommand\ITERAmeeting{Pertemuan 16}
+\begin{document}
+\SlideJudul{IF25-11002 PRAKTIKUM PEMROGRAMAN}{Pertemuan 16\\Ujian Akhir Semester}{Kisi-kisi, format, tata tertib, dan contoh soal untuk materi Pertemuan 9 sampai 14}{Tim Pengajar}{Tahun 2026. Dilaksanakan serentak dengan UAS Algoritma Pemrograman.}
+\note{Slide ini dibahas di akhir pertemuan sebelumnya, bukan pada hari ujian.}
+
+\begin{frame}{Format UAS}
+\framesubtitle{Durasi 150 menit, 4 soal, 100 poin}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{66pt}>{\raggedright\arraybackslash}p{448pt}>{\raggedright\arraybackslash}p{105pt}>{\raggedright\arraybackslash}p{76pt}>{\raggedright\arraybackslash}p{143pt}@{}}
+\kepala{Soal} & \kepala{Bentuk} & \kepala{Bagian} & \kepala{Poin} & \kepala{CPMK}\\
+1 & Menulis program: array atau string dengan fungsi & A & 25 & CPMK0607\\
+\barisgenap 2 & Menulis program: struct dengan pengurutan, pencarian, atau rekursi & A & 25 & CPMK0607\\
+3 & Tracing fungsi, array, dan rekursi & B & 25 & CPMK0608\\
+\barisgenap 4 & Menemukan, menjelaskan, dan memperbaiki kesalahan & B & 25 & CPMK0608\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Bagian A dan Bagian B masing-masing 50 poin, sama seperti semua instrumen di mata kuliah ini.}
+\note{Tekankan pembagian 50:50 dan bahwa soal tracing tidak perlu komputer.}
+\end{frame}
+
+\begin{frame}{Kisi-kisi UAS}
+\framesubtitle{Cakupan Pertemuan 9 sampai 14}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{189pt}>{\raggedright\arraybackslash}p{104pt}>{\raggedright\arraybackslash}p{454pt}>{\raggedright\arraybackslash}p{104pt}@{}}
+\kepala{Topik} & \kepala{Pertemuan} & \kepala{Indikator yang diuji} & \kepala{Bagian}\\
+Array satu dimensi & P9 & statistik, maksimum, pergeseran, batas indeks & A, B\\
+\barisgenap Array 2D dan string & P10 & pemrosesan baris dan kolom, operasi karakter dan string & A, B\\
+Searching & P11 & linear dan binary search, trace low-high-mid & A, B\\
+\barisgenap Sorting & P12 & bubble dan selection sort, isi array per putaran & A, B\\
+Fungsi & P13 & parameter, nilai kembali, referensi, array sebagai parameter & A, B\\
+\barisgenap Rekursi dan struct & P14 & kasus basis, pohon pemanggilan, array of struct & A, B\\
+\garisdasar
+\end{tabular}
+\note{Kisi-kisi ini juga ada di modul persiapan.}
+\end{frame}
+
+\begin{frame}{Tata tertib}
+\framesubtitle{Berlaku selama ujian}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Yang boleh}
+Satu lembar catatan A4 tulisan tangan sendiri (dua sisi). GDB Online atau g++ di komputer lab untuk soal A.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokAlert}{Yang tidak boleh}
+AI, internet selain GDB Online, catatan elektronik, berdiskusi, atau membuka file selain lembar jawaban.
+\end{BlokAlert}
+\end{column}
+\end{columns}
+\vspace{6pt}
+\begin{Catatan}
+Soal B dikerjakan di kertas tanpa menjalankan program. Pelanggaran tata tertib membuat nilai UAS 0 dan dilaporkan ke program studi.
+\end{Catatan}
+\note{Bacakan tata tertib di awal ujian.}
+\end{frame}
+
+\begin{frame}{Contoh soal untuk berlatih}
+\framesubtitle{Folder 02 Hands-on/P16 - UAS - Contoh Soal - Hands-on}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{47pt}>{\raggedright\arraybackslash}p{312pt}>{\raggedright\arraybackslash}p{388pt}>{\raggedright\arraybackslash}p{104pt}@{}}
+\kepala{No} & \kepala{File} & \kepala{Yang diuji} & \kepala{Bagian}\\
+1 & \texttt{soal1-nilai.cpp} & array 2D, fungsi, nilai huruf & Bagian A\\
+\barisgenap 2 & \texttt{soal2-inventaris.cpp} & struct, bubble sort, binary search, rekursi & Bagian A\\
+3 & \texttt{soal3-tracing.cpp} & isi array sesudah fungsi, pohon pemanggilan & Bagian B\\
+\barisgenap 4 & \texttt{soal4-jelaskan.cpp} & temukan tiga kesalahan, jelaskan akibat, perbaiki & Bagian B\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Keluaran yang benar ada di \texttt{expected/} dan bisa dicek dengan \texttt{bash cek.sh}. Kunci lengkap disimpan dosen.}
+\note{Sarankan mahasiswa mengerjakan contoh soal dengan batas waktu seperti ujian sungguhan.}
+\end{frame}
+
+\begin{frame}{Rubrik penilaian ujian}
+\framesubtitle{Empat level}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{156pt}>{\raggedright\arraybackslash}p{195pt}>{\raggedright\arraybackslash}p{185pt}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{136pt}@{}}
+\kepala{Aspek} & \kepala{Sangat baik 85--100} & \kepala{Baik 70--84} & \kepala{Cukup 55--69} & \kepala{Kurang <55}\\
+A. Program berjalan & kompilasi bersih, keluaran tepat untuk semua uji & keluaran tepat untuk sebagian besar uji & berjalan, keluaran sering salah & tidak terkompilasi\\
+\barisgenap A. Struktur kode & tipe, nama variabel, dan alur rapi & satu kekurangan kecil & sulit dibaca & tidak sesuai soal\\
+B. Tracing & semua nilai dan keluaran tepat & satu langkah salah & separuh langkah salah & tidak ada atau acak\\
+\barisgenap B. Penjelasan & alasan tepat dengan istilah yang benar & tepat tetapi kurang lengkap & sebagian keliru & tidak ada atau disalin\\
+\garisdasar
+\end{tabular}
+\vspace{8pt}
+
+{\small Skor soal = poin soal × skor level rata-rata aspek yang relevan.}
+\note{Rubrik yang sama dipakai untuk UTS dan UAS.}
+\end{frame}
+
+\begin{frame}{Cara bersiap}
+\framesubtitle{Persiapan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Ulangi}
+Modul Belajar 9 sampai 14 dan peta materi di slide P15.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Latih}
+Kerjakan empat contoh soal P16 dalam 150 menit tanpa bantuan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Siapkan}
+Lembar catatan A4 tulisan tangan dan datang 15 menit lebih awal.
+\end{Langkah}
+\end{column}
+\end{columns}
+\note{Ingatkan jadwal dan ruang ujian.}
+\end{frame}
+
+\SlidePenutup{Selamat bersiap}{Terima kasih untuk satu semester belajar bersama. Kerjakan dengan tenang.}
+\note{Slide penutup.}
+\end{document}

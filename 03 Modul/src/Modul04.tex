@@ -1,0 +1,349 @@
+% Modul Belajar 4, dihasilkan oleh tools/build.py dari tools/konten/p04.py
+\documentclass[a4paper]{article}
+\usepackage{modulITERA}
+\begin{document}
+\Sampul{4}{Percabangan}{Program yang memilih jalan: if, else if, switch, dan operator ternary}{CPMK0607 (menerapkan) dan CPMK0608 (menjelaskan) pada konsep dasar algoritma dan sistem komputer}{sekitar 3 jam belajar mandiri, ditambah 150 menit di kelas}{\texttt{02 Hands-on/P4 - Percabangan - Hands-on/}}
+\Bagian{Modul 4}{Peta belajar}
+Ikuti urutan ini dari atas ke bawah. Setiap bagian memakai apa yang sudah dibahas di bagian sebelumnya.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.140\textwidth}>{\raggedright\arraybackslash}p{0.840\textwidth}@{}}
+\kepala{Urutan} & \kepala{Bagian}\\
+1 & Tentang modul ini\\\garis
+2 & Masalah pembuka: Nilai huruf otomatis\\\garis
+3 & Langkah 1: if dan if-else\\\garis
+4 & Langkah 2: Rantai else if\\\garis
+5 & Langkah 3: Syarat gabungan\\\garis
+6 & Langkah 4: switch untuk pilihan bernilai tetap\\\garis
+7 & Langkah 5: Operator ternary\\\garis
+8 & Langkah 6: Menguji setiap cabang\\\garis
+9 & Pesan error yang sering muncul\\\garis
+10 & Latihan mandiri\\\garis
+11 & Rangkuman\\\garis
+12 & Cek pemahaman\\\garis
+13 & Exit Ticket dan tugas\\\garis
+14 & Bacaan lanjut dan persiapan minggu depan\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Pembuka}{Tentang modul ini}
+Modul ini mendampingi Pertemuan 4. Sampai minggu lalu, setiap baris program selalu dijalankan berurutan. Minggu ini program mulai mengambil keputusan: menjalankan sebagian baris dan melewati yang lain, tergantung data yang diterimanya.
+
+Isinya sama dengan slide di kelas, tetapi ditulis lebih pelan dan lebih lengkap, supaya kalian bisa mengulang sendiri di rumah tanpa harus menebak maksud slide.
+
+\Sub{Setelah menyelesaikan modul ini, kalian bisa}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.680\textwidth}>{\raggedright\arraybackslash}p{0.230\textwidth}@{}}
+\kepala{No} & \kepala{Kemampuan} & \kepala{Dibahas di}\\
+1 & Menulis program yang memilih tindakan dengan \texttt{if}, \texttt{if-else}, rantai \texttt{else if}, \texttt{switch}, dan operator ternary sesuai syarat masalah (Sub-CPMK 4.1, CPMK0607) & Langkah 1 sampai 6\\\garis
+2 & Menjelaskan cabang mana yang dijalankan untuk masukan tertentu dan merancang data uji yang mencakup setiap cabang dan nilai batasnya (Sub-CPMK 4.2, CPMK0608) & kotak Tebak dulu, Latihan 3\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Karena setiap instrumen penilaian dibagi rata antara Bagian A (menulis kode) dan Bagian B (menelusuri dan menjelaskan), yang dinilai bukan hanya program kalian jalan, tetapi juga kalian bisa menjelaskan mengapa program itu jalan.
+
+\Sub{Cara memakai modul ini}
+Setiap langkah punya pola yang sama: penjelasan konsep, kadang contoh dari kehidupan sehari-hari, lalu kode yang bisa langsung kalian ketik. Sesudah kode ada kotak \textbf{Tebak dulu}. Tulis tebakan kalian di kertas sebelum membaca \textbf{Jawaban} di bawahnya. Kebiasaan menebak lalu membuktikan inilah yang membuat konsep menempel, bukan sekadar membaca.
+
+\begin{Penting}[Ketik, jangan salin]
+Ketik ulang setiap contoh di GDB Online atau editor kalian, jangan disalin-tempel. Saat mengetik, kalian akan membuat salah ketik, membaca pesan error, dan memperbaikinya. Itu bagian dari belajar.
+\end{Penting}
+\Sub{Yang perlu disiapkan}
+Peramban dengan akses ke onlinegdb.com, atau g++ di komputer kalian sendiri. Kertas dan alat tulis untuk menebak keluaran dan membuat trace table. Folder hands-on pertemuan ini dari repo mata kuliah.
+
+\Bagian{Pembuka}{Masalah pembuka: Nilai huruf otomatis}
+Dosen punya nilai akhir 120 mahasiswa dan harus mengubahnya ke nilai huruf: A, AB, B, BC, C, D, atau E menurut batas yang ditetapkan ITERA.
+
+Program minggu lalu selalu menjalankan semua baris. Di sini, setiap nilai hanya boleh menghasilkan satu huruf.
+
+\begin{MKeluaran}[title={Tampilan yang diinginkan}]
+Nilai akhir: 72.5
+Nilai huruf: AB
+
+Nilai akhir: 39.9
+Nilai huruf: E
+\end{MKeluaran}
+\begin{Tebak}[Coba pikirkan]
+Kalau kalian mengecek dengan tangan, batas mana yang kalian periksa lebih dulu? Apa yang terjadi kalau urutannya dibalik?
+\end{Tebak}
+\begin{Jawaban}[Cara memecahnya]
+Daftar syarat: A untuk nilai 75 ke atas, AB untuk 70 ke atas, dan seterusnya. Urutkan pemeriksaan: Periksa dari batas tertinggi; berhenti di syarat pertama yang benar. Terjemahkan: Satu rantai \texttt{if}, \texttt{else if}, \texttt{else} di C++.
+\end{Jawaban}
+\Bagian{Langkah 1}{if dan if-else}
+\texttt{if (kondisi) \{ ... \}} menjalankan blok hanya bila kondisinya benar. Dengan \texttt{else}, salah satu dari dua blok pasti dijalankan, tidak pernah keduanya. Baris sesudah blok \texttt{if-else} selalu dijalankan.
+
+Biasakan selalu memakai kurung kurawal walaupun bloknya hanya satu baris. Kebiasaan ini mencegah kesalahan saat baris ditambah kemudian.
+
+\begin{MKode}{ifelse.cpp}
+int nilai;
+cin >> nilai;
+if (nilai >= 50) {
+    cout << "LULUS" << endl;
+} else {
+    cout << "TIDAK LULUS" << endl;
+}
+cout << "Selesai" << endl;
+\end{MKode}
+\begin{MKeluaran}[title={Masukan}]
+45
+\end{MKeluaran}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+TIDAK LULUS
+Selesai
+\end{MKeluaran}
+Kondisi selalu di dalam kurung. Kurung kurawal menandai blok yang dijalankan.
+\end{Jawaban}
+\Bagian{Langkah 2}{Rantai else if}
+Rantai \texttt{else if} memeriksa syarat dari atas ke bawah dan berhenti di syarat pertama yang benar. Urutan sangat penting: bila \texttt{n >= 65} diletakkan paling atas, nilai 92 akan mendapat B.
+
+Karena pemeriksaan berhenti di syarat pertama yang benar, cabang \texttt{n >= 70} otomatis hanya dicapai oleh nilai di bawah 75. Batas atas tidak perlu ditulis ulang.
+
+\begin{MKode}{huruf.cpp}
+double n = 72.5;
+if (n >= 75) {
+    cout << "A";
+} else if (n >= 70) {
+    cout << "AB";
+} else if (n >= 65) {
+    cout << "B";
+} else {
+    cout << "di bawah B";
+}
+cout << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+AB
+\end{MKeluaran}
+Pemeriksaan berhenti di syarat pertama yang benar. Karena itu \texttt{n >= 70} tidak perlu ditulis \texttt{n >= 70 \&\& n < 75}.
+\end{Jawaban}
+\Bagian{Langkah 3}{Syarat gabungan}
+Syarat yang terdiri dari beberapa bagian ditulis dengan \texttt{\&\&} dan \texttt{||}. Setiap perbandingan harus lengkap: \texttt{hari == 6 || hari == 7}, bukan \texttt{hari == 6 || 7}. Bentuk kedua selalu benar, karena angka 7 dianggap true.
+
+Bila sebuah keputusan bergantung pada keputusan lain, \texttt{if} boleh diletakkan di dalam \texttt{if}. Sering kali bentuk bersarang bisa diratakan menjadi rantai \texttt{else if} yang lebih mudah dibaca, seperti contoh berikut.
+
+\begin{MKode}{gabungan.cpp}
+int umur = 17;
+bool punyaKTP = false;
+if (umur >= 17 && punyaKTP) {
+    cout << "Boleh memilih" << endl;
+} else if (umur >= 17) {
+    cout << "Urus KTP dulu" << endl;
+} else {
+    cout << "Belum cukup umur" << endl;
+}
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Urus KTP dulu
+\end{MKeluaran}
+
+\end{Jawaban}
+\Bagian{Langkah 4}{switch untuk pilihan bernilai tetap}
+\texttt{switch} cocok bila pilihan berupa nilai tetap, misalnya nomor menu atau karakter operator. Setiap \texttt{case} diakhiri \texttt{break}; tanpa itu, eksekusi berlanjut ke \texttt{case} di bawahnya (fall-through). \texttt{default} menangani nilai yang tidak tercantum.
+
+\texttt{switch} tidak bisa memeriksa rentang seperti \texttt{nilai >= 75}. Untuk itu tetap gunakan rantai \texttt{else if}.
+
+\begin{MKode}{menu.cpp}
+int pilihan = 2;
+switch (pilihan) {
+    case 1: cout << "Nasi goreng"; break;
+    case 2: cout << "Mie ayam"; break;
+    case 3: cout << "Soto"; break;
+    default: cout << "Menu tidak ada";
+}
+cout << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Mie ayam
+\end{MKeluaran}
+Tanpa \texttt{break}, eksekusi terus jatuh ke \texttt{case} berikutnya. \texttt{switch} hanya untuk \texttt{int} dan \texttt{char}, bukan \texttt{string} atau rentang nilai.
+\end{Jawaban}
+\Bagian{Langkah 5}{Operator ternary}
+\texttt{kondisi ? nilai1 : nilai2} menghasilkan \texttt{nilai1} bila kondisinya benar dan \texttt{nilai2} bila salah. Bentuk ini ringkas untuk memilih satu nilai, tetapi sulit dibaca bila bersarang.
+
+\begin{MKode}{ternary.cpp}
+int a = 8, b = 13;
+int maks = (a > b) ? a : b;
+cout << "Maks: " << maks << endl;
+cout << (b % 2 == 0 ? "genap" : "ganjil") << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Maks: 13
+ganjil
+\end{MKeluaran}
+Pakai ternary hanya untuk pilihan sederhana. Bila ragu, \texttt{if-else} lebih jelas.
+\end{Jawaban}
+\Bagian{Langkah 6}{Menguji setiap cabang}
+Program dengan percabangan baru teruji bila setiap cabangnya pernah dijalankan. Untuk setiap cabang, pilih satu nilai biasa dan nilai tepat di batasnya. Nilai batas mengungkap kesalahan \texttt{>} yang seharusnya \texttt{>=}.
+
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.185\textwidth}>{\raggedright\arraybackslash}p{0.218\textwidth}>{\raggedright\arraybackslash}p{0.327\textwidth}>{\raggedright\arraybackslash}p{0.250\textwidth}@{}}
+\kepala{Cabang} & \kepala{Data uji biasa} & \kepala{Nilai batas} & \kepala{Harapan}\\
+A & 92 & 75 dan 74.9 & 75 → A, 74.9 → AB\\\garis
+C & 55 & 50 dan 49.9 & 50 → C, 49.9 → D\\\garis
+E & 20 & 0 dan 39.9 & keduanya E\\\garis
+Tidak valid & 105 & 100.1 dan -0.1 & keduanya tidak valid\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\begin{Penting}[]
+Kesalahan percabangan paling sering terjadi tepat di nilai batas, misalnya \texttt{>} yang seharusnya \texttt{>=}.
+\end{Penting}
+\Bagian{Waspada}{Pesan error yang sering muncul}
+Semua pesan di tabel ini dihasilkan g++ dengan opsi \texttt{-Wall}, sama seperti yang dipakai \texttt{cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.270\textwidth}>{\raggedright\arraybackslash}p{0.470\textwidth}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+= di dalam kondisi & \texttt{if (x = 5)} & \texttt{warning: suggest parentheses around assignment used as truth value}\\\garis
+else tanpa if & \texttt{if (...); else} & \texttt{error: 'else' without a previous 'if'}\\\garis
+switch pada string & \texttt{switch (nama)} & \texttt{error: switch quantity not an integer}\\\garis
+case ganda & \texttt{case 1: ... case 1:} & \texttt{error: duplicate case value}\\\garis
+Kondisi tanpa kurung & \texttt{if x > 5} & \texttt{error: expected '(' before 'x'}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Titik koma sesudah \texttt{if (...)} membuat blok \texttt{if} kosong. Baris di bawahnya selalu dijalankan, dan \texttt{else} sesudahnya tidak punya pasangan. Kesalahan ini sulit dilihat karena indentasinya terlihat benar.
+
+\Bagian{Latihan}{Latihan mandiri}
+Latihan ini sama dengan hands-on di kelas. Semua file ada di \texttt{02 Hands-on/P4 - Percabangan - Hands-on/latihan/}. Kerjakan berurutan, lalu cocokkan dengan \texttt{expected/} atau jalankan \texttt{bash cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.360\textwidth}>{\raggedright\arraybackslash}p{0.150\textwidth}>{\raggedright\arraybackslash}p{0.400\textwidth}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-lulus.cpp} & Dasar & \texttt{if-else} dan \texttt{if} terpisah\\\garis
+2 & \texttt{handson2-huruf.cpp} & Menengah & rantai \texttt{else if}, nilai batas\\\garis
+3 & \texttt{handson3-tiket.cpp} & Tantangan & perbaiki tiga kesalahan logika percabangan\\\garis
++ & \texttt{bonus-kalkulator.cpp} & Pengayaan & \texttt{switch} pada \texttt{char}, \texttt{default}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Sub{Latihan 1: handson1-lulus.cpp}
+Tentukan lulus atau tidak, lalu tambahkan pesan khusus untuk nilai istimewa. Masukan uji: \texttt{88}.
+
+\Sub{Latihan 2: handson2-huruf.cpp}
+Ubah lima nilai ke nilai huruf ITERA, termasuk nilai tidak valid. Perulangan \texttt{for} sudah disediakan.
+
+\Sub{Latihan 3: handson3-tiket.cpp}
+Program harga tiket bioskop punya tiga kesalahan, termasuk \texttt{=} yang seharusnya \texttt{==}. Perbaiki dan jelaskan.
+
+\Sub{Bonus: bonus-kalkulator.cpp}
+Kalkulator lima operator dengan penanganan pembagian nol dan operator tidak dikenal.
+
+\Sub{Latihan menelusuri}
+\begin{MKode}{tebak.cpp}
+int x = 7;
+if (x > 5)
+    cout << "A";
+    cout << "B";
+if (x % 2 == 0) {
+    cout << "C";
+} else if (x > 6) {
+    cout << "D";
+} else {
+    cout << "E";
+}
+cout << endl;
+\end{MKode}
+\begin{Tebak}[]
+Tulis keluarannya di kertas tanpa menjalankan program. Buat trace table bila perlu.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+ABD
+\end{MKeluaran}
+Tanpa kurung kurawal, hanya \texttt{cout << "A"} milik \texttt{if} pertama; \texttt{B} selalu tampil walau indentasinya menipu. Lalu 7 ganjil dan lebih dari 6, jadi \texttt{D}.
+\end{Jawaban}
+\Bagian{Penutup}{Rangkuman}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.320\textwidth}>{\raggedright\arraybackslash}p{0.660\textwidth}@{}}
+\kepala{Konsep} & \kepala{Yang perlu diingat}\\
+if dan if-else & Kondisi selalu di dalam kurung.\\\garis
+Rantai else if & Pemeriksaan berhenti di syarat pertama yang benar.\\\garis
+Syarat gabungan & Syarat yang terdiri dari beberapa bagian ditulis dengan \texttt{\&\&} dan \texttt{||}.\\\garis
+switch untuk pilihan bernilai tetap & Tanpa \texttt{break}, eksekusi terus jatuh ke \texttt{case} berikutnya.\\\garis
+Operator ternary & Pakai ternary hanya untuk pilihan sederhana.\\\garis
+Menguji setiap cabang & Kesalahan percabangan paling sering terjadi tepat di nilai batas, misalnya \texttt{>} yang seharusnya \texttt{>=}.\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penutup}{Cek pemahaman}
+Jawab tanpa menjalankan program, lalu periksa dengan menjalankannya.
+\begin{enumerate}
+\item Apa keluaran bila \texttt{nilai} = 50 pada \texttt{if (nilai > 50) cout << "L"; else cout << "T";}?
+\item Mengapa \texttt{if (hari == 6 || 7)} selalu benar?
+\item Apa yang terjadi bila \texttt{break} di \texttt{case 1} lupa ditulis?
+\item Sebutkan tiga data uji untuk syarat \texttt{nilai >= 60}.
+\item Tulis ulang \texttt{if (a > b) m = a; else m = b;} dengan ternary.
+\end{enumerate}
+\begin{Jawaban}[]
+\begin{enumerate}[leftmargin=16pt]
+\item \texttt{T}, karena 50 tidak lebih dari 50.
+\item Ruas kanan \texttt{7} bernilai true; perbandingan harus ditulis lengkap.
+\item Eksekusi jatuh ke \texttt{case 2} dan ikut menjalankannya.
+\item Misalnya 80, 60, dan 59.9.
+\item \texttt{m = (a > b) ? a : b;}
+\end{enumerate}
+\end{Jawaban}
+\Bagian{Penilaian}{Exit Ticket 4}
+Dikerjakan di 25 menit terakhir kelas, sendiri, tanpa AI, internet, atau diskusi. Exit Ticket 4 adalah satu dari 14 Exit Ticket; rata-ratanya menjadi komponen berbobot 25\%.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.080\textwidth}>{\raggedright\arraybackslash}p{0.600\textwidth}>{\raggedright\arraybackslash}p{0.100\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang menentukan kategori BMI dari berat dan tinggi & 25 & CPMK0607\\\garis
+A2 & Tulis menu dengan \texttt{switch} untuk tiga pilihan dan \texttt{default} & 25 & CPMK0607\\\garis
+B1 & Tentukan keluaran program percabangan untuk tiga masukan berbeda & 20 & CPMK0608\\\garis
+B2 & Temukan dan jelaskan dua kesalahan pada potongan percabangan & 20 & CPMK0608\\\garis
+B3 & Rancang data uji yang mencakup semua cabang dan nilai batasnya & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penilaian}{Tugas 4: Sistem Tiket Bioskop}
+Kumpulkan sebelum Pertemuan 5 lewat kanal pengumpulan yang diumumkan dosen.
+
+\Sub{Bagian A: program (50 poin)}
+Buat program pemesanan tiket bioskop dengan aturan berikut, lalu tampilkan struk pemesanan lengkap.
+\begin{enumerate}
+\item Pilih film dengan \texttt{switch}: 1 Action, 2 Horror, 3 Comedy, 4 Romance
+\item Baca umur; film Horror hanya untuk umur 17 tahun ke atas
+\item Pilih hari dengan \texttt{switch}: 1 Senin sampai Kamis, 2 Jumat, 3 akhir pekan
+\item Harga: Rp35.000 hari biasa, Rp45.000 Jumat, Rp50.000 akhir pekan
+\item Diskon 20\% untuk anak di bawah 12 tahun dan lansia 60 tahun ke atas
+\item Struk berisi film, hari, umur, harga awal, diskon, dan harga akhir
+\end{enumerate}
+\Sub{Bagian B: penjelasan (50 poin)}
+Komentar maksimal 150 kata dan tabel data uji minimal enam baris yang mencakup setiap cabang dan nilai batas (umur 11, 12, 16, 17, 59, 60), dengan harga yang diharapkan dan hasil sebenarnya. Jelaskan satu kesalahan yang ditemukan lewat data uji itu.
+
+\Sub{Rubrik Tugas 4}
+\par\vspace{4pt}\noindent{\fontsize{8.5pt}{11.5pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.190\textwidth}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}>{\raggedright\arraybackslash}p{0.180\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85–100} & \kepala{Baik 70–84} & \kepala{Cukup 55–69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\\garis
+A2 switch dan if-else & 15 & semua pilihan dan default tepat & satu cabang kurang & dua kurang & tidak memakai switch\\\garis
+A3 Validasi umur dan diskon & 15 & semua tepat di nilai batas & satu batas salah & dua salah & diskon tidak dihitung\\\garis
+B1 Data uji dan nilai batas & 30 & semua cabang dan batas tercakup & satu batas terlewat & hanya data biasa & tidak ada atau disalin\\\garis
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Nilai kriteria = poin × skor level. Contoh: A1 di level Baik dengan skor 80 memberi 20 × 0,80 = 16 poin.
+
+\Bagian{Penutup}{Bacaan lanjut dan persiapan minggu depan}
+\begin{enumerate}
+\item Deitel, P. dan Deitel, H. C++ How to Program, edisi ke-10, Bab 4 dan 5.
+\item learncpp.com, Bab 8 (control flow).
+\item Pedoman nilai huruf: Peraturan Akademik ITERA (A-03 Standar Penilaian Pembelajaran).
+\item Slide \texttt{01 Slide/P4 Percabangan.pdf} dan hands-on di \texttt{02 Hands-on/P4 - Percabangan - Hands-on/}.
+\end{enumerate}
+\begin{Penting}[Minggu depan]
+Pertemuan 5 membahas perulangan dengan \texttt{for}, \texttt{while}, dan \texttt{do-while}, termasuk pola pencacah dan akumulator.
+\end{Penting}
+\end{document}

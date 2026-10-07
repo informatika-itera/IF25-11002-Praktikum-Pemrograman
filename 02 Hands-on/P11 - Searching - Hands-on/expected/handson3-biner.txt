@@ -1,0 +1,3 @@
+90 -> indeks 9
+21 -> indeks 3
+50 -> tidak ditemukan

@@ -1,0 +1,574 @@
+% Pertemuan 5 Praktikum Pemrograman (IF25-11002). Dihasilkan oleh tools/build.py dari tools/konten/p05.py.
+% Kompilasi: xelatex P05.tex (dua kali). Catatan: xelatex -jobname=P05-catatan "\def\catatan{1}\input{P05.tex}"
+\documentclass[t]{beamer}
+\usetheme{ITERA}
+\input{catatan-preamble.tex}
+\renewcommand\ITERAmeeting{Pertemuan 5}
+\begin{document}
+\SlideJudul{IF25-11002 PRAKTIKUM PEMROGRAMAN}{Pertemuan 5\\Perulangan Bagian 1}{for, while, dan do-while dengan pola pencacah, akumulator, dan sentinel}{Tim Pengajar}{Tahun 2026. Sejajar dengan Pertemuan 5 Algoritma Pemrograman: Perulangan Bagian 1.}
+\note{Buka dengan menanyakan satu hal dari pertemuan lalu yang masih membingungkan.}
+
+\begin{frame}{Dua mata kuliah, satu minggu}
+\framesubtitle{Sebelum mulai}
+Topik minggu ini sama di dua mata kuliah, dengan peran yang berbeda.
+\vspace{10pt}
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Algoritma: Perulangan Bagian 1}
+Memodelkan pengulangan dengan flowchart dan pseudocode ULANGI dan SELAMA, lalu menelusurinya dengan trace table.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Praktikum: Perulangan 1}
+Menulis \texttt{for}, \texttt{while}, dan \texttt{do-while}, memakai pencacah dan akumulator, dan menghentikan perulangan dengan sentinel.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\note{Tanyakan apa yang sudah dibahas di Algoritma minggu ini. Gunakan jawabannya sebagai jembatan ke praktikum.}
+\end{frame}
+
+\begin{frame}{Saat pulang nanti, kalian bisa}
+\framesubtitle{Target hari ini}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{1}{Menerapkan}
+Menulis program yang mengulang proses dengan \texttt{for}, \texttt{while}, dan \texttt{do-while}, memakai pola pencacah, akumulator, dan nilai sentinel
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 5.1, CPMK0607}
+\end{Langkah}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{2}{Menjelaskan}
+Menelusuri perulangan dengan trace table, menentukan berapa kali badan perulangan dijalankan, dan menjelaskan penyebab off-by-one atau perulangan tak berhenti
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 5.2, CPMK0608}
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{Catatan}
+Dua kemampuan ini dinilai sama berat di Exit Ticket, tugas, UTS, dan UAS.
+\end{Catatan}
+\note{Bacakan target dengan pelan. Kata kuncinya menerapkan dan menjelaskan.}
+\end{frame}
+
+\begin{frame}{Ingat minggu lalu}
+\framesubtitle{Review, 5 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Apa keluaran rantai \texttt{else if} untuk nilai batas 75?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Mengapa perlu \texttt{break} di \texttt{switch}?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Apa beda \texttt{if (x = 5)} dan \texttt{if (x == 5)}?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Jawab di kertas dulu, lalu cocokkan dengan teman sebelah.\note{Pilih dua mahasiswa untuk menjawab. Koreksi singkat, jangan mengajar ulang.}
+\end{frame}
+
+\Bagian{1}{Masalah pembuka}{Rata-rata nilai satu kelas}
+\note{Masalah pembuka 10 menit.}
+
+\begin{frame}[fragile]{Rata-rata nilai satu kelas}
+\framesubtitle{Masalah minggu ini}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+{Asisten praktikum harus menghitung rata-rata nilai Exit Ticket. Jumlah mahasiswa berbeda di setiap kelas, kadang 30, kadang 45.
+
+\vspace{6pt}
+Menulis \texttt{cin} sebanyak 45 kali jelas tidak masuk akal. Lagi pula banyaknya data baru diketahui saat program berjalan.\par}
+\vspace{6pt}
+\begin{Catatan}
+\textbf{Diskusi 2 menit.} Langkah apa yang terus diulang untuk setiap nilai? Bagaimana program tahu kapan berhenti?
+\end{Catatan}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[]
+Masukkan nilai (-1 untuk selesai):
+70 85 60 90 -1
+Banyak    : 4
+Tertinggi : 90
+Rata-rata : 76.25
+\end{Keluaran}
+\end{column}
+\end{columns}
+\note{Tampung beberapa jawaban tanpa menilai benar salah.}
+\end{frame}
+
+\begin{frame}{Dari langkah ke instruksi}
+\framesubtitle{Sambungan dengan Algoritma}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Temukan yang berulang}
+Baca satu nilai, tambahkan ke total, tambah pencacah.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Tentukan kapan berhenti}
+Berhenti saat bertemu -1, atau setelah n kali.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Terjemahkan}
+\texttt{while} untuk syarat berhenti, \texttt{for} untuk banyak putaran yang sudah diketahui.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Langkah 1 dan 2 dilatih di Algoritma. Langkah 3 kita kerjakan hari ini dengan C++.\note{Hubungkan eksplisit ke Algoritma minggu ini.}
+\end{frame}
+
+\Bagian{2}{Coba dulu, baru dijelaskan}{25 menit eksperimen di GDB Online}
+\note{Struggle 25 menit. Berkeliling, jangan menjelaskan materi dulu.}
+
+\begin{frame}{Misi kalian}
+\framesubtitle{Struggle, 25 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Hitung}
+Tampilkan angka 1 sampai 10 tanpa menulis \texttt{cout} sepuluh kali.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Jumlahkan}
+Hitung 1 + 2 + ... + 100. Tebak dulu hasilnya.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Berhenti}
+Baca angka terus sampai pengguna mengetik 0.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Boleh}
+Bertanya ke teman, mengubah apa saja, sengaja membuat error.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokAlert}{Belum dulu}
+Mencari jawaban jadi di internet atau AI.
+\end{BlokAlert}
+\end{column}
+\end{columns}
+\note{Catat kesalahan yang sering muncul untuk dibahas di debrief.}
+\end{frame}
+
+\begin{frame}{Apa yang kalian temukan?}
+\framesubtitle{Debrief struggle}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Variabel apa yang kalian butuhkan untuk menyimpan jumlah?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Di mana variabel itu harus diberi nilai awal?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Apakah ada yang programnya tidak mau berhenti? Mengapa?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Jawaban kalian akan kita uji di bagian berikutnya.\note{Tulis jawaban di papan; buktikan atau patahkan di bagian materi.}
+\end{frame}
+
+\Bagian{3}{Mengulang dengan terkendali}{for, while, do-while, dan pola-pola perulangan}
+\note{Materi 40 menit. Tunjukkan setiap contoh langsung di GDB Online.}
+
+\begin{frame}[fragile]{Perulangan for}
+\framesubtitle{Banyak putaran diketahui}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{for.cpp}
+for (int i = 1; i <= 5; i++) {
+    cout << i << " ";
+}
+cout << endl;
+for (int i = 10; i > 0; i -= 3) {
+    cout << i << " ";
+}
+cout << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P05/k001.txt}
+\begin{Catatan}
+Tiga bagian \texttt{for}: nilai awal; syarat lanjut; perubahan. Syarat diperiksa sebelum setiap putaran.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Pencacah dan akumulator}
+\framesubtitle{Pola perulangan}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{akumulator.cpp}
+int jumlah = 0, genap = 0;
+for (int i = 1; i <= 10; i++) {
+    jumlah += i;
+    if (i % 2 == 0) {
+        genap++;
+    }
+}
+cout << "Jumlah: " << jumlah << endl;
+cout << "Genap : " << genap << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P05/k002.txt}
+\begin{Catatan}
+Akumulator dan pencacah selalu diberi nilai awal sebelum perulangan, bukan di dalamnya.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Tanya: apa yang terjadi bila int jumlah = 0 dipindah ke dalam perulangan?}
+\end{frame}
+
+\begin{frame}[fragile]{Perulangan while}
+\framesubtitle{Berhenti karena syarat}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{while.cpp}
+int saldo = 100000, bulan = 0;
+while (saldo < 500000) {
+    saldo += 150000;
+    bulan++;
+}
+cout << bulan << " bulan, saldo " << saldo << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P05/k003.txt}
+\begin{Catatan}
+Sesuatu di dalam badan harus mengubah syarat. Bila tidak, perulangan tidak pernah berhenti.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Nilai sentinel}
+\framesubtitle{Membaca sampai tanda berhenti}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{sentinel.cpp}
+int nilai, banyak = 0, total = 0;
+cin >> nilai;
+while (nilai != -1) {
+    banyak++;
+    total += nilai;
+    cin >> nilai;
+}
+cout << banyak << " data, total " << total << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\begin{Keluaran}[title={Masukan},listing options={style=ITERAPlainKecil}]
+70 85 60 90 -1
+\end{Keluaran}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P05/k004.txt}
+\begin{Catatan}
+Baca sekali sebelum perulangan, lalu baca lagi di akhir badan. Dengan begitu -1 tidak ikut dihitung.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Perulangan do-while}
+\framesubtitle{Minimal sekali jalan}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{dowhile.cpp}
+int pin, coba = 0;
+do {
+    cin >> pin;
+    coba++;
+} while (pin != 1234 && coba < 3);
+cout << (pin == 1234 ? "Masuk" : "Terkunci");
+cout << " setelah " << coba << " kali" << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\begin{Keluaran}[title={Masukan},listing options={style=ITERAPlainKecil}]
+1111 1234
+\end{Keluaran}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P05/k005.txt}
+\begin{Catatan}
+Syarat diperiksa sesudah badan. Jangan lupa titik koma setelah \texttt{while (...)}.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}{Memilih jenis perulangan}
+\framesubtitle{for, while, atau do-while}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{364pt}>{\raggedright\arraybackslash}p{153pt}>{\raggedright\arraybackslash}p{345pt}@{}}
+\kepala{Situasi} & \kepala{Pilihan} & \kepala{Contoh}\\
+Banyak putaran diketahui & \texttt{for} & tampilkan 1 sampai n\\
+\barisgenap Berhenti karena syarat, bisa nol putaran & \texttt{while} & baca sampai sentinel\\
+Badan harus jalan minimal sekali & \texttt{do-while} & menu, validasi PIN\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Ketiganya bisa saling menggantikan. Pilih yang paling jelas menyatakan maksud kalian.
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya}
+\framesubtitle{Latihan menjelaskan, 3 menit}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int x = 0;
+for (int i = 0; i < 4; i++) {
+    x += i * 2;
+}
+int k = 1;
+while (k < 20) {
+    k *= 3;
+}
+cout << x << " " << k << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Catatan}
+Tulis keluarannya di kertas, karakter demi karakter. Jangan dijalankan dulu.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Contoh soal Bagian B. Beri waktu 3 menit sebelum slide jawaban.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya: jawaban}
+\framesubtitle{Latihan menjelaskan}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int x = 0;
+for (int i = 0; i < 4; i++) {
+    x += i * 2;
+}
+int k = 1;
+while (k < 20) {
+    k *= 3;
+}
+cout << x << " " << k << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Keluaran}[]
+12 27
+\end{Keluaran}
+\begin{Catatan}
+\texttt{x} = 0 + 2 + 4 + 6 = 12. \texttt{k} menjadi 3, 9, 27; berhenti saat 27 tidak lagi kurang dari 20.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Tanyakan jawaban yang paling sering salah, lalu telusuri bersama.}
+\end{frame}
+
+\begin{frame}{Error yang sering muncul minggu ini}
+\framesubtitle{Pesan diambil langsung dari g++}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{208pt}>{\raggedright\arraybackslash}p{256pt}>{\raggedright\arraybackslash}p{398pt}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Koma di header for & \texttt{for (int i = 0, i < 5, i++)} & \texttt{error: expected ';' before '<' token}\\
+\barisgenap Variabel di luar jangkauan & \texttt{cout << i; sesudah for} & \texttt{error: 'i' was not declared in this scope}\\
+Lupa ; sesudah do-while & \texttt{\} while (x < 5)} & \texttt{error: expected ';' before 'cout'}\\
+\barisgenap Perbandingan bertipe beda & \texttt{i < s.length() dengan int} & \texttt{warning: comparison of integer expressions of different signedness: 'int' and ...}\\
+Badan for kosong & \texttt{for (...);} & \texttt{warning: this 'for' clause does not guard...}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Pesan di tabel ini dihasilkan dengan g++ dan opsi -Wall, sama seperti di cek.sh.}
+\note{Minta mahasiswa memotret slide ini.}
+\end{frame}
+
+\Bagian{4}{Hands-on bertingkat}{45 menit, dari dasar sampai tantangan}
+\note{Mahasiswa membuka folder 02 Hands-on/P5 - Perulangan 1 - Hands-on.}
+
+\begin{frame}{Peta hands-on}
+\framesubtitle{Folder 02 Hands-on/P5 - Perulangan 1 - Hands-on}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{36pt}>{\raggedright\arraybackslash}p{267pt}>{\raggedright\arraybackslash}p{110pt}>{\raggedright\arraybackslash}p{83pt}>{\raggedright\arraybackslash}p{341pt}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Waktu} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-deret.cpp} & Dasar & 10' & \texttt{for}, akumulator\\
+\barisgenap 2 & \texttt{handson2-tabungan.cpp} & Menengah & 15' & \texttt{while} dengan syarat berhenti\\
+3 & \texttt{handson3-rerata.cpp} & Tantangan & 20' & trace table, perbaiki tiga kesalahan sentinel\\
+\barisgenap + & \texttt{bonus-faktorial.cpp} & Pengayaan & sisa & \texttt{do-while} untuk menu, \texttt{long long}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Kerjakan berurutan. Cocokkan keluaran dengan folder \texttt{expected/}; latihan yang membaca masukan memakai data di folder \texttt{input/}.\note{Saat berkeliling, minta mahasiswa yang mengerjakan latihan tantangan menjelaskan blok PENJELASAN mereka.}
+\end{frame}
+
+\begin{frame}{Cara mengecek dan aturannya}
+\framesubtitle{Hands-on}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Di GDB Online}
+Salin isi file latihan, lengkapi TODO, klik Run. Bila program membaca masukan, ketik isi file di \texttt{input/}. Bandingkan dengan \texttt{expected/}.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Di komputer sendiri}
+Jalankan \texttt{bash cek.sh}. Skrip mengompilasi dengan \texttt{-Wall -Werror}, memberi masukan dari \texttt{input/}, lalu mencocokkan keluaran.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{6pt}
+\begin{Catatan}
+AI boleh untuk memahami pesan error, tidak untuk meminta solusi utuh. Exit Ticket dikerjakan tanpa bantuan apa pun.
+\end{Catatan}
+\note{Hands-on tidak dinilai langsung; yang dinilai Exit Ticket dan tugas.}
+\end{frame}
+
+\Bagian{5}{Exit Ticket dan tugas}{25 menit terakhir, lalu pekerjaan rumah}
+\note{Mulai Exit Ticket tepat waktu.}
+
+\begin{frame}{Exit Ticket 5}
+\framesubtitle{Individual, 25 menit, tanpa AI dan internet}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{60pt}>{\raggedright\arraybackslash}p{560pt}>{\raggedright\arraybackslash}p{80pt}>{\raggedright\arraybackslash}p{150pt}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang menampilkan kelipatan k dari 1 sampai n beserta banyaknya & 25 & CPMK0607\\
+\barisgenap A2 & Tulis program yang membaca bilangan sampai 0 lalu menampilkan jumlah bilangan positif & 25 & CPMK0607\\
+B1 & Buat trace table sebuah perulangan dan tentukan keluarannya & 20 & CPMK0608\\
+\barisgenap B2 & Jelaskan mengapa sebuah perulangan tidak berhenti dan cara memperbaikinya & 20 & CPMK0608\\
+B3 & Tentukan berapa kali badan perulangan dijalankan dan jelaskan alasannya & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Soal A dinilai dari keluaran yang tepat sama. Soal B dinilai dari ketepatan dan alasan. Pelanggaran aturan membuat nilai Exit Ticket ini 0.}
+\note{Soal lengkap dibagikan terpisah dan tidak disimpan di repo publik.}
+\end{frame}
+
+\begin{frame}{Tugas 5: Program Statistik Nilai}
+\framesubtitle{Dikumpulkan sebelum Pertemuan 6}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Bagian A, program, 50 poin}
+Buat program statistik nilai dengan ketentuan berikut. Ketentuannya di slide berikut.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Bagian B, penjelasan, 50 poin}
+Komentar maksimal 150 kata dan trace table untuk n = 3 dengan nilai 80, 70, 90. Jelaskan alasan memilih \texttt{for}, \texttt{while}, atau \texttt{do-while} di setiap bagian, dan satu kesalahan off-by-one atau perulangan tak berhenti yang kalian temui.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+{\small Data di tugas adalah data kalian sendiri. Rubrik lengkap ada di Modul Belajar 5.}
+\note{Ingatkan bahwa penjelasan disalin dari AI mudah dikenali karena tidak menyebut pengalaman mereka sendiri.}
+\end{frame}
+
+\begin{frame}{Ketentuan Tugas 5}
+\framesubtitle{Program Statistik Nilai}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{87pt}>{\raggedright\arraybackslash}p{788pt}@{}}
+\kepala{No} & \kepala{Ketentuan Bagian A}\\
+1 & Baca jumlah siswa n, ulangi sampai n > 0\\
+\barisgenap 2 & Baca nilai n siswa; setiap nilai harus 0 sampai 100, ulangi bila tidak valid\\
+3 & Tampilkan nilai tertinggi, nilai terendah, dan rata-rata kelas\\
+\barisgenap 4 & Tampilkan jumlah siswa LULUS (nilai 75 ke atas) dan TIDAK LULUS\\
+5 & Menu \texttt{do-while} untuk mengulang atau keluar\\
+\barisgenap Bonus & Tampilkan persentase kelulusan dengan dua desimal.\\
+\garisdasar
+\end{tabular}
+\note{Bacakan ketentuan satu per satu dan tanyakan apakah ada yang belum jelas.}
+\end{frame}
+
+\begin{frame}{Rubrik Tugas 5}
+\framesubtitle{Empat level, sama di semua instrumen}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{44pt}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{156pt}>{\raggedright\arraybackslash}p{146pt}>{\raggedright\arraybackslash}p{146pt}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85--100} & \kepala{Baik 70--84} & \kepala{Cukup 55--69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\
+\barisgenap A2 Validasi dan perulangan & 15 & validasi n dan nilai, menu berulang & satu validasi kurang & dua kurang & tanpa validasi\\
+A3 Ketepatan statistik & 15 & semua tepat termasuk n = 1 & satu salah & dua salah & sebagian besar salah\\
+\barisgenap B1 Trace table dan alasan & 30 & trace lengkap dan alasan tepat & satu baris trace salah & trace tidak lengkap & tidak ada atau disalin\\
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}
+\vspace{8pt}
+
+{\small Nilai kriteria = poin × skor level. Bagian A total 50, Bagian B total 50.}
+\note{Rubrik ini sama strukturnya setiap minggu; yang berubah hanya isi kriteria A2, A3, dan B1.}
+\end{frame}
+
+\begin{frame}{Sebelum Pertemuan 6}
+\framesubtitle{Persiapan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Selesaikan}
+Hands-on yang belum lulus \texttt{cek.sh}, terutama latihan tantangan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Kumpulkan}
+Tugas 5 sebelum Pertemuan 6 dimulai.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Baca}
+Modul Belajar 5 untuk mengulang, lalu bagian awal modul berikutnya.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Pertemuan 6 membahas perulangan bersarang, \texttt{break}, \texttt{continue}, dan pola bintang, sejalan dengan Algoritma Pertemuan 6.\note{Tanyakan satu hal yang paling membingungkan hari ini untuk dibuka di review minggu depan.}
+\end{frame}
+
+\SlidePenutup{Terima kasih}{Sampai jumpa di Pertemuan 6: perulangan bersarang dan pola}
+\note{Slide penutup.}
+\end{document}

@@ -1,0 +1,8 @@
+Pindah cakram 1 dari A ke C
+Pindah cakram 2 dari A ke B
+Pindah cakram 1 dari C ke B
+Pindah cakram 3 dari A ke C
+Pindah cakram 1 dari B ke A
+Pindah cakram 2 dari B ke C
+Pindah cakram 1 dari A ke C
+Total langkah: 7

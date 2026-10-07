@@ -1,0 +1,542 @@
+% Pertemuan 10 Praktikum Pemrograman (IF25-11002). Dihasilkan oleh tools/build.py dari tools/konten/p10.py.
+% Kompilasi: xelatex P10.tex (dua kali). Catatan: xelatex -jobname=P10-catatan "\def\catatan{1}\input{P10.tex}"
+\documentclass[t]{beamer}
+\usetheme{ITERA}
+\input{catatan-preamble.tex}
+\renewcommand\ITERAmeeting{Pertemuan 10}
+\begin{document}
+\SlideJudul{IF25-11002 PRAKTIKUM PEMROGRAMAN}{Pertemuan 10\\Array Dua Dimensi dan String}{Tabel baris-kolom dengan array dua dimensi, dan teks sebagai deretan karakter}{Tim Pengajar}{Tahun 2026. Sejajar dengan Pertemuan 10 Algoritma Pemrograman: Array 2D dan String.}
+\note{Buka dengan menanyakan satu hal dari pertemuan lalu yang masih membingungkan.}
+
+\begin{frame}{Dua mata kuliah, satu minggu}
+\framesubtitle{Sebelum mulai}
+Topik minggu ini sama di dua mata kuliah, dengan peran yang berbeda.
+\vspace{10pt}
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Algoritma: Array 2D dan String}
+Larik dua dimensi sebagai tabel, penelusuran baris dan kolom, serta string sebagai larik karakter.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Praktikum: Array 2D dan string}
+Mendeklarasikan \texttt{int m[B][K]}, memprosesnya dengan \texttt{for} bersarang, dan mengolah \texttt{string} per karakter.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\note{Tanyakan apa yang sudah dibahas di Algoritma minggu ini. Gunakan jawabannya sebagai jembatan ke praktikum.}
+\end{frame}
+
+\begin{frame}{Saat pulang nanti, kalian bisa}
+\framesubtitle{Target hari ini}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{1}{Menerapkan}
+Menulis program yang memproses data tabel dengan array dua dimensi dan mengolah teks dengan \texttt{string}: mengakses karakter, menghitung, mengubah huruf, dan memakai fungsi anggota \texttt{string}
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 10.1, CPMK0607}
+\end{Langkah}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{2}{Menjelaskan}
+Menelusuri indeks baris dan kolom yang diakses pada perulangan bersarang, serta menjelaskan pemrosesan string karakter demi karakter
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 10.2, CPMK0608}
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{Catatan}
+Dua kemampuan ini dinilai sama berat di Exit Ticket, tugas, UTS, dan UAS.
+\end{Catatan}
+\note{Bacakan target dengan pelan. Kata kuncinya menerapkan dan menjelaskan.}
+\end{frame}
+
+\begin{frame}{Ingat minggu lalu}
+\framesubtitle{Review, 5 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Mengapa rotasi kanan menggeser dari belakang?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Apa indeks terakhir dari \texttt{int a[n]}?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Mengapa maksimum disimpan sebagai indeks?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Jawab di kertas dulu, lalu cocokkan dengan teman sebelah.\note{Pilih dua mahasiswa untuk menjawab. Koreksi singkat, jangan mengajar ulang.}
+\end{frame}
+
+\Bagian{1}{Masalah pembuka}{Rekap nilai kuis}
+\note{Masalah pembuka 10 menit.}
+
+\begin{frame}[fragile]{Rekap nilai kuis}
+\framesubtitle{Masalah minggu ini}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+{Asisten menyimpan nilai 3 mahasiswa untuk 4 kuis. Dosen ingin total per mahasiswa dan rata-rata per kuis.
+
+\vspace{6pt}
+Dua belas variabel terlalu banyak, dan satu array satu dimensi tidak memperlihatkan mana baris mahasiswa dan mana kolom kuis.\par}
+\vspace{6pt}
+\begin{Catatan}
+\textbf{Diskusi 2 menit.} Bagaimana kalian menunjuk nilai Budi di kuis 3? Berapa angka yang kalian butuhkan untuk menunjuknya?
+\end{Catatan}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[]
+       K1 K2 K3 K4 | total
+Rani   80 75 90 85 | 330
+Budi   60 70 65 72 | 267
+Siti   95 88 92 90 | 365
+\end{Keluaran}
+\end{column}
+\end{columns}
+\note{Tampung beberapa jawaban tanpa menilai benar salah.}
+\end{frame}
+
+\begin{frame}{Dari langkah ke instruksi}
+\framesubtitle{Sambungan dengan Algoritma}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Lihat bentuknya}
+Data berbentuk tabel: baris mahasiswa, kolom kuis.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Tunjuk dengan dua indeks}
+Satu nilai ditunjuk oleh pasangan baris dan kolom.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Terjemahkan}
+\texttt{int n[3][4]} diproses dengan \texttt{for} baris di luar, kolom di dalam.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Langkah 1 dan 2 dilatih di Algoritma. Langkah 3 kita kerjakan hari ini dengan C++.\note{Hubungkan eksplisit ke Algoritma minggu ini.}
+\end{frame}
+
+\Bagian{2}{Coba dulu, baru dijelaskan}{25 menit eksperimen di GDB Online}
+\note{Struggle 25 menit. Berkeliling, jangan menjelaskan materi dulu.}
+
+\begin{frame}{Misi kalian}
+\framesubtitle{Struggle, 25 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Tabel}
+Buat \texttt{int n[3][4]} berisi nilai contoh dan tampilkan \texttt{n[1][2]}.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Total baris}
+Hitung total nilai mahasiswa kedua.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Teks}
+Buat \texttt{string s = "ITERA";} lalu tampilkan \texttt{s[0]} dan \texttt{s.length()}.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Boleh}
+Bertanya ke teman, mengubah apa saja, sengaja membuat error.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokAlert}{Belum dulu}
+Mencari jawaban jadi di internet atau AI.
+\end{BlokAlert}
+\end{column}
+\end{columns}
+\note{Catat kesalahan yang sering muncul untuk dibahas di debrief.}
+\end{frame}
+
+\begin{frame}{Apa yang kalian temukan?}
+\framesubtitle{Debrief struggle}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Indeks mana yang ditulis lebih dulu, baris atau kolom?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Bagaimana menghitung total per kolom, bukan per baris?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Apa kesamaan \texttt{s[0]} dengan \texttt{a[0]} minggu lalu?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Jawaban kalian akan kita uji di bagian berikutnya.\note{Tulis jawaban di papan; buktikan atau patahkan di bagian materi.}
+\end{frame}
+
+\Bagian{3}{Tabel dan teks}{Array dua dimensi, string, dan pemrosesan per karakter}
+\note{Materi 40 menit. Tunjukkan setiap contoh langsung di GDB Online.}
+
+\begin{frame}[fragile]{Array dua dimensi}
+\framesubtitle{Baris dan kolom}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{matriks.cpp}
+int n[3][4] = {{80, 75, 90, 85},
+               {60, 70, 65, 72},
+               {95, 88, 92, 90}};
+cout << n[1][2] << endl;
+for (int b = 0; b < 3; b++) {
+    int total = 0;
+    for (int k = 0; k < 4; k++) total += n[b][k];
+    cout << "Baris " << b << ": " << total << endl;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P10/k001.txt}
+\begin{Catatan}
+\texttt{n[b][k]}: indeks pertama baris, kedua kolom. Keduanya mulai dari 0.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Total per kolom}
+\framesubtitle{Menukar urutan perulangan}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{kolom.cpp}
+int n[3][4] = {{80, 75, 90, 85},
+               {60, 70, 65, 72},
+               {95, 88, 92, 90}};
+for (int k = 0; k < 4; k++) {
+    int total = 0;
+    for (int b = 0; b < 3; b++) total += n[b][k];
+    cout << "K" << k + 1 << ": " << total / 3.0 << endl;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P10/k002.txt}
+\begin{Catatan}
+Untuk per kolom, \texttt{for} kolom di luar. Penulisan indeks tetap \texttt{n[b][k]}.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{string sebagai deretan karakter}
+\framesubtitle{Indeks pada teks}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{string.cpp}
+string s = "Teknik Informatika";
+cout << s.length() << endl;
+cout << s[0] << s[7] << endl;
+int spasi = 0;
+for (int i = 0; i < (int) s.length(); i++) {
+    if (s[i] == ' ') spasi++;
+}
+cout << "Spasi: " << spasi << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P10/k003.txt}
+\begin{Catatan}
+\texttt{s.length()} bertipe tak bertanda; ubah ke \texttt{int} agar perbandingan dengan \texttt{i} tidak memicu peringatan.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Mengolah karakter}
+\framesubtitle{cctype}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{karakter.cpp}
+string s = "Halo ITERA 2026";
+int huruf = 0, angka = 0;
+for (int i = 0; i < (int) s.length(); i++) {
+    if (isalpha(s[i])) huruf++;
+    if (isdigit(s[i])) angka++;
+    s[i] = toupper(s[i]);
+}
+cout << huruf << " " << angka << endl;
+cout << s << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P10/k004.txt}
+\begin{Catatan}
+Fungsi \texttt{isalpha}, \texttt{isdigit}, \texttt{toupper}, dan \texttt{tolower} ada di \texttt{<cctype>}.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}{Fungsi anggota string yang sering dipakai}
+\framesubtitle{Operasi string}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{220pt}>{\raggedright\arraybackslash}p{384pt}>{\raggedright\arraybackslash}p{259pt}@{}}
+\kepala{Operasi} & \kepala{Contoh dengan s = "Praktikum"} & \kepala{Hasil}\\
+panjang & \texttt{s.length()} & 9\\
+\barisgenap gabung & \texttt{s + " C++"} & \texttt{Praktikum C++}\\
+potong & \texttt{s.substr(0, 4)} & \texttt{Prak}\\
+\barisgenap cari & \texttt{s.find("tik")} & 4\\
+bandingkan & \texttt{s == "praktikum"} & false (huruf besar beda)\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Membandingkan string dengan \texttt{==} membedakan huruf besar dan kecil.
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya}
+\framesubtitle{Latihan menjelaskan, 3 menit}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int m[2][3] = {{1, 2, 3}, {4, 5, 6}};
+int s = 0;
+for (int k = 0; k < 3; k++) {
+    s += m[1][k] - m[0][k];
+}
+string t = "data";
+t[0] = 'D';
+cout << s << " " << t + t.substr(2) << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Catatan}
+Tulis keluarannya di kertas, karakter demi karakter. Jangan dijalankan dulu.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Contoh soal Bagian B. Beri waktu 3 menit sebelum slide jawaban.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya: jawaban}
+\framesubtitle{Latihan menjelaskan}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int m[2][3] = {{1, 2, 3}, {4, 5, 6}};
+int s = 0;
+for (int k = 0; k < 3; k++) {
+    s += m[1][k] - m[0][k];
+}
+string t = "data";
+t[0] = 'D';
+cout << s << " " << t + t.substr(2) << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Keluaran}[]
+9 Datata
+\end{Keluaran}
+\begin{Catatan}
+Setiap kolom menyumbang 3 (4−1, 5−2, 6−3), jadi \texttt{s} = 9. \texttt{t} menjadi \texttt{Data}, lalu digabung dengan \texttt{ta}.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Tanyakan jawaban yang paling sering salah, lalu telusuri bersama.}
+\end{frame}
+
+\begin{frame}{Error yang sering muncul minggu ini}
+\framesubtitle{Pesan diambil langsung dari g++}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{208pt}>{\raggedright\arraybackslash}p{256pt}>{\raggedright\arraybackslash}p{398pt}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Indeks dua dimensi pakai koma & \texttt{n[1, 2]} & \texttt{warning: left operand of comma operator has no effect}\\
+\barisgenap Kolom tidak disebut & \texttt{int n[][] = ...} & \texttt{error: declaration of 'n' as multidimensional array must have bounds for all ...}\\
+Kutip ganda untuk char & \texttt{s[0] = "A";} & \texttt{error: invalid conversion from 'const char*' to ...}\\
+\barisgenap Perbandingan int dengan length() & \texttt{i < s.length()} & \texttt{warning: comparison of integer expressions of different signedness: 'int' and ...}\\
+string tanpa nilai ke int & \texttt{int x = s;} & \texttt{error: cannot convert 'std::string' \{aka 'std::\_\_cxx11::basic\_string<char>'\} ...}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Pesan di tabel ini dihasilkan dengan g++ dan opsi -Wall, sama seperti di cek.sh.}
+\note{Minta mahasiswa memotret slide ini.}
+\end{frame}
+
+\Bagian{4}{Hands-on bertingkat}{45 menit, dari dasar sampai tantangan}
+\note{Mahasiswa membuka folder 02 Hands-on/P10 - Array 2D dan String - Hands-on.}
+
+\begin{frame}{Peta hands-on}
+\framesubtitle{Folder 02 Hands-on/P10 - Array 2D dan String - Hands-on}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{36pt}>{\raggedright\arraybackslash}p{267pt}>{\raggedright\arraybackslash}p{110pt}>{\raggedright\arraybackslash}p{83pt}>{\raggedright\arraybackslash}p{341pt}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Waktu} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-matriks.cpp} & Dasar & 10' & baca dan tampilkan array 2D, total baris\\
+\barisgenap 2 & \texttt{handson2-kata.cpp} & Menengah & 15' & \texttt{getline}, akses karakter, \texttt{cctype}\\
+3 & \texttt{handson3-transpos.cpp} & Tantangan & 20' & telusuri indeks [b][k], perbaiki tiga kesalahan\\
+\barisgenap + & \texttt{bonus-palindrom.cpp} & Pengayaan & sisa & membandingkan karakter dari dua ujung\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Kerjakan berurutan. Cocokkan keluaran dengan folder \texttt{expected/}; latihan yang membaca masukan memakai data di folder \texttt{input/}.\note{Saat berkeliling, minta mahasiswa yang mengerjakan latihan tantangan menjelaskan blok PENJELASAN mereka.}
+\end{frame}
+
+\begin{frame}{Cara mengecek dan aturannya}
+\framesubtitle{Hands-on}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Di GDB Online}
+Salin isi file latihan, lengkapi TODO, klik Run. Bila program membaca masukan, ketik isi file di \texttt{input/}. Bandingkan dengan \texttt{expected/}.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Di komputer sendiri}
+Jalankan \texttt{bash cek.sh}. Skrip mengompilasi dengan \texttt{-Wall -Werror}, memberi masukan dari \texttt{input/}, lalu mencocokkan keluaran.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{6pt}
+\begin{Catatan}
+AI boleh untuk memahami pesan error, tidak untuk meminta solusi utuh. Exit Ticket dikerjakan tanpa bantuan apa pun.
+\end{Catatan}
+\note{Hands-on tidak dinilai langsung; yang dinilai Exit Ticket dan tugas.}
+\end{frame}
+
+\Bagian{5}{Exit Ticket dan tugas}{25 menit terakhir, lalu pekerjaan rumah}
+\note{Mulai Exit Ticket tepat waktu.}
+
+\begin{frame}{Exit Ticket 10}
+\framesubtitle{Individual, 25 menit, tanpa AI dan internet}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{60pt}>{\raggedright\arraybackslash}p{560pt}>{\raggedright\arraybackslash}p{80pt}>{\raggedright\arraybackslash}p{150pt}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang menghitung rata-rata setiap kolom array 2D & 25 & CPMK0607\\
+\barisgenap A2 & Tulis program yang membalik sebuah kata dan menghitung huruf kapitalnya & 25 & CPMK0607\\
+B1 & Tentukan keluaran perulangan bersarang yang mengakses array 2D & 20 & CPMK0608\\
+\barisgenap B2 & Jelaskan kesalahan indeks pada potongan kode transpos & 20 & CPMK0608\\
+B3 & Jelaskan perbedaan \texttt{'A'} dan \texttt{"A"} beserta contohnya & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Soal A dinilai dari keluaran yang tepat sama. Soal B dinilai dari ketepatan dan alasan. Pelanggaran aturan membuat nilai Exit Ticket ini 0.}
+\note{Soal lengkap dibagikan terpisah dan tidak disimpan di repo publik.}
+\end{frame}
+
+\begin{frame}{Tugas 10: Sistem Nilai Kelas}
+\framesubtitle{Dikumpulkan sebelum Pertemuan 11}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Bagian A, program, 50 poin}
+Buat program pengelola nilai kelas dengan ketentuan berikut. Gunakan \texttt{const} untuk ukuran dan perulangan bersarang untuk operasi tabel. Ketentuannya di slide berikut.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Bagian B, penjelasan, 50 poin}
+Komentar maksimal 150 kata: gambar tabel indeks [b][k] yang diakses saat menghitung rata-rata per mata kuliah untuk 2 mahasiswa dan 3 mata kuliah, dan jelaskan perbedaan urutan perulangan untuk rata-rata per baris dan per kolom.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+{\small Data di tugas adalah data kalian sendiri. Rubrik lengkap ada di Modul Belajar 10.}
+\note{Ingatkan bahwa penjelasan disalin dari AI mudah dikenali karena tidak menyebut pengalaman mereka sendiri.}
+\end{frame}
+
+\begin{frame}{Ketentuan Tugas 10}
+\framesubtitle{Sistem Nilai Kelas}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{87pt}>{\raggedright\arraybackslash}p{788pt}@{}}
+\kepala{No} & \kepala{Ketentuan Bagian A}\\
+1 & Baca jumlah mahasiswa (maksimal 40) dan jumlah mata kuliah (maksimal 10)\\
+\barisgenap 2 & Baca nama setiap mahasiswa ke array \texttt{string} dengan \texttt{getline}\\
+3 & Baca nilai setiap mahasiswa untuk setiap mata kuliah ke array dua dimensi, dengan validasi 0 sampai 100\\
+\barisgenap 4 & Tampilkan tabel nilai dengan format rapi\\
+5 & Tampilkan rata-rata setiap mahasiswa (per baris) dan setiap mata kuliah (per kolom)\\
+\barisgenap 6 & Tampilkan nilai tertinggi dan terendah, serta mahasiswa dengan rata-rata tertinggi\\
+Bonus & Tampilkan grafik batang sederhana rata-rata setiap mahasiswa dengan karakter \texttt{*}.\\
+\garisdasar
+\end{tabular}
+\note{Bacakan ketentuan satu per satu dan tanyakan apakah ada yang belum jelas.}
+\end{frame}
+
+\begin{frame}{Rubrik Tugas 10}
+\framesubtitle{Empat level, sama di semua instrumen}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{44pt}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{156pt}>{\raggedright\arraybackslash}p{146pt}>{\raggedright\arraybackslash}p{146pt}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85--100} & \kepala{Baik 70--84} & \kepala{Cukup 55--69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\
+\barisgenap A2 Kelengkapan fitur & 15 & tabel dan semua statistik & satu fitur kurang & dua kurang & tiga atau lebih kurang\\
+A3 Validasi dan ketepatan & 15 & validasi tepat, hasil benar & satu salah & dua salah & sebagian besar salah\\
+\barisgenap B1 Penelusuran indeks & 30 & tabel indeks tepat, alasan jelas & satu indeks keliru & tanpa tabel & tidak ada atau disalin\\
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}
+\vspace{8pt}
+
+{\small Nilai kriteria = poin × skor level. Bagian A total 50, Bagian B total 50.}
+\note{Rubrik ini sama strukturnya setiap minggu; yang berubah hanya isi kriteria A2, A3, dan B1.}
+\end{frame}
+
+\begin{frame}{Sebelum Pertemuan 11}
+\framesubtitle{Persiapan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Selesaikan}
+Hands-on yang belum lulus \texttt{cek.sh}, terutama latihan tantangan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Kumpulkan}
+Tugas 10 sebelum Pertemuan 11 dimulai.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Baca}
+Modul Belajar 10 untuk mengulang, lalu bagian awal modul berikutnya.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Pertemuan 11 membahas searching: linear search dan binary search pada array, sejalan dengan Algoritma Pertemuan 11.\note{Tanyakan satu hal yang paling membingungkan hari ini untuk dibuka di review minggu depan.}
+\end{frame}
+
+\SlidePenutup{Terima kasih}{Sampai jumpa di Pertemuan 11: searching}
+\note{Slide penutup.}
+\end{document}

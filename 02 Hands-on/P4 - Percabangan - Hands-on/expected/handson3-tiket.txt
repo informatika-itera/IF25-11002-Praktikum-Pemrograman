@@ -1,0 +1,3 @@
+Harga: 25000
+Harga: 50000
+Harga: 0

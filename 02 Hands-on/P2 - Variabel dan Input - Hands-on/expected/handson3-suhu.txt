@@ -1,0 +1,2 @@
+Suhu (C): Fahrenheit: 97.88
+Kelvin    : 309.75

@@ -1,0 +1,343 @@
+% Modul Belajar 14, dihasilkan oleh tools/build.py dari tools/konten/p14.py
+\documentclass[a4paper]{article}
+\usepackage{modulITERA}
+\begin{document}
+\Sampul{14}{Rekursi dan Struct}{Fungsi yang memanggil dirinya sendiri, dan tipe data buatan sendiri untuk mengelompokkan data}{CPMK0607 (menerapkan) dan CPMK0608 (menjelaskan) pada konsep dasar algoritma dan sistem komputer}{sekitar 3 jam belajar mandiri, ditambah 150 menit di kelas}{\texttt{02 Hands-on/P14 - Rekursi dan Struct - Hands-on/}}
+\Bagian{Modul 14}{Peta belajar}
+Ikuti urutan ini dari atas ke bawah. Setiap bagian memakai apa yang sudah dibahas di bagian sebelumnya.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.140\textwidth}>{\raggedright\arraybackslash}p{0.840\textwidth}@{}}
+\kepala{Urutan} & \kepala{Bagian}\\
+1 & Tentang modul ini\\\garis
+2 & Masalah pembuka: Data buku perpustakaan\\\garis
+3 & Langkah 1: Rekursi: kasus basis dan langkah rekursif\\\garis
+4 & Langkah 2: Menelusuri faktorial(4)\\\garis
+5 & Langkah 3: Rekursi bercabang dan rekursi pada array\\\garis
+6 & Langkah 4: struct: tipe data buatan sendiri\\\garis
+7 & Langkah 5: Array of struct\\\garis
+8 & Pesan error yang sering muncul\\\garis
+9 & Latihan mandiri\\\garis
+10 & Rangkuman\\\garis
+11 & Cek pemahaman\\\garis
+12 & Exit Ticket dan tugas\\\garis
+13 & Bacaan lanjut dan persiapan minggu depan\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Pembuka}{Tentang modul ini}
+Modul ini mendampingi Pertemuan 14, pertemuan materi terakhir. Kalian belajar dua alat baru. Rekursi adalah cara menyelesaikan masalah dengan memecahnya menjadi versi yang lebih kecil dari masalah yang sama. Struct adalah cara mengelompokkan beberapa data berbeda tipe menjadi satu kesatuan, misalnya nama, NIM, dan IPK seorang mahasiswa.
+
+Isinya sama dengan slide di kelas, tetapi ditulis lebih pelan dan lebih lengkap, supaya kalian bisa mengulang sendiri di rumah tanpa harus menebak maksud slide.
+
+\Sub{Setelah menyelesaikan modul ini, kalian bisa}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.680\textwidth}>{\raggedright\arraybackslash}p{0.230\textwidth}@{}}
+\kepala{No} & \kepala{Kemampuan} & \kepala{Dibahas di}\\
+1 & Menulis fungsi rekursif dengan kasus basis dan langkah rekursif yang tepat, serta mendefinisikan \texttt{struct} dan memproses array of struct (Sub-CPMK 14.1, CPMK0607) & Langkah 1 sampai 5\\\garis
+2 & Menelusuri pemanggilan rekursif dengan pohon pemanggilan atau tumpukan panggilan, dan menjelaskan peran kasus basis serta akses anggota struct (Sub-CPMK 14.2, CPMK0608) & kotak Tebak dulu, Latihan 3\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Karena setiap instrumen penilaian dibagi rata antara Bagian A (menulis kode) dan Bagian B (menelusuri dan menjelaskan), yang dinilai bukan hanya program kalian jalan, tetapi juga kalian bisa menjelaskan mengapa program itu jalan.
+
+\Sub{Cara memakai modul ini}
+Setiap langkah punya pola yang sama: penjelasan konsep, kadang contoh dari kehidupan sehari-hari, lalu kode yang bisa langsung kalian ketik. Sesudah kode ada kotak \textbf{Tebak dulu}. Tulis tebakan kalian di kertas sebelum membaca \textbf{Jawaban} di bawahnya. Kebiasaan menebak lalu membuktikan inilah yang membuat konsep menempel, bukan sekadar membaca.
+
+\begin{Penting}[Ketik, jangan salin]
+Ketik ulang setiap contoh di GDB Online atau editor kalian, jangan disalin-tempel. Saat mengetik, kalian akan membuat salah ketik, membaca pesan error, dan memperbaikinya. Itu bagian dari belajar.
+\end{Penting}
+\Sub{Yang perlu disiapkan}
+Peramban dengan akses ke onlinegdb.com, atau g++ di komputer kalian sendiri. Kertas dan alat tulis untuk menebak keluaran dan membuat trace table. Folder hands-on pertemuan ini dari repo mata kuliah.
+
+\Bagian{Pembuka}{Masalah pembuka: Data buku perpustakaan}
+Perpustakaan prodi mencatat setiap buku dengan kode, judul, penulis, tahun, dan stok. Dengan materi sejauh ini, kalian butuh lima array sejajar dan harus menjaga indeksnya selalu sama.
+
+Selain itu, beberapa pertanyaan lebih mudah dirumuskan dari ukuran yang lebih kecil, misalnya: total stok n buku adalah stok buku terakhir ditambah total stok n − 1 buku sebelumnya.
+
+\begin{MKeluaran}[title={Tampilan yang diinginkan}]
+[B01] Algoritma (2019) stok 5
+[B02] C++ Dasar (2021) stok 8
+[B03] Struktur Data (2018) stok 10
+Total stok: 23
+Buku terlama: Struktur Data
+\end{MKeluaran}
+\begin{Tebak}[Coba pikirkan]
+Bagaimana menyimpan lima keterangan satu buku dalam satu variabel? Bagaimana menghitung total stok tanpa perulangan?
+\end{Tebak}
+\begin{Jawaban}[Cara memecahnya]
+Kelompokkan: Satu buku punya beberapa field: kode, judul, penulis, tahun, stok. Perkecil masalah: Total n buku = buku terakhir + total n − 1 buku; total 0 buku = 0. Terjemahkan: \texttt{struct Buku} dan fungsi rekursif dengan kasus basis.
+\end{Jawaban}
+\Bagian{Langkah 1}{Rekursi: kasus basis dan langkah rekursif}
+Fungsi rekursif memanggil dirinya sendiri dengan masukan yang lebih kecil. Setiap fungsi rekursif punya dua bagian: kasus basis, yaitu masukan terkecil yang jawabannya langsung diketahui, dan langkah rekursif, yang menyelesaikan masalah dengan memanggil versi lebih kecil.
+
+Tanpa kasus basis, atau bila langkah rekursif tidak mendekati basis, pemanggilan tidak pernah berhenti sampai memori tumpukan habis dan program berhenti mendadak.
+
+\begin{Contoh}[Contoh sehari-hari]
+Antrean panjang di kantin: kalian ingin tahu urutan kalian, jadi bertanya ke orang di depan, yang bertanya ke orang di depannya, sampai orang terdepan menjawab "saya nomor 1". Jawaban lalu mengalir balik ke belakang.
+\end{Contoh}
+\begin{MKode}{faktorial.cpp}
+int faktorial(int n) {
+    if (n == 0) return 1;
+    return n * faktorial(n - 1);
+}
+
+int main() {
+    cout << faktorial(5) << endl;
+    cout << faktorial(0) << endl;
+    return 0;
+}
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+120
+1
+\end{MKeluaran}
+Kasus basis menghentikan rekursi. Langkah rekursif harus selalu mendekati kasus basis.
+\end{Jawaban}
+\Bagian{Langkah 2}{Menelusuri faktorial(4)}
+Setiap pemanggilan menunggu hasil pemanggilan di bawahnya. Tabel dibaca dua arah: kolom Menunggu dari atas ke bawah saat pemanggilan turun, lalu kolom Nilai kembali dari bawah ke atas saat hasilnya naik kembali.
+
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.283\textwidth}>{\raggedright\arraybackslash}p{0.348\textwidth}>{\raggedright\arraybackslash}p{0.348\textwidth}@{}}
+\kepala{Pemanggilan} & \kepala{Menunggu} & \kepala{Nilai kembali}\\
+faktorial(4) & 4 × faktorial(3) & 4 × 6 = 24\\\garis
+faktorial(3) & 3 × faktorial(2) & 3 × 2 = 6\\\garis
+faktorial(2) & 2 × faktorial(1) & 2 × 1 = 2\\\garis
+faktorial(1) & 1 × faktorial(0) & 1 × 1 = 1\\\garis
+faktorial(0) & kasus basis & 1\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\begin{Penting}[]
+Pemanggilan turun sampai kasus basis, lalu nilai kembali naik dari bawah ke atas.
+\end{Penting}
+\Bagian{Langkah 3}{Rekursi bercabang dan rekursi pada array}
+Fibonacci adalah contoh rekursi bercabang: setiap pemanggilan memicu dua pemanggilan lagi. Hasilnya benar, tetapi banyak nilai dihitung berulang. Untuk n besar, versi perulangan jauh lebih cepat.
+
+Rekursi juga bisa memproses array: jumlah n elemen adalah elemen terakhir ditambah jumlah n − 1 elemen sebelumnya. Perhatikan indeksnya, elemen terakhir dari n elemen ada di \texttt{a[n - 1]}.
+
+\begin{MKode}{fibarray.cpp}
+int fib(int n) {
+    if (n <= 1) return n;
+    return fib(n - 1) + fib(n - 2);
+}
+int jumlah(int a[], int n) {
+    if (n == 0) return 0;
+    return a[n - 1] + jumlah(a, n - 1);
+}
+int main() {
+    int a[4] = {5, 8, 10, 2};
+    cout << fib(7) << " " << jumlah(a, 4) << endl;
+    return 0;
+}
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+13 25
+\end{MKeluaran}
+\texttt{fib} memanggil dirinya dua kali, sehingga pohon pemanggilannya melebar. \texttt{jumlah} memproses elemen terakhir lalu sisanya.
+\end{Jawaban}
+\Bagian{Langkah 4}{struct: tipe data buatan sendiri}
+\texttt{struct} mendefinisikan tipe data baru yang terdiri dari beberapa field dengan tipe berbeda. Setelah didefinisikan, \texttt{Mahasiswa} bisa dipakai seperti \texttt{int} atau \texttt{string} untuk mendeklarasikan variabel.
+
+Setiap field diakses dengan operator titik. Jangan lupa titik koma sesudah kurung kurawal penutup definisi struct.
+
+\begin{Contoh}[Contoh sehari-hari]
+Kartu tanda mahasiswa memuat nama, NIM, dan foto dalam satu kartu. Kalian membawa satu kartu, bukan tiga lembar kertas terpisah.
+\end{Contoh}
+\begin{MKode}{struct.cpp}
+struct Mahasiswa {
+    string nama;
+    string nim;
+    double ipk;
+};
+int main() {
+    Mahasiswa m;
+    m.nama = "Rani";
+    m.nim = "126140001";
+    m.ipk = 3.72;
+    cout << m.nama << " " << m.nim << " " << m.ipk << endl;
+    return 0;
+}
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Rani 126140001 3.72
+\end{MKeluaran}
+Definisi \texttt{struct} diakhiri titik koma. Field diakses dengan titik: \texttt{m.nama}.
+\end{Jawaban}
+\Bagian{Langkah 5}{Array of struct}
+Array of struct menggantikan beberapa array sejajar. Semua keterangan satu buku tersimpan bersama, sehingga tidak ada risiko indeks antar-array tidak sinkron. Pola pencarian dan pengurutan dari minggu-minggu sebelumnya tetap berlaku; yang dibandingkan adalah salah satu field-nya.
+
+\begin{MKode}{arraystruct.cpp}
+struct Buku { string judul; int tahun; };
+
+int main() {
+    Buku rak[3] = {{"Algoritma", 2019},
+                   {"C++ Dasar", 2021},
+                   {"Struktur Data", 2018}};
+    int iLama = 0;
+    for (int i = 1; i < 3; i++)
+        if (rak[i].tahun < rak[iLama].tahun) iLama = i;
+    cout << rak[iLama].judul << endl;
+    return 0;
+}
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Struktur Data
+\end{MKeluaran}
+\texttt{rak[i].tahun}: indeks dulu untuk memilih buku, lalu titik untuk memilih field.
+\end{Jawaban}
+\Bagian{Waspada}{Pesan error yang sering muncul}
+Semua pesan di tabel ini dihasilkan g++ dengan opsi \texttt{-Wall}, sama seperti yang dipakai \texttt{cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.270\textwidth}>{\raggedright\arraybackslash}p{0.470\textwidth}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Lupa ; sesudah struct & \texttt{struct A \{ int x; \}} & \texttt{error: expected ';' after struct definition}\\\garis
+Field tidak ada & \texttt{m.umur pada Mahasiswa} & \texttt{error: 'struct Mahasiswa' has no member named 'umur'}\\\garis
+Akses field tanpa indeks & \texttt{rak.judul pada array} & \texttt{error: request for member 'judul' in 'rak', which is of non-class type 'Buku ...}\\\garis
+Rekursi tanpa return di satu jalur & \texttt{if (n == 0) return 1; tanpa return lain} & \texttt{warning: control reaches end of non-void function}\\\garis
+Rekursi tanpa basis & \texttt{return n * f(n - 1); saja} & \texttt{warning: infinite recursion detected}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Baris terakhir menunjukkan bahwa g++ bisa memperingatkan rekursi tanpa kasus basis, tetapi tidak selalu. Bila program berhenti mendadak dengan pesan seperti Segmentation fault saat memakai rekursi, periksa kasus basis lebih dulu.
+
+\Bagian{Latihan}{Latihan mandiri}
+Latihan ini sama dengan hands-on di kelas. Semua file ada di \texttt{02 Hands-on/P14 - Rekursi dan Struct - Hands-on/latihan/}. Kerjakan berurutan, lalu cocokkan dengan \texttt{expected/} atau jalankan \texttt{bash cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.360\textwidth}>{\raggedright\arraybackslash}p{0.150\textwidth}>{\raggedright\arraybackslash}p{0.400\textwidth}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-rekursi.cpp} & Dasar & kasus basis dan langkah rekursif\\\garis
+2 & \texttt{handson2-struct.cpp} & Menengah & \texttt{struct}, array of struct, maksimum\\\garis
+3 & \texttt{handson3-basis.cpp} & Tantangan & pohon pemanggilan, perbaiki tiga kesalahan\\\garis
++ & \texttt{bonus-hanoi.cpp} & Pengayaan & rekursi bercabang klasik\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Sub{Latihan 1: handson1-rekursi.cpp}
+Fungsi rekursif pangkat dan jumlah digit tanpa perulangan.
+
+\Sub{Latihan 2: handson2-struct.cpp}
+Data mahasiswa sebagai array of struct: tabel, IPK tertinggi, dan banyak IPK 3.5 ke atas.
+
+\Sub{Latihan 3: handson3-basis.cpp}
+Faktorial, Fibonacci, dan total stok rekursif dengan tiga kesalahan. Gambar pohon pemanggilan, perbaiki, dan jelaskan.
+
+\Sub{Bonus: bonus-hanoi.cpp}
+Menara Hanoi tiga cakram beserta total langkahnya.
+
+\Sub{Latihan menelusuri}
+\begin{MKode}{tebak.cpp}
+int f(int n) {
+    if (n <= 0) return 0;
+    if (n % 2 == 0) return n + f(n - 1);
+    return f(n - 1);
+}
+
+int main() {
+    cout << f(6) << " " << f(3) << endl;
+    return 0;
+}
+\end{MKode}
+\begin{Tebak}[]
+Tulis keluarannya di kertas tanpa menjalankan program. Buat trace table bila perlu.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+12 2
+\end{MKeluaran}
+Hanya bilangan genap yang dijumlahkan: f(6) = 6 + 4 + 2 = 12, f(3) = 2.
+\end{Jawaban}
+\Bagian{Penutup}{Rangkuman}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.320\textwidth}>{\raggedright\arraybackslash}p{0.660\textwidth}@{}}
+\kepala{Konsep} & \kepala{Yang perlu diingat}\\
+Rekursi: kasus basis dan langkah rekursif & Kasus basis menghentikan rekursi.\\\garis
+Menelusuri faktorial(4) & Pemanggilan turun sampai kasus basis, lalu nilai kembali naik dari bawah ke atas.\\\garis
+Rekursi bercabang dan rekursi pada array & \texttt{fib} memanggil dirinya dua kali, sehingga pohon pemanggilannya melebar.\\\garis
+struct: tipe data buatan sendiri & Definisi \texttt{struct} diakhiri titik koma.\\\garis
+Array of struct & \texttt{rak[i].tahun}: indeks dulu untuk memilih buku, lalu titik untuk memilih field.\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penutup}{Cek pemahaman}
+Jawab tanpa menjalankan program, lalu periksa dengan menjalankannya.
+\begin{enumerate}
+\item Apa dua bagian wajib fungsi rekursif?
+\item Apa yang terjadi bila kasus basis faktorial mengembalikan 0?
+\item Berapa nilai \texttt{fib(6)} dengan fib(0) = 0, fib(1) = 1?
+\item Mengapa definisi struct diakhiri titik koma?
+\item Bagaimana mengakses tahun buku ketiga di \texttt{Buku rak[10]}?
+\end{enumerate}
+\begin{Jawaban}[]
+\begin{enumerate}[leftmargin=16pt]
+\item Kasus basis dan langkah rekursif yang mendekati basis.
+\item Semua hasil menjadi 0 karena dikalikan 0.
+\item 8.
+\item Definisi struct adalah deklarasi; titik koma menutupnya, seperti deklarasi variabel.
+\item \texttt{rak[2].tahun}.
+\end{enumerate}
+\end{Jawaban}
+\Bagian{Penilaian}{Exit Ticket 14}
+Dikerjakan di 25 menit terakhir kelas, sendiri, tanpa AI, internet, atau diskusi. Exit Ticket 14 adalah satu dari 14 Exit Ticket; rata-ratanya menjadi komponen berbobot 25\%.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.080\textwidth}>{\raggedright\arraybackslash}p{0.600\textwidth}>{\raggedright\arraybackslash}p{0.100\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis fungsi rekursif yang menghitung jumlah 1 sampai n & 25 & CPMK0607\\\garis
+A2 & Definisikan struct dan tampilkan data dengan nilai field tertinggi dari array of struct & 25 & CPMK0607\\\garis
+B1 & Gambar pohon pemanggilan sebuah fungsi rekursif dan tentukan hasilnya & 20 & CPMK0608\\\garis
+B2 & Jelaskan apa yang terjadi bila kasus basis sebuah fungsi dihapus & 20 & CPMK0608\\\garis
+B3 & Jelaskan keunggulan array of struct dibandingkan beberapa array sejajar & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penilaian}{Tugas 14: Perpustakaan Mini dengan Struct dan Rekursi}
+Kumpulkan sebelum Pertemuan 15 lewat kanal pengumpulan yang diumumkan dosen.
+
+\Sub{Bagian A: program (50 poin)}
+Buat program perpustakaan mini dengan ketentuan berikut. Semua fungsi pencarian dan agregasi wajib rekursif, bukan perulangan.
+\begin{enumerate}
+\item \texttt{struct Buku} berisi kodeBuku, judul, penulis, tahun, dan stok
+\item Array of struct dengan maksimal 10 buku dan validasi masukan
+\item Fungsi rekursif \texttt{hitungTotalStok(Buku arr[], int n)}
+\item Fungsi rekursif \texttt{cariBukuTerlama(Buku arr[], int n)} yang mengembalikan indeks buku dengan tahun terkecil
+\item Fungsi rekursif \texttt{faktorial(int n)} untuk menghitung banyak cara menyusun n buku di rak
+\item Menu: tambah buku, tampilkan semua, cari buku terlama, total stok, banyak susunan, keluar
+\end{enumerate}
+\begin{Contoh}[Bonus, tidak wajib]
+Tambahkan pencarian judul secara rekursif.
+\end{Contoh}
+\Sub{Bagian B: penjelasan (50 poin)}
+Komentar maksimal 150 kata: gambar tumpukan pemanggilan \texttt{hitungTotalStok} untuk tiga buku contoh, jelaskan kasus basis setiap fungsi rekursif, dan alasan memakai struct dibandingkan array sejajar.
+
+\Sub{Rubrik Tugas 14}
+\par\vspace{4pt}\noindent{\fontsize{8.5pt}{11.5pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.190\textwidth}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}>{\raggedright\arraybackslash}p{0.180\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85–100} & \kepala{Baik 70–84} & \kepala{Cukup 55–69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\\garis
+A2 Struct dan fungsi rekursif & 15 & struct lengkap, tiga fungsi rekursif & satu fungsi tidak rekursif & dua tidak rekursif & tanpa struct\\\garis
+A3 Menu dan ketepatan & 15 & semua menu tepat, validasi ada & satu salah & dua salah & sebagian besar salah\\\garis
+B1 Tumpukan pemanggilan dan basis & 30 & jejak tepat, basis dijelaskan & satu langkah keliru & tanpa jejak & tidak ada atau disalin\\\garis
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Nilai kriteria = poin × skor level. Contoh: A1 di level Baik dengan skor 80 memberi 20 × 0,80 = 16 poin.
+
+\Bagian{Penutup}{Bacaan lanjut dan persiapan minggu depan}
+\begin{enumerate}
+\item Deitel, P. dan Deitel, H. C++ How to Program, edisi ke-10, Bab 6 (rekursi) dan Bab 9 (struct dan kelas).
+\item learncpp.com, Bab 13 (struct) dan 20 (recursion).
+\item Gaddis, T. Starting Out with C++, Bab 11 dan 20.
+\item Slide \texttt{01 Slide/P14 Rekursi dan Struct.pdf} dan hands-on di \texttt{02 Hands-on/P14 - Rekursi dan Struct - Hands-on/}.
+\end{enumerate}
+\begin{Penting}[Minggu depan]
+Pertemuan 15 adalah review dan simulasi UAS untuk materi Pertemuan 9 sampai 14. Bawa catatan dan daftar hal yang masih membingungkan.
+\end{Penting}
+\end{document}

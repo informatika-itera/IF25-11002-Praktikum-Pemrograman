@@ -1,0 +1,4 @@
+Putaran 1: 10 14 29 13 37
+Putaran 2: 10 14 13 29 37
+Putaran 3: 10 13 14 29 37
+Putaran 4: 10 13 14 29 37

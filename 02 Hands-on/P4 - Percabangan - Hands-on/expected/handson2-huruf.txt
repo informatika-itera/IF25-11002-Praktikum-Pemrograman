@@ -1,0 +1,5 @@
+92 -> A
+72.5 -> AB
+60 -> BC
+39.9 -> E
+105 -> Nilai tidak valid

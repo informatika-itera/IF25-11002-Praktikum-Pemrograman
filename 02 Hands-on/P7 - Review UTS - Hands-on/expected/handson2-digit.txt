@@ -1,0 +1,4 @@
+Banyak digit : 6
+Jumlah digit : 20
+Digit terbesar: 7
+Dibalik      : 413705

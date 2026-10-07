@@ -1,0 +1,6 @@
+126140001  Rani  3.72
+126140002  Budi  3.1
+126140003  Siti  3.88
+126140004  Andi  3.5
+IPK tertinggi: Siti (3.88)
+IPK >= 3.5   : 3 orang

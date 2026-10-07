@@ -1,0 +1,577 @@
+% Pertemuan 4 Praktikum Pemrograman (IF25-11002). Dihasilkan oleh tools/build.py dari tools/konten/p04.py.
+% Kompilasi: xelatex P04.tex (dua kali). Catatan: xelatex -jobname=P04-catatan "\def\catatan{1}\input{P04.tex}"
+\documentclass[t]{beamer}
+\usetheme{ITERA}
+\input{catatan-preamble.tex}
+\renewcommand\ITERAmeeting{Pertemuan 4}
+\begin{document}
+\SlideJudul{IF25-11002 PRAKTIKUM PEMROGRAMAN}{Pertemuan 4\\Percabangan}{Program yang memilih jalan: if, else if, switch, dan operator ternary}{Tim Pengajar}{Tahun 2026. Sejajar dengan Pertemuan 4 Algoritma Pemrograman: Percabangan.}
+\note{Buka dengan menanyakan satu hal dari pertemuan lalu yang masih membingungkan.}
+
+\begin{frame}{Dua mata kuliah, satu minggu}
+\framesubtitle{Sebelum mulai}
+Topik minggu ini sama di dua mata kuliah, dengan peran yang berbeda.
+\vspace{10pt}
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Algoritma: Percabangan}
+Memodelkan keputusan dengan flowchart belah ketupat dan pseudocode JIKA-MAKA-SELAIN ITU.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Praktikum: Percabangan}
+Menulis \texttt{if}, \texttt{else if}, \texttt{else}, \texttt{switch}, dan \texttt{?:} di C++, serta menguji setiap cabang.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\note{Tanyakan apa yang sudah dibahas di Algoritma minggu ini. Gunakan jawabannya sebagai jembatan ke praktikum.}
+\end{frame}
+
+\begin{frame}{Saat pulang nanti, kalian bisa}
+\framesubtitle{Target hari ini}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{1}{Menerapkan}
+Menulis program yang memilih tindakan dengan \texttt{if}, \texttt{if-else}, rantai \texttt{else if}, \texttt{switch}, dan operator ternary sesuai syarat masalah
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 4.1, CPMK0607}
+\end{Langkah}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{2}{Menjelaskan}
+Menjelaskan cabang mana yang dijalankan untuk masukan tertentu dan merancang data uji yang mencakup setiap cabang dan nilai batasnya
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 4.2, CPMK0608}
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{Catatan}
+Dua kemampuan ini dinilai sama berat di Exit Ticket, tugas, UTS, dan UAS.
+\end{Catatan}
+\note{Bacakan target dengan pelan. Kata kuncinya menerapkan dan menjelaskan.}
+\end{frame}
+
+\begin{frame}{Ingat minggu lalu}
+\framesubtitle{Review, 5 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Berapa nilai \texttt{7 + 10 \% 4 * 2}?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Apa beda \texttt{=} dan \texttt{==}?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Kapan \texttt{a \&\& b} bernilai true?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Jawab di kertas dulu, lalu cocokkan dengan teman sebelah.\note{Pilih dua mahasiswa untuk menjawab. Koreksi singkat, jangan mengajar ulang.}
+\end{frame}
+
+\Bagian{1}{Masalah pembuka}{Nilai huruf otomatis}
+\note{Masalah pembuka 10 menit.}
+
+\begin{frame}[fragile]{Nilai huruf otomatis}
+\framesubtitle{Masalah minggu ini}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+{Dosen punya nilai akhir 120 mahasiswa dan harus mengubahnya ke nilai huruf: A, AB, B, BC, C, D, atau E menurut batas yang ditetapkan ITERA.
+
+\vspace{6pt}
+Program minggu lalu selalu menjalankan semua baris. Di sini, setiap nilai hanya boleh menghasilkan satu huruf.\par}
+\vspace{6pt}
+\begin{Catatan}
+\textbf{Diskusi 2 menit.} Kalau kalian mengecek dengan tangan, batas mana yang kalian periksa lebih dulu? Apa yang terjadi kalau urutannya dibalik?
+\end{Catatan}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[]
+Nilai akhir: 72.5
+Nilai huruf: AB
+
+Nilai akhir: 39.9
+Nilai huruf: E
+\end{Keluaran}
+\end{column}
+\end{columns}
+\note{Tampung beberapa jawaban tanpa menilai benar salah.}
+\end{frame}
+
+\begin{frame}{Dari langkah ke instruksi}
+\framesubtitle{Sambungan dengan Algoritma}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Daftar syarat}
+A untuk nilai 75 ke atas, AB untuk 70 ke atas, dan seterusnya.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Urutkan pemeriksaan}
+Periksa dari batas tertinggi; berhenti di syarat pertama yang benar.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Terjemahkan}
+Satu rantai \texttt{if}, \texttt{else if}, \texttt{else} di C++.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Langkah 1 dan 2 dilatih di Algoritma. Langkah 3 kita kerjakan hari ini dengan C++.\note{Hubungkan eksplisit ke Algoritma minggu ini.}
+\end{frame}
+
+\Bagian{2}{Coba dulu, baru dijelaskan}{25 menit eksperimen di GDB Online}
+\note{Struggle 25 menit. Berkeliling, jangan menjelaskan materi dulu.}
+
+\begin{frame}{Misi kalian}
+\framesubtitle{Struggle, 25 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Satu syarat}
+Baca nilai, tampilkan LULUS bila nilai paling kecil 50.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Dua cabang}
+Tambahkan TIDAK LULUS untuk nilai di bawah 50.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Banyak cabang}
+Coba ubah nilai ke huruf A sampai E. Uji dengan 75, 74.9, dan 0.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Boleh}
+Bertanya ke teman, mengubah apa saja, sengaja membuat error.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokAlert}{Belum dulu}
+Mencari jawaban jadi di internet atau AI.
+\end{BlokAlert}
+\end{column}
+\end{columns}
+\note{Catat kesalahan yang sering muncul untuk dibahas di debrief.}
+\end{frame}
+
+\begin{frame}{Apa yang kalian temukan?}
+\framesubtitle{Debrief struggle}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Bagaimana kalian menghindari nilai 80 mendapat A sekaligus AB?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Nilai berapa saja yang kalian pakai untuk menguji?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Apa yang terjadi bila ditulis \texttt{if (nilai = 50)}?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Jawaban kalian akan kita uji di bagian berikutnya.\note{Tulis jawaban di papan; buktikan atau patahkan di bagian materi.}
+\end{frame}
+
+\Bagian{3}{Program yang memilih}{if, else if, logika gabungan, switch, dan pengujian cabang}
+\note{Materi 40 menit. Tunjukkan setiap contoh langsung di GDB Online.}
+
+\begin{frame}[fragile]{if dan if-else}
+\framesubtitle{Satu dan dua cabang}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{ifelse.cpp}
+int nilai;
+cin >> nilai;
+if (nilai >= 50) {
+    cout << "LULUS" << endl;
+} else {
+    cout << "TIDAK LULUS" << endl;
+}
+cout << "Selesai" << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[title={Masukan}]
+45
+\end{Keluaran}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P04/k001.txt}
+\begin{Catatan}
+Kondisi selalu di dalam kurung. Kurung kurawal menandai blok yang dijalankan.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Rantai else if}
+\framesubtitle{Banyak cabang}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{huruf.cpp}
+double n = 72.5;
+if (n >= 75) {
+    cout << "A";
+} else if (n >= 70) {
+    cout << "AB";
+} else if (n >= 65) {
+    cout << "B";
+} else {
+    cout << "di bawah B";
+}
+cout << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P04/k002.txt}
+\begin{Catatan}
+Pemeriksaan berhenti di syarat pertama yang benar. Karena itu \texttt{n >= 70} tidak perlu ditulis \texttt{n >= 70 \&\& n < 75}.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Syarat gabungan}
+\framesubtitle{\&\&, ||, dan if bersarang}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{gabungan.cpp}
+int umur = 17;
+bool punyaKTP = false;
+if (umur >= 17 && punyaKTP) {
+    cout << "Boleh memilih" << endl;
+} else if (umur >= 17) {
+    cout << "Urus KTP dulu" << endl;
+} else {
+    cout << "Belum cukup umur" << endl;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P04/k003.txt}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{switch untuk pilihan bernilai tetap}
+\framesubtitle{switch-case}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{menu.cpp}
+int pilihan = 2;
+switch (pilihan) {
+    case 1: cout << "Nasi goreng"; break;
+    case 2: cout << "Mie ayam"; break;
+    case 3: cout << "Soto"; break;
+    default: cout << "Menu tidak ada";
+}
+cout << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P04/k004.txt}
+\begin{Catatan}
+Tanpa \texttt{break}, eksekusi terus jatuh ke \texttt{case} berikutnya. \texttt{switch} hanya untuk \texttt{int} dan \texttt{char}, bukan \texttt{string} atau rentang nilai.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Operator ternary}
+\framesubtitle{Pilihan dalam satu ekspresi}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{ternary.cpp}
+int a = 8, b = 13;
+int maks = (a > b) ? a : b;
+cout << "Maks: " << maks << endl;
+cout << (b % 2 == 0 ? "genap" : "ganjil") << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P04/k005.txt}
+\begin{Catatan}
+Pakai ternary hanya untuk pilihan sederhana. Bila ragu, \texttt{if-else} lebih jelas.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}{Menguji setiap cabang}
+\framesubtitle{Data uji dan nilai batas}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{160pt}>{\raggedright\arraybackslash}p{189pt}>{\raggedright\arraybackslash}p{284pt}>{\raggedright\arraybackslash}p{217pt}@{}}
+\kepala{Cabang} & \kepala{Data uji biasa} & \kepala{Nilai batas} & \kepala{Harapan}\\
+A & 92 & 75 dan 74.9 & 75 → A, 74.9 → AB\\
+\barisgenap C & 55 & 50 dan 49.9 & 50 → C, 49.9 → D\\
+E & 20 & 0 dan 39.9 & keduanya E\\
+\barisgenap Tidak valid & 105 & 100.1 dan -0.1 & keduanya tidak valid\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Kesalahan percabangan paling sering terjadi tepat di nilai batas, misalnya \texttt{>} yang seharusnya \texttt{>=}.
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya}
+\framesubtitle{Latihan menjelaskan, 3 menit}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{tebak.cpp}
+int x = 7;
+if (x > 5)
+    cout << "A";
+    cout << "B";
+if (x % 2 == 0) {
+    cout << "C";
+} else if (x > 6) {
+    cout << "D";
+} else {
+    cout << "E";
+}
+cout << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Catatan}
+Tulis keluarannya di kertas, karakter demi karakter. Jangan dijalankan dulu.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Contoh soal Bagian B. Beri waktu 3 menit sebelum slide jawaban.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya: jawaban}
+\framesubtitle{Latihan menjelaskan}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{tebak.cpp}
+int x = 7;
+if (x > 5)
+    cout << "A";
+    cout << "B";
+if (x % 2 == 0) {
+    cout << "C";
+} else if (x > 6) {
+    cout << "D";
+} else {
+    cout << "E";
+}
+cout << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Keluaran}[]
+ABD
+\end{Keluaran}
+\begin{Catatan}
+Tanpa kurung kurawal, hanya \texttt{cout << "A"} milik \texttt{if} pertama; \texttt{B} selalu tampil walau indentasinya menipu. Lalu 7 ganjil dan lebih dari 6, jadi \texttt{D}.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Tanyakan jawaban yang paling sering salah, lalu telusuri bersama.}
+\end{frame}
+
+\begin{frame}{Error yang sering muncul minggu ini}
+\framesubtitle{Pesan diambil langsung dari g++}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{208pt}>{\raggedright\arraybackslash}p{256pt}>{\raggedright\arraybackslash}p{398pt}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+= di dalam kondisi & \texttt{if (x = 5)} & \texttt{warning: suggest parentheses around assignment used as truth value}\\
+\barisgenap else tanpa if & \texttt{if (...); else} & \texttt{error: 'else' without a previous 'if'}\\
+switch pada string & \texttt{switch (nama)} & \texttt{error: switch quantity not an integer}\\
+\barisgenap case ganda & \texttt{case 1: ... case 1:} & \texttt{error: duplicate case value}\\
+Kondisi tanpa kurung & \texttt{if x > 5} & \texttt{error: expected '(' before 'x'}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Pesan di tabel ini dihasilkan dengan g++ dan opsi -Wall, sama seperti di cek.sh.}
+\note{Minta mahasiswa memotret slide ini.}
+\end{frame}
+
+\Bagian{4}{Hands-on bertingkat}{45 menit, dari dasar sampai tantangan}
+\note{Mahasiswa membuka folder 02 Hands-on/P4 - Percabangan - Hands-on.}
+
+\begin{frame}{Peta hands-on}
+\framesubtitle{Folder 02 Hands-on/P4 - Percabangan - Hands-on}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{36pt}>{\raggedright\arraybackslash}p{267pt}>{\raggedright\arraybackslash}p{110pt}>{\raggedright\arraybackslash}p{83pt}>{\raggedright\arraybackslash}p{341pt}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Waktu} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-lulus.cpp} & Dasar & 10' & \texttt{if-else} dan \texttt{if} terpisah\\
+\barisgenap 2 & \texttt{handson2-huruf.cpp} & Menengah & 15' & rantai \texttt{else if}, nilai batas\\
+3 & \texttt{handson3-tiket.cpp} & Tantangan & 20' & perbaiki tiga kesalahan logika percabangan\\
+\barisgenap + & \texttt{bonus-kalkulator.cpp} & Pengayaan & sisa & \texttt{switch} pada \texttt{char}, \texttt{default}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Kerjakan berurutan. Cocokkan keluaran dengan folder \texttt{expected/}; latihan yang membaca masukan memakai data di folder \texttt{input/}.\note{Saat berkeliling, minta mahasiswa yang mengerjakan latihan tantangan menjelaskan blok PENJELASAN mereka.}
+\end{frame}
+
+\begin{frame}{Cara mengecek dan aturannya}
+\framesubtitle{Hands-on}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Di GDB Online}
+Salin isi file latihan, lengkapi TODO, klik Run. Bila program membaca masukan, ketik isi file di \texttt{input/}. Bandingkan dengan \texttt{expected/}.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Di komputer sendiri}
+Jalankan \texttt{bash cek.sh}. Skrip mengompilasi dengan \texttt{-Wall -Werror}, memberi masukan dari \texttt{input/}, lalu mencocokkan keluaran.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{6pt}
+\begin{Catatan}
+AI boleh untuk memahami pesan error, tidak untuk meminta solusi utuh. Exit Ticket dikerjakan tanpa bantuan apa pun.
+\end{Catatan}
+\note{Hands-on tidak dinilai langsung; yang dinilai Exit Ticket dan tugas.}
+\end{frame}
+
+\Bagian{5}{Exit Ticket dan tugas}{25 menit terakhir, lalu pekerjaan rumah}
+\note{Mulai Exit Ticket tepat waktu.}
+
+\begin{frame}{Exit Ticket 4}
+\framesubtitle{Individual, 25 menit, tanpa AI dan internet}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{60pt}>{\raggedright\arraybackslash}p{560pt}>{\raggedright\arraybackslash}p{80pt}>{\raggedright\arraybackslash}p{150pt}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang menentukan kategori BMI dari berat dan tinggi & 25 & CPMK0607\\
+\barisgenap A2 & Tulis menu dengan \texttt{switch} untuk tiga pilihan dan \texttt{default} & 25 & CPMK0607\\
+B1 & Tentukan keluaran program percabangan untuk tiga masukan berbeda & 20 & CPMK0608\\
+\barisgenap B2 & Temukan dan jelaskan dua kesalahan pada potongan percabangan & 20 & CPMK0608\\
+B3 & Rancang data uji yang mencakup semua cabang dan nilai batasnya & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Soal A dinilai dari keluaran yang tepat sama. Soal B dinilai dari ketepatan dan alasan. Pelanggaran aturan membuat nilai Exit Ticket ini 0.}
+\note{Soal lengkap dibagikan terpisah dan tidak disimpan di repo publik.}
+\end{frame}
+
+\begin{frame}{Tugas 4: Sistem Tiket Bioskop}
+\framesubtitle{Dikumpulkan sebelum Pertemuan 5}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Bagian A, program, 50 poin}
+Buat program pemesanan tiket bioskop dengan aturan berikut, lalu tampilkan struk pemesanan lengkap. Ketentuannya di slide berikut.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Bagian B, penjelasan, 50 poin}
+Komentar maksimal 150 kata dan tabel data uji minimal enam baris yang mencakup setiap cabang dan nilai batas (umur 11, 12, 16, 17, 59, 60), dengan harga yang diharapkan dan hasil sebenarnya. Jelaskan satu kesalahan yang ditemukan lewat data uji itu.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+{\small Data di tugas adalah data kalian sendiri. Rubrik lengkap ada di Modul Belajar 4.}
+\note{Ingatkan bahwa penjelasan disalin dari AI mudah dikenali karena tidak menyebut pengalaman mereka sendiri.}
+\end{frame}
+
+\begin{frame}{Ketentuan Tugas 4}
+\framesubtitle{Sistem Tiket Bioskop}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{87pt}>{\raggedright\arraybackslash}p{788pt}@{}}
+\kepala{No} & \kepala{Ketentuan Bagian A}\\
+1 & Pilih film dengan \texttt{switch}: 1 Action, 2 Horror, 3 Comedy, 4 Romance\\
+\barisgenap 2 & Baca umur; film Horror hanya untuk umur 17 tahun ke atas\\
+3 & Pilih hari dengan \texttt{switch}: 1 Senin sampai Kamis, 2 Jumat, 3 akhir pekan\\
+\barisgenap 4 & Harga: Rp35.000 hari biasa, Rp45.000 Jumat, Rp50.000 akhir pekan\\
+5 & Diskon 20\% untuk anak di bawah 12 tahun dan lansia 60 tahun ke atas\\
+\barisgenap 6 & Struk berisi film, hari, umur, harga awal, diskon, dan harga akhir\\
+\garisdasar
+\end{tabular}
+\note{Bacakan ketentuan satu per satu dan tanyakan apakah ada yang belum jelas.}
+\end{frame}
+
+\begin{frame}{Rubrik Tugas 4}
+\framesubtitle{Empat level, sama di semua instrumen}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{44pt}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{156pt}>{\raggedright\arraybackslash}p{146pt}>{\raggedright\arraybackslash}p{146pt}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85--100} & \kepala{Baik 70--84} & \kepala{Cukup 55--69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\
+\barisgenap A2 switch dan if-else & 15 & semua pilihan dan default tepat & satu cabang kurang & dua kurang & tidak memakai switch\\
+A3 Validasi umur dan diskon & 15 & semua tepat di nilai batas & satu batas salah & dua salah & diskon tidak dihitung\\
+\barisgenap B1 Data uji dan nilai batas & 30 & semua cabang dan batas tercakup & satu batas terlewat & hanya data biasa & tidak ada atau disalin\\
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}
+\vspace{8pt}
+
+{\small Nilai kriteria = poin × skor level. Bagian A total 50, Bagian B total 50.}
+\note{Rubrik ini sama strukturnya setiap minggu; yang berubah hanya isi kriteria A2, A3, dan B1.}
+\end{frame}
+
+\begin{frame}{Sebelum Pertemuan 5}
+\framesubtitle{Persiapan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Selesaikan}
+Hands-on yang belum lulus \texttt{cek.sh}, terutama latihan tantangan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Kumpulkan}
+Tugas 4 sebelum Pertemuan 5 dimulai.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Baca}
+Modul Belajar 4 untuk mengulang, lalu bagian awal modul berikutnya.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Pertemuan 5 membahas perulangan dengan \texttt{for}, \texttt{while}, dan \texttt{do-while}, termasuk pola pencacah dan akumulator.\note{Tanyakan satu hal yang paling membingungkan hari ini untuk dibuka di review minggu depan.}
+\end{frame}
+
+\SlidePenutup{Terima kasih}{Sampai jumpa di Pertemuan 5: perulangan}
+\note{Slide penutup.}
+\end{document}

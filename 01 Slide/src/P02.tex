@@ -1,0 +1,594 @@
+% Pertemuan 2 Praktikum Pemrograman (IF25-11002). Dihasilkan oleh tools/build.py dari tools/konten/p02.py.
+% Kompilasi: xelatex P02.tex (dua kali). Catatan: xelatex -jobname=P02-catatan "\def\catatan{1}\input{P02.tex}"
+\documentclass[t]{beamer}
+\usetheme{ITERA}
+\input{catatan-preamble.tex}
+\renewcommand\ITERAmeeting{Pertemuan 2}
+\begin{document}
+\SlideJudul{IF25-11002 PRAKTIKUM PEMROGRAMAN}{Pertemuan 2\\Variabel, Tipe Data, Ekspresi, dan Input}{Menyimpan data di memori, memilih tipe yang tepat, dan membaca masukan pengguna}{Tim Pengajar}{Tahun 2026. Sejajar dengan Pertemuan 2 Algoritma Pemrograman: Tipe Data, Variabel dan Ekspresi.}
+\note{Buka dengan menanyakan satu hal dari pertemuan lalu yang masih membingungkan.}
+
+\begin{frame}{Dua mata kuliah, satu minggu}
+\framesubtitle{Sebelum mulai}
+Topik minggu ini sama di dua mata kuliah, dengan peran yang berbeda.
+\vspace{10pt}
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Algoritma: Tipe Data, Variabel dan Ekspresi}
+Mengenal tipe data, variabel sebagai wadah nilai, penugasan, dan menelusuri perubahan nilai dengan trace table.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Praktikum: Variabel dan input}
+Mendeklarasikan variabel bertipe di C++, menghitung ekspresi, dan membaca masukan dengan \texttt{cin}.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\note{Tanyakan apa yang sudah dibahas di Algoritma minggu ini. Gunakan jawabannya sebagai jembatan ke praktikum.}
+\end{frame}
+
+\begin{frame}{Saat pulang nanti, kalian bisa}
+\framesubtitle{Target hari ini}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{1}{Menerapkan}
+Menulis program yang menyimpan data dalam variabel bertipe tepat (\texttt{int}, \texttt{double}, \texttt{char}, \texttt{string}, \texttt{bool}), membaca masukan dengan \texttt{cin}, dan menampilkan hasil ekspresi
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 2.1, CPMK0607}
+\end{Langkah}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{2}{Menjelaskan}
+Menjelaskan pemilihan tipe data dan menelusuri nilai variabel setelah serangkaian penugasan, termasuk akibat pembagian bilangan bulat
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 2.2, CPMK0608}
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{Catatan}
+Dua kemampuan ini dinilai sama berat di Exit Ticket, tugas, UTS, dan UAS.
+\end{Catatan}
+\note{Bacakan target dengan pelan. Kata kuncinya menerapkan dan menjelaskan.}
+\end{frame}
+
+\begin{frame}{Ingat minggu lalu}
+\framesubtitle{Review, 5 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Apa beda \texttt{endl} dan \texttt{\textbackslash{}n}?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Mengapa \texttt{"C:\textbackslash{}data"} memunculkan peringatan?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Apa yang terjadi bila satu titik koma hilang?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Jawab di kertas dulu, lalu cocokkan dengan teman sebelah.\note{Pilih dua mahasiswa untuk menjawab. Koreksi singkat, jangan mengajar ulang.}
+\end{frame}
+
+\Bagian{1}{Masalah pembuka}{Kasir kantin}
+\note{Masalah pembuka 10 menit.}
+
+\begin{frame}[fragile]{Kasir kantin}
+\framesubtitle{Masalah minggu ini}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+{\small Kantin kampus ingin program kasir sederhana. Kasir mengetik nama barang, harga, dan jumlah; program menghitung totalnya.
+
+\vspace{6pt}
+Program minggu lalu tidak bisa melakukan ini, karena semua teksnya sudah ditulis sebelum program jalan. Kali ini datanya baru diketahui saat program berjalan.\par}
+\vspace{6pt}
+\begin{Catatan}
+\textbf{Diskusi 2 menit.} Di mana program menyimpan angka 12000 sebelum dikalikan? Apa bedanya menyimpan nama barang dengan menyimpan harga?
+\end{Catatan}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[]
+Barang: Nasi
+Harga: 12000
+Jumlah: 3
+
+=== STRUK KANTIN ===
+Nasi
+12000 x 3
+Total: 36000
+\end{Keluaran}
+\end{column}
+\end{columns}
+\note{Tampung beberapa jawaban tanpa menilai benar salah.}
+\end{frame}
+
+\begin{frame}{Dari langkah ke instruksi}
+\framesubtitle{Sambungan dengan Algoritma}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Identifikasi data}
+Barang berupa teks, harga dan jumlah berupa bilangan bulat.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Tentukan proses}
+Total adalah harga dikali jumlah.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Terjemahkan}
+Buat variabel bertipe tepat, baca dengan \texttt{cin}, hitung, tampilkan.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Langkah 1 dan 2 dilatih di Algoritma. Langkah 3 kita kerjakan hari ini dengan C++.\note{Hubungkan eksplisit ke Algoritma minggu ini.}
+\end{frame}
+
+\Bagian{2}{Coba dulu, baru dijelaskan}{25 menit eksperimen di GDB Online}
+\note{Struggle 25 menit. Berkeliling, jangan menjelaskan materi dulu.}
+
+\begin{frame}{Misi kalian}
+\framesubtitle{Struggle, 25 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Simpan}
+Buat variabel \texttt{int harga = 12000;} lalu tampilkan dengan \texttt{cout}.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Hitung}
+Tambahkan variabel jumlah, lalu tampilkan hasil kali keduanya.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Baca}
+Ganti nilai tetap dengan \texttt{cin >> harga;}. Apa yang berubah saat program jalan?
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Boleh}
+Bertanya ke teman, mengubah apa saja, sengaja membuat error.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokAlert}{Belum dulu}
+Mencari jawaban jadi di internet atau AI.
+\end{BlokAlert}
+\end{column}
+\end{columns}
+\note{Catat kesalahan yang sering muncul untuk dibahas di debrief.}
+\end{frame}
+
+\begin{frame}{Apa yang kalian temukan?}
+\framesubtitle{Debrief struggle}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Apa yang terjadi kalau \texttt{harga} diisi \texttt{12500.5}?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Bagaimana kalian menampilkan nama barang yang terdiri dari dua kata?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Apa hasil \texttt{7 / 2} di program kalian?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Jawaban kalian akan kita uji di bagian berikutnya.\note{Tulis jawaban di papan; buktikan atau patahkan di bagian materi.}
+\end{frame}
+
+\Bagian{3}{Variabel, tipe, dan masukan}{Wadah nilai, cara menghitung, dan cara membaca data}
+\note{Materi 40 menit. Tunjukkan setiap contoh langsung di GDB Online.}
+
+\begin{frame}[fragile]{Variabel: wadah bernama untuk nilai}
+\framesubtitle{Deklarasi dan inisialisasi}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{variabel.cpp}
+int umur = 18;
+double ipk = 3.75;
+char grade = 'A';
+string nama = "Rani";
+bool lulus = true;
+cout << nama << " " << umur << " " << ipk << endl;
+cout << grade << " " << lulus << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P02/k001.txt}
+\begin{Catatan}
+\texttt{bool} tampil sebagai 1 (true) atau 0 (false).
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Tekankan pola tipe nama = nilai. Kutip tunggal untuk char, kutip ganda untuk string.}
+\end{frame}
+
+\begin{frame}{Memilih tipe data}
+\framesubtitle{Tipe data dasar}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{144pt}>{\raggedright\arraybackslash}p{249pt}>{\raggedright\arraybackslash}p{470pt}@{}}
+\kepala{Tipe} & \kepala{Contoh nilai} & \kepala{Dipakai untuk}\\
+\texttt{int} & \texttt{18}, \texttt{-5}, \texttt{36000} & bilangan bulat: umur, jumlah, harga dalam rupiah\\
+\barisgenap \texttt{double} & \texttt{3.75}, \texttt{36.6} & bilangan pecahan: IPK, suhu, berat\\
+\texttt{char} & \texttt{'A'}, \texttt{'O'} & satu karakter: grade, golongan darah\\
+\barisgenap \texttt{string} & \texttt{"Rani Puspita"} & teks: nama, alamat (perlu \texttt{\#include <string>})\\
+\texttt{bool} & \texttt{true}, \texttt{false} & keadaan ya atau tidak: lulus, aktif\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Pertanyaan yang membantu: apakah nilainya bisa pecahan? Apakah berupa teks? Apakah hanya ya atau tidak?
+\end{frame}
+
+\begin{frame}[fragile]{Menelusuri penugasan}
+\framesubtitle{Nilai lama ditimpa}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{telusur.cpp}
+int a = 5;
+int b = a;
+a = a + 3;
+b = b * 2;
+cout << "a = " << a << ", b = " << b << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P02/k002.txt}
+\begin{Catatan}
+\texttt{b = a} menyalin nilai saat itu. Mengubah \texttt{a} sesudahnya tidak mengubah \texttt{b}.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+{\small Ini jenis soal Bagian B: tuliskan nilai setiap variabel sesudah setiap baris, seperti trace table di Algoritma.}
+\note<1>{Gambar trace table di papan: kolom a dan b, satu baris per pernyataan.}
+\end{frame}
+
+\begin{frame}[fragile]{Membaca masukan dengan cin}
+\framesubtitle{Input}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{masukan.cpp}
+string barang;
+int harga, jumlah;
+cin >> barang;
+cin >> harga >> jumlah;
+int total = harga * jumlah;
+cout << barang << ": " << total << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[title={Masukan}]
+Teh
+5000 2
+\end{Keluaran}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P02/k003.txt}
+}
+\end{column}
+\end{columns}
+\note<1>{Tunjukkan bahwa cin berhenti di spasi atau enter. Masukan bisa satu baris atau dipisah enter.}
+\end{frame}
+
+\begin{frame}[fragile]{Teks dengan spasi: getline}
+\framesubtitle{Input baris penuh}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{getline.cpp}
+string nama;
+int nim;
+cin >> nim;
+cin.ignore();
+getline(cin, nama);
+cout << nama << " (" << nim << ")" << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[title={Masukan}]
+126140001
+Rani Puspita
+\end{Keluaran}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P02/k004.txt}
+\begin{Catatan}
+\texttt{cin.ignore()} membuang enter sisa sesudah \texttt{cin >> nim}. Tanpa itu, \texttt{getline} langsung membaca baris kosong.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Uji tanpa cin.ignore() di depan kelas supaya mereka melihat masalahnya.}
+\end{frame}
+
+\begin{frame}[fragile]{Pembagian bilangan bulat}
+\framesubtitle{Ekspresi aritmetika}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{Kode}[]{bagi.cpp}
+int a = 7, b = 2;
+cout << a / b << endl;
+cout << a / 2.0 << endl;
+cout << (double) a / b << endl;
+double hasil = a / b;
+cout << hasil << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.41\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[]{keluaran/P02/k005.txt}
+\begin{Catatan}
+Kalau kedua operand bulat, hasilnya bulat dan sisanya dibuang, bahkan bila disimpan ke \texttt{double}.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Baris terakhir adalah jebakan terbesar minggu ini: double hasil = a / b tetap 3.}
+\end{frame}
+
+\begin{frame}[fragile]{Mengatur angka di belakang koma}
+\framesubtitle{fixed dan setprecision}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{presisi.cpp}
+double rata = 82.333333;
+cout << rata << endl;
+cout << fixed << setprecision(2) << rata << endl;
+cout << 12.5 << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P02/k006.txt}
+\begin{Catatan}
+Perlu \texttt{\#include <iomanip>}. Pengaturan ini berlaku untuk semua \texttt{cout} sesudahnya.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya}
+\framesubtitle{Latihan menjelaskan, 3 menit}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int x = 10, y = 4;
+double p = x / y;
+double q = x / 4.0;
+x = x + y;
+y = x - y;
+cout << p << " " << q << endl;
+cout << x << " " << y << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Catatan}
+Tulis keluarannya di kertas, karakter demi karakter. Jangan dijalankan dulu.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Contoh soal Bagian B. Beri waktu 3 menit sebelum slide jawaban.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya: jawaban}
+\framesubtitle{Latihan menjelaskan}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[]{tebak.cpp}
+int x = 10, y = 4;
+double p = x / y;
+double q = x / 4.0;
+x = x + y;
+y = x - y;
+cout << p << " " << q << endl;
+cout << x << " " << y << endl;
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Keluaran}[]
+2 2.5
+14 10
+\end{Keluaran}
+\begin{Catatan}
+\texttt{p} bernilai 2 karena \texttt{10 / 4} dihitung sebagai pembagian bulat. \texttt{y} dihitung dari \texttt{x} yang sudah berubah menjadi 14.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Tanyakan jawaban yang paling sering salah, lalu telusuri bersama.}
+\end{frame}
+
+\begin{frame}{Error yang sering muncul minggu ini}
+\framesubtitle{Pesan diambil langsung dari g++}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{208pt}>{\raggedright\arraybackslash}p{256pt}>{\raggedright\arraybackslash}p{398pt}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Variabel belum dideklarasikan & \texttt{cout << total;} & \texttt{error: 'total' was not declared in this scope}\\
+\barisgenap Tipe tidak cocok & \texttt{int x = "lima";} & \texttt{error: invalid conversion from 'const char*' to 'int'}\\
+Arah operator cin terbalik & \texttt{cin << x;} & \texttt{error: no match for 'operator<<'}\\
+\barisgenap Deklarasi dua kali & \texttt{int x = 1; int x = 2;} & \texttt{error: redeclaration of 'int x'}\\
+Variabel tidak dipakai & \texttt{int sisa;} & \texttt{warning: unused variable 'sisa'}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Pesan di tabel ini dihasilkan dengan g++ dan opsi -Wall, sama seperti di cek.sh.}
+\note{Minta mahasiswa memotret slide ini.}
+\end{frame}
+
+\Bagian{4}{Hands-on bertingkat}{45 menit, dari dasar sampai tantangan}
+\note{Mahasiswa membuka folder 02 Hands-on/P2 - Variabel dan Input - Hands-on.}
+
+\begin{frame}{Peta hands-on}
+\framesubtitle{Folder 02 Hands-on/P2 - Variabel dan Input - Hands-on}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{36pt}>{\raggedright\arraybackslash}p{267pt}>{\raggedright\arraybackslash}p{110pt}>{\raggedright\arraybackslash}p{83pt}>{\raggedright\arraybackslash}p{341pt}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Waktu} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-identitas.cpp} & Dasar & 10' & lima tipe data dasar\\
+\barisgenap 2 & \texttt{handson2-kantin.cpp} & Menengah & 15' & \texttt{cin}, ekspresi perkalian\\
+3 & \texttt{handson3-suhu.cpp} & Tantangan & 20' & telusuri dan perbaiki tiga kesalahan logika\\
+\barisgenap + & \texttt{bonus-ipk.cpp} & Pengayaan & sisa & \texttt{fixed}, \texttt{setprecision}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Kerjakan berurutan. Cocokkan keluaran dengan folder \texttt{expected/}; latihan yang membaca masukan memakai data di folder \texttt{input/}.\note{Saat berkeliling, minta mahasiswa yang mengerjakan latihan tantangan menjelaskan blok PENJELASAN mereka.}
+\end{frame}
+
+\begin{frame}{Cara mengecek dan aturannya}
+\framesubtitle{Hands-on}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Di GDB Online}
+Salin isi file latihan, lengkapi TODO, klik Run. Bila program membaca masukan, ketik isi file di \texttt{input/}. Bandingkan dengan \texttt{expected/}.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Di komputer sendiri}
+Jalankan \texttt{bash cek.sh}. Skrip mengompilasi dengan \texttt{-Wall -Werror}, memberi masukan dari \texttt{input/}, lalu mencocokkan keluaran.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{6pt}
+\begin{Catatan}
+AI boleh untuk memahami pesan error, tidak untuk meminta solusi utuh. Exit Ticket dikerjakan tanpa bantuan apa pun.
+\end{Catatan}
+\note{Hands-on tidak dinilai langsung; yang dinilai Exit Ticket dan tugas.}
+\end{frame}
+
+\Bagian{5}{Exit Ticket dan tugas}{25 menit terakhir, lalu pekerjaan rumah}
+\note{Mulai Exit Ticket tepat waktu.}
+
+\begin{frame}{Exit Ticket 2}
+\framesubtitle{Individual, 25 menit, tanpa AI dan internet}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{60pt}>{\raggedright\arraybackslash}p{560pt}>{\raggedright\arraybackslash}p{80pt}>{\raggedright\arraybackslash}p{150pt}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang membaca dua bilangan bulat dan menampilkan jumlah serta hasil kalinya & 25 & CPMK0607\\
+\barisgenap A2 & Baca nama lengkap dengan spasi dan tinggi badan, tampilkan dengan dua desimal & 25 & CPMK0607\\
+B1 & Telusuri nilai tiga variabel sesudah lima baris penugasan & 20 & CPMK0608\\
+\barisgenap B2 & Jelaskan mengapa sebuah ekspresi pembagian menghasilkan nilai yang tidak diharapkan & 20 & CPMK0608\\
+B3 & Pilih tipe data untuk empat data yang diberikan dan beri alasannya & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Soal A dinilai dari keluaran yang tepat sama. Soal B dinilai dari ketepatan dan alasan. Pelanggaran aturan membuat nilai Exit Ticket ini 0.}
+\note{Soal lengkap dibagikan terpisah dan tidak disimpan di repo publik.}
+\end{frame}
+
+\begin{frame}{Tugas 2: Program Pendaftaran Mahasiswa Baru}
+\framesubtitle{Dikumpulkan sebelum Pertemuan 3}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Bagian A, program, 50 poin}
+Buat program yang meminta masukan berikut, lalu menampilkan kartu pendaftaran dengan format rapi dan border. Ketentuannya di slide berikut.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Bagian B, penjelasan, 50 poin}
+Komentar maksimal 150 kata: alasan memilih tipe untuk setiap variabel, satu jebakan yang kalian temui (misalnya \texttt{getline} sesudah \texttt{cin}), dan trace table singkat untuk perhitungan umur atau format dua desimal.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+{\small Data di tugas adalah data kalian sendiri. Rubrik lengkap ada di Modul Belajar 2.}
+\note{Ingatkan bahwa penjelasan disalin dari AI mudah dikenali karena tidak menyebut pengalaman mereka sendiri.}
+\end{frame}
+
+\begin{frame}{Ketentuan Tugas 2}
+\framesubtitle{Program Pendaftaran Mahasiswa Baru}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{87pt}>{\raggedright\arraybackslash}p{788pt}@{}}
+\kepala{No} & \kepala{Ketentuan Bagian A}\\
+1 & Nama lengkap (\texttt{string}, boleh berspasi, baca dengan \texttt{getline})\\
+\barisgenap 2 & Tempat lahir (\texttt{string}) dan tanggal lahir sebagai tiga \texttt{int}: dd, mm, yyyy\\
+3 & Asal sekolah (\texttt{string}, boleh berspasi)\\
+\barisgenap 4 & Nilai rata-rata ujian sekolah (\texttt{double}), ditampilkan dua desimal\\
+5 & Kartu pendaftaran dengan border yang memuat semua data\\
+\barisgenap Bonus & Hitung dan tampilkan umur dalam tahun dari tahun lahir, dengan tahun sekarang 2026.\\
+\garisdasar
+\end{tabular}
+\note{Bacakan ketentuan satu per satu dan tanyakan apakah ada yang belum jelas.}
+\end{frame}
+
+\begin{frame}{Rubrik Tugas 2}
+\framesubtitle{Empat level, sama di semua instrumen}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{44pt}>{\raggedright\arraybackslash}p{166pt}>{\raggedright\arraybackslash}p{156pt}>{\raggedright\arraybackslash}p{146pt}>{\raggedright\arraybackslash}p{146pt}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85--100} & \kepala{Baik 70--84} & \kepala{Cukup 55--69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\
+\barisgenap A2 Ketepatan tipe data & 15 & semua tipe tepat & satu kurang tepat & dua kurang tepat & tiga atau lebih salah\\
+A3 Masukan dan keluaran & 15 & nama berspasi terbaca, kartu rapi & satu masalah masukan & kartu tidak rapi & masukan gagal\\
+\barisgenap B1 Alasan tipe dan trace table & 30 & semua beralasan, trace tepat & satu alasan kurang & trace tidak lengkap & tidak ada atau disalin\\
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}
+\vspace{8pt}
+
+{\small Nilai kriteria = poin × skor level. Bagian A total 50, Bagian B total 50.}
+\note{Rubrik ini sama strukturnya setiap minggu; yang berubah hanya isi kriteria A2, A3, dan B1.}
+\end{frame}
+
+\begin{frame}{Sebelum Pertemuan 3}
+\framesubtitle{Persiapan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Selesaikan}
+Hands-on yang belum lulus \texttt{cek.sh}, terutama latihan tantangan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Kumpulkan}
+Tugas 2 sebelum Pertemuan 3 dimulai.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Baca}
+Modul Belajar 2 untuk mengulang, lalu bagian awal modul berikutnya.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Pertemuan 3 membahas operator dan precedence: sisa bagi \texttt{\%}, operator penugasan majemuk, increment, operator relasional dan logika, sejalan dengan Algoritma Pertemuan 3.\note{Tanyakan satu hal yang paling membingungkan hari ini untuk dibuka di review minggu depan.}
+\end{frame}
+
+\SlidePenutup{Terima kasih}{Sampai jumpa di Pertemuan 3: operator dan precedence}
+\note{Slide penutup.}
+\end{document}

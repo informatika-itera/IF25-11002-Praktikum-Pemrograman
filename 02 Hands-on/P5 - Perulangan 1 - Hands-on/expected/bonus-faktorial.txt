@@ -1,0 +1,4 @@
+Faktorial 5 = 120
+Jumlah 10 = 55
+Faktorial 20 = 2432902008176640000
+Selesai

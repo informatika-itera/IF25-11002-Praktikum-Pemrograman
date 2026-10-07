@@ -1,0 +1,4 @@
+Hari      : 5
+Rata-rata : 31.60
+Hari panas: 2
+Selisih   : 6

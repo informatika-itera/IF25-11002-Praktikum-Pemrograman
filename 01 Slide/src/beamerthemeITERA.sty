@@ -1,0 +1,194 @@
+% Tema Beamer ITERA Slides untuk IF25-11002 Praktikum Pemrograman.
+% Mengikuti sistem desain ITERA Slides (tokens.json, tema Terang).
+% Satuan: 1px desain = 0.75pt, slide 16:9 = 960pt x 540pt (1280x720px).
+% Kompilasi dengan XeLaTeX; perlu Poppins, Open Sans, JetBrains Mono terpasang di sistem.
+\ProvidesPackage{beamerthemeITERA}
+\RequirePackage{fontspec,tikz,tcolorbox,listings,xcolor,array,booktabs,colortbl,calc}
+\tcbuselibrary{skins,listings}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\geometry{paperwidth=960pt,paperheight=540pt}
+
+% ---------- warna (tokens.json, tema Terang)
+\definecolor{ITERACanvas}{HTML}{FAF7F0}  \definecolor{ITERASurface}{HTML}{FFFFFF}
+\definecolor{ITERAInk}{HTML}{1A1710}     \definecolor{ITERAInkMuted}{HTML}{4A4A4A}
+\definecolor{ITERAStructure}{HTML}{3D2F06}\definecolor{ITERAGround}{HTML}{14120D}
+\definecolor{ITERAOnGround}{HTML}{FAF7F0}\definecolor{ITERAGold}{HTML}{C8A848}
+\definecolor{ITERAGold300}{HTML}{E6CF85} \definecolor{ITERAGold600}{HTML}{A88A2C}
+\definecolor{ITERAGoldText}{HTML}{7A5F10}\definecolor{ITERAGold50}{HTML}{F6EDCF}
+\definecolor{ITERANeutral50}{HTML}{F1EDE1}\definecolor{ITERARed}{HTML}{E02020}
+\definecolor{ITERAAlert}{HTML}{8C1515}   \definecolor{ITERAAlert50}{HTML}{FBE9E6}
+\definecolor{ITERARule}{HTML}{D9D1BB}
+\definecolor{CodeComment}{HTML}{6B6552}  \definecolor{CodeKeyword}{HTML}{7A5F10}
+\definecolor{CodeString}{HTML}{2F6B1C}   \definecolor{CodeNumber}{HTML}{A31D1D}
+\definecolor{CodeLineNum}{HTML}{655F4B}
+
+% ---------- huruf
+\setsansfont{Open Sans}
+\setmonofont{JetBrains Mono}[Contextuals=NoAlternate]
+\newfontfamily\ITERADisplay{Poppins}[UprightFont=*-Regular,BoldFont=*-Bold]
+\newfontfamily\ITERAKickerFont{Poppins}[UprightFont=*-Bold,LetterSpace=8]
+\renewcommand\normalsize{\fontsize{19.5pt}{28.5pt}\selectfont}
+\renewcommand\small{\fontsize{16.5pt}{24pt}\selectfont}
+\renewcommand\footnotesize{\fontsize{13.5pt}{19.5pt}\selectfont}
+\renewcommand\scriptsize{\fontsize{10.5pt}{15pt}\selectfont}
+\renewcommand\large{\fontsize{24pt}{33pt}\selectfont}
+\renewcommand\Large{\fontsize{30pt}{36pt}\selectfont}
+\renewcommand\huge{\fontsize{42pt}{48pt}\selectfont}
+\renewcommand\Huge{\fontsize{48pt}{54pt}\selectfont}
+\newcommand\codesize{\fontsize{16.5pt}{24pt}\selectfont}
+\newcommand\codesmall{\fontsize{14pt}{20pt}\selectfont}
+\usefonttheme{professionalfonts}
+
+% ---------- dasar
+\setbeamercolor{normal text}{fg=ITERAInk,bg=ITERACanvas}
+\setbeamercolor{background canvas}{bg=ITERACanvas}
+\setbeamercolor{alerted text}{fg=ITERAAlert}
+\setbeamersize{text margin left=24pt,text margin right=24pt}
+\setbeamertemplate{navigation symbols}{}
+\hyphenpenalty=10000 \exhyphenpenalty=10000
+\setbeamertemplate{itemize items}{\color{ITERAGoldText}\rule[0.25em]{0.3em}{0.3em}}
+\newcommand\ITERAcourse{Praktikum Pemrograman, Teknik Informatika ITERA}
+\newcommand\ITERAmeeting{Pertemuan 1}
+
+% logo ITERA kanan atas di frame isi (tinggi 84px = 63pt, kanan 32px, atas 24px)
+\setbeamertemplate{background}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east,inner sep=0] at ([xshift=-24pt,yshift=-18pt]current page.north east)
+      {\includegraphics[height=63pt]{logos/itera-light.png}};
+  \end{tikzpicture}}
+
+% judul frame: framesubtitle dipakai sebagai label kecil di atas judul
+\setbeamertemplate{frametitle}{%
+  \vspace*{22pt}%
+  \ifx\insertframesubtitle\@empty\else
+    {\ITERAKickerFont\fontsize{10.5pt}{14pt}\selectfont\color{ITERAGoldText}\MakeUppercase{\insertframesubtitle}}\par\vspace{3pt}%
+  \fi
+  \parbox{820pt}{\raggedright\ITERADisplay\bfseries\fontsize{30pt}{36pt}\selectfont\color{ITERAStructure}\insertframetitle}\par
+  \vspace{7pt}{\color{ITERAGold}\rule{42pt}{3pt}}{\color{ITERARed}\rule{12pt}{3pt}}\par\vspace{14pt}}
+
+% kaki slide: pita emas 52px (39pt), garis atas merah 3px
+\setbeamertemplate{footline}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[ITERAGold] (current page.south west) rectangle ([yshift=39pt]current page.south east);
+    \fill[ITERARed] ([yshift=39pt]current page.south west) rectangle ([yshift=41.25pt]current page.south east);
+    \node[anchor=west,text=ITERAInk,font=\fontsize{10.5pt}{14pt}\selectfont] at ([xshift=24pt,yshift=19.5pt]current page.south west) {\ITERAcourse};
+    \node[anchor=east,text=ITERAInk,font=\fontsize{10.5pt}{14pt}\selectfont] at ([xshift=-24pt,yshift=19.5pt]current page.south east) {\ITERAmeeting\ \ |\ \ \insertframenumber/\inserttotalframenumber};
+  \end{tikzpicture}}
+
+% ---------- blok (radius-sm 4px = 3pt)
+\tcbset{ITERAbase/.style={enhanced,arc=3pt,boxrule=0pt,left=12pt,right=12pt,top=8pt,bottom=10pt,
+  fonttitle=\ITERADisplay\bfseries\fontsize{16.5pt}{22pt}\selectfont,toptitle=4pt,bottomtitle=4pt,
+  fontupper=\small\raggedright,before skip=6pt,after skip=6pt}}
+% Kartu: semua kartu sejenis di satu slide punya tinggi sama (equal height group
+% per nomor frame) dan tinggi minimum seragam di seluruh deck.
+\makeatletter
+\tcbset{ITERAkartu/.style={equal height group=blok-\the\c@framenumber,height from=84pt to 420pt},
+        ITERAlangkah/.style={equal height group=langkah-\the\c@framenumber,height from=118pt to 420pt}}
+\makeatother
+\newtcolorbox{Blok}[2][]{ITERAbase,ITERAkartu,colback=ITERAGold50,colbacktitle=ITERAGold,coltitle=ITERAInk,title={#2},#1}
+\newtcolorbox{BlokGelap}[2][]{ITERAbase,ITERAkartu,colback=ITERANeutral50,colbacktitle=ITERAGround,coltitle=ITERAGold,title={#2},#1}
+\newtcolorbox{BlokAlert}[2][]{ITERAbase,ITERAkartu,colback=ITERAAlert50,colbacktitle=ITERAAlert,coltitle=white,title={#2},#1}
+\newtcolorbox{Catatan}[1][]{ITERAbase,colback=ITERAGold50,borderline west={4pt}{0pt}{ITERAGold},title={},#1}
+% nomor langkah dalam lingkaran
+\newcommand\Nomor[1]{\tikz[baseline=(n.base)]\node[circle,fill=ITERAGold,text=ITERAInk,inner sep=0pt,minimum size=26pt,font=\ITERADisplay\bfseries\fontsize{15pt}{15pt}\selectfont](n){#1};}
+\newtcolorbox{Langkah}[3][]{ITERAbase,ITERAlangkah,colback=ITERASurface,colframe=ITERARule,boxrule=1pt,
+  before upper={\Nomor{#2}\hspace{8pt}{\ITERADisplay\bfseries\fontsize{16.5pt}{22pt}\selectfont #3}\par\vspace{6pt}},#1}
+
+% ---------- kode dan keluaran
+\lstdefinestyle{ITERACode}{language=C++,basicstyle=\ttfamily\codesize\color{ITERAInk},
+  keywordstyle=\color{CodeKeyword}\bfseries,stringstyle=\color{CodeString},
+  commentstyle=\color{CodeComment}\itshape,numbers=left,numberstyle=\ttfamily\footnotesize\color{CodeLineNum},
+  numbersep=10pt,showstringspaces=false,columns=fixed,keepspaces=true,upquote=true,
+  morekeywords={include,using,namespace,cout,endl,std},
+  moredelim=[is][\color{CodeKeyword}\bfseries]{@@}{@@},
+  escapeinside={(*}{*)},tabsize=4}
+\lstdefinestyle{ITERACodeKecil}{style=ITERACode,basicstyle=\ttfamily\codesmall\color{ITERAInk},numberstyle=\ttfamily\scriptsize\color{CodeLineNum}}
+\lstdefinestyle{ITERACodeMini}{style=ITERACode,basicstyle=\ttfamily\fontsize{12.5pt}{16.5pt}\selectfont\color{ITERAInk},numberstyle=\ttfamily\fontsize{9pt}{11pt}\selectfont\color{CodeLineNum}}
+\lstdefinestyle{ITERAPlainKecil}{basicstyle=\ttfamily\codesmall\color{ITERAInk},columns=fixed,keepspaces=true,showstringspaces=false,upquote=true,numbers=none,tabsize=8}
+\lstdefinestyle{ITERAPlain}{basicstyle=\ttfamily\codesize\color{ITERAInk},columns=fixed,keepspaces=true,
+  showstringspaces=false,upquote=true,numbers=none,tabsize=8}
+\newtcblisting{Kode}[2][]{enhanced,arc=3pt,colback=white,colframe=ITERARule,boxrule=1pt,
+  colbacktitle=ITERAGold,coltitle=ITERAInk,title={#2},fonttitle=\ttfamily\footnotesize,
+  toptitle=2pt,bottomtitle=2pt,left=22pt,right=8pt,top=4pt,bottom=4pt,listing only,
+  listing options={style=ITERACode},before skip=4pt,after skip=6pt,#1}
+\newtcblisting{Keluaran}[1][]{enhanced,arc=3pt,colback=ITERANeutral50,colframe=ITERARule,boxrule=1pt,
+  colbacktitle=ITERAGround,coltitle=ITERAGold,title={Keluaran},fonttitle=\ITERADisplay\bfseries\footnotesize,
+  toptitle=2pt,bottomtitle=2pt,left=10pt,right=8pt,top=4pt,bottom=4pt,listing only,
+  listing options={style=ITERAPlain},before skip=4pt,after skip=6pt,#1}
+% keluaran dari file, aman dipakai di dalam overlay (\only)
+\newtcbinputlisting{\KeluaranFile}[2][]{enhanced,arc=3pt,colback=ITERANeutral50,colframe=ITERARule,boxrule=1pt,
+  colbacktitle=ITERAGround,coltitle=ITERAGold,title={Keluaran},fonttitle=\ITERADisplay\bfseries\footnotesize,
+  toptitle=2pt,bottomtitle=2pt,left=10pt,right=8pt,top=4pt,bottom=4pt,listing only,listing file={#2},
+  listing options={style=ITERAPlain},before skip=4pt,after skip=6pt,#1}
+\newtcolorbox{TebakDulu}{ITERAbase,colback=ITERAAlert50,borderline west={4pt}{0pt}{ITERAAlert},title={}}
+\newcommand\kode[1]{\tcbox[on line,enhanced,arc=2pt,boxrule=0pt,colback=ITERAGold50,left=3pt,right=3pt,top=1pt,bottom=1pt,boxsep=0pt]{\ttfamily\fontsize{17pt}{20pt}\selectfont\color{ITERAInk}\detokenize{#1}}}
+
+% ---------- tabel: kepala emas, garis dasar merah
+\newcommand\kepala[1]{\cellcolor{ITERAGold}\color{ITERAInk}\bfseries #1}
+\newcommand\barisgenap{\rowcolor{ITERANeutral50}}
+\newcommand\garisdasar{\arrayrulecolor{ITERARed}\specialrule{2pt}{0pt}{0pt}\arrayrulecolor{ITERARule}}
+\renewcommand\arraystretch{1.25}
+
+% ---------- slide khusus
+\newcommand\gradientline[1]{\begin{tikzpicture}
+  \fill[ITERARed] (0,0) rectangle (0.12*#1,6pt);
+  \shade[left color=ITERAGold600,right color=ITERAGold300,middle color=ITERAGold] (0.12*#1,0) rectangle (#1,6pt);
+  \end{tikzpicture}}
+
+% slide judul: latar ground, batang merah 16px, panel emas 360px di kanan
+\newcommand\SlideJudul[5]{% kode-mk, judul, subjudul, penulis, keterangan
+  {\setbeamertemplate{background}{}\setbeamertemplate{footline}{}
+  \begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[ITERAGround] (current page.south west) rectangle (current page.north east);
+    \fill[ITERAGold] ([xshift=-270pt]current page.south east) rectangle (current page.north east);
+    \fill[ITERARed] ([xshift=-282pt]current page.south east) rectangle ([xshift=-270pt]current page.north east);
+    \node[anchor=north west,inner sep=0] at ([xshift=-246pt,yshift=-48pt]current page.north east)
+      {\includegraphics[height=110pt]{logos/itera-ongold.png}};
+    \node[anchor=south west,inner sep=0,align=left,text=ITERAInk,font=\ITERADisplay\bfseries\fontsize{13.5pt}{19pt}\selectfont]
+      (inst) at ([xshift=-246pt,yshift=40pt]current page.south east)
+      {Program Studi Teknik Informatika\\Fakultas Teknologi Industri\\Institut Teknologi Sumatera};
+    \node[anchor=south west,inner sep=0] at ([yshift=12pt]inst.north west)
+      {\includegraphics[height=72pt]{logos/dikti.pdf}};
+    \node[anchor=north west,inner sep=0,text width=560pt,align=left] at ([xshift=48pt,yshift=-112pt]current page.north west) {%
+      {\ITERAKickerFont\fontsize{12pt}{16pt}\selectfont\color{ITERAGold}#1}\par\vspace{10pt}
+      {\ITERADisplay\bfseries\fontsize{40pt}{48pt}\selectfont\color{ITERAOnGround}#2\par}\vspace{14pt}
+      {\ITERADisplay\fontsize{20pt}{28pt}\selectfont\color{ITERAGold}#3\par}\vspace{18pt}
+      \gradientline{420pt}\par\vspace{18pt}
+      {\ITERADisplay\bfseries\fontsize{18pt}{24pt}\selectfont\color{ITERAOnGround}#4}\par\vspace{6pt}
+      {\fontsize{13.5pt}{19pt}\selectfont\color{ITERAOnGround}#5}};
+  \end{tikzpicture}
+  \end{frame}}}
+
+% pembagi bagian: latar emas, tanpa merah, label "Bagian n" dalam pil gelap
+\newcommand\Bagian[3]{% nomor, judul, keterangan
+  {\setbeamertemplate{background}{}\setbeamertemplate{footline}{}
+  \begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[ITERAGold] (current page.south west) rectangle (current page.north east);
+    \node[anchor=north east,inner sep=0] at ([xshift=-24pt,yshift=-18pt]current page.north east)
+      {\includegraphics[height=63pt]{logos/itera-ongold.png}};
+    \node[anchor=west,inner sep=0,text width=760pt,align=left] at ([xshift=48pt,yshift=0pt]current page.west) {%
+      \tikz\node[fill=ITERAGround,text=ITERAGold,rounded corners=11pt,inner xsep=14pt,inner ysep=5pt,
+        font=\ITERADisplay\bfseries\fontsize{14pt}{16pt}\selectfont]{Bagian #1};\par\vspace{18pt}
+      {\ITERADisplay\bfseries\fontsize{42pt}{50pt}\selectfont\color{ITERAInk}#2\par}\vspace{12pt}
+      {\fontsize{19.5pt}{28pt}\selectfont\color{ITERAInk}#3\par}};
+    \node[anchor=south west,text=ITERAInk,font=\fontsize{10.5pt}{14pt}\selectfont] at ([xshift=24pt,yshift=14pt]current page.south west)
+      {\ITERAmeeting\ \ |\ \ \insertframenumber/\inserttotalframenumber};
+  \end{tikzpicture}
+  \end{frame}}}
+
+% penutup: latar ground
+\newcommand\SlidePenutup[2]{%
+  {\setbeamertemplate{background}{}\setbeamertemplate{footline}{}
+  \begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[ITERAGround] (current page.south west) rectangle (current page.north east);
+    \node[anchor=north east,inner sep=0] at ([xshift=-24pt,yshift=-18pt]current page.north east)
+      {\includegraphics[height=63pt]{logos/itera-dark.png}};
+    \node[anchor=west,inner sep=0,text width=760pt,align=left] at ([xshift=48pt]current page.west) {%
+      {\ITERADisplay\bfseries\fontsize{48pt}{54pt}\selectfont\color{ITERAOnGround}#1}\par\vspace{16pt}
+      \gradientline{420pt}\par\vspace{16pt}
+      {\ITERADisplay\fontsize{20pt}{28pt}\selectfont\color{ITERAGold}#2}};
+  \end{tikzpicture}
+  \end{frame}}}

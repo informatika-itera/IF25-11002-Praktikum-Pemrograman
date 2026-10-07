@@ -1,0 +1,4 @@
+1 ganjil
+2 genap
+3 ganjil
+4 genap

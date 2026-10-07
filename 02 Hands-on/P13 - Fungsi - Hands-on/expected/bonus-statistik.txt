@@ -1,0 +1,4 @@
+Minimum : 5
+Maksimum: 30
+Rata    : 14
+Terurut : 5 5 8 12 17 21 30

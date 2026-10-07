@@ -1,0 +1,455 @@
+% Pertemuan 15 Praktikum Pemrograman (IF25-11002). Dihasilkan oleh tools/build.py dari tools/konten/p15.py.
+% Kompilasi: xelatex P15.tex (dua kali). Catatan: xelatex -jobname=P15-catatan "\def\catatan{1}\input{P15.tex}"
+\documentclass[t]{beamer}
+\usetheme{ITERA}
+\input{catatan-preamble.tex}
+\renewcommand\ITERAmeeting{Pertemuan 15}
+\begin{document}
+\SlideJudul{IF25-11002 PRAKTIKUM PEMROGRAMAN}{Pertemuan 15\\Review dan Simulasi UAS}{Merangkai materi Pertemuan 9 sampai 14 dan berlatih dengan soal bergaya UAS}{Tim Pengajar}{Tahun 2026. Sejajar dengan Pertemuan 15 Algoritma Pemrograman: Review dan Simulasi UAS.}
+\note{Buka dengan menanyakan satu hal dari pertemuan lalu yang masih membingungkan.}
+
+\begin{frame}{Dua mata kuliah, satu minggu}
+\framesubtitle{Sebelum mulai}
+Topik minggu ini sama di dua mata kuliah, dengan peran yang berbeda.
+\vspace{10pt}
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Algoritma: Review dan Simulasi UAS}
+Review larik, string, pencarian, pengurutan, subprogram, rekursi, dan record.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Praktikum: Review UAS}
+Review C++ pertemuan 9 sampai 14 dan simulasi soal A (kode) dan soal B (tracing dan penjelasan).
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\note{Tanyakan apa yang sudah dibahas di Algoritma minggu ini. Gunakan jawabannya sebagai jembatan ke praktikum.}
+\end{frame}
+
+\begin{frame}{Saat pulang nanti, kalian bisa}
+\framesubtitle{Target hari ini}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{1}{Menerapkan}
+Menyelesaikan masalah yang menggabungkan array, string, fungsi, pengurutan atau pencarian, dan struct dalam satu program C++ dalam batas waktu ujian
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 15.1, CPMK0607}
+\end{Langkah}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{Langkah}{2}{Menjelaskan}
+Menelusuri program yang memakai array, fungsi, dan rekursi, lalu menjelaskan setiap perubahan nilai dengan istilah yang tepat
+
+{\footnotesize\color{ITERAInkMuted}Sub-CPMK 15.2, CPMK0608}
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{Catatan}
+Dua kemampuan ini dinilai sama berat di Exit Ticket, tugas, UTS, dan UAS.
+\end{Catatan}
+\note{Bacakan target dengan pelan. Kata kuncinya menerapkan dan menjelaskan.}
+\end{frame}
+
+\begin{frame}{Ingat minggu lalu}
+\framesubtitle{Review, 5 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Apa dua bagian wajib fungsi rekursif?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Bagaimana mengakses field tahun buku ketiga di array of struct?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Mengapa binary search butuh data terurut?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Jawab di kertas dulu, lalu cocokkan dengan teman sebelah.\note{Gunakan tiga pertanyaan ini sebagai diagnosis cepat. Catat topik yang paling banyak salah untuk dibahas di bagian materi.}
+\end{frame}
+
+\Bagian{1}{Masalah pembuka}{Satu soal, banyak materi}
+\note{Masalah pembuka 10 menit.}
+
+\begin{frame}[fragile]{Satu soal, banyak materi}
+\framesubtitle{Masalah minggu ini}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+{Soal UAS biasanya menggabungkan beberapa materi sekaligus. Contohnya ranking peserta: data disimpan sebagai array of struct, diurutkan dengan fungsi, lalu dicari namanya.
+
+\vspace{6pt}
+Hari ini kita berlatih memecah soal seperti itu menjadi bagian-bagian yang sudah kalian kuasai.\par}
+\vspace{6pt}
+\begin{Catatan}
+\textbf{Diskusi 2 menit.} Materi pertemuan mana saja yang dipakai soal ini? Bagian mana yang menurut kalian paling rawan salah?
+\end{Catatan}
+\end{column}
+\begin{column}{0.41\textwidth}
+\begin{Keluaran}[]
+1. Siti 95
+2. Andi 88
+3. Rani 82
+4. Budi 75
+5. Doni 70
+Andi peringkat 2
+\end{Keluaran}
+\end{column}
+\end{columns}
+\note{Tampung beberapa jawaban tanpa menilai benar salah.}
+\end{frame}
+
+\begin{frame}{Dari langkah ke instruksi}
+\framesubtitle{Sambungan dengan Algoritma}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Baca soal}
+Garis bawahi masukan, keluaran, dan aturan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Pecah}
+Petakan setiap bagian ke struct, fungsi, sort, atau search.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Uji}
+Siapkan data uji, termasuk data yang tidak ditemukan dan nilai sama.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Langkah ini sama dengan yang dilatih di Algoritma minggu ini, hanya hasil akhirnya kode C++.\note{Hubungkan eksplisit ke Algoritma minggu ini.}
+\end{frame}
+
+\Bagian{2}{Coba dulu, baru dijelaskan}{25 menit eksperimen di GDB Online}
+\note{Struggle 25 menit. Berkeliling, jangan menjelaskan materi dulu.}
+
+\begin{frame}{Misi kalian}
+\framesubtitle{Struggle, 25 menit}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Pilih}
+Kerjakan \texttt{handson2-ranking.cpp} tanpa bantuan selama 20 menit.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Uji}
+Uji dengan nama yang tidak ada di daftar. Apa yang ditampilkan?
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Catat}
+Tulis satu hal yang membuat kalian tersendat.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Boleh}
+Membuka catatan dan modul sendiri.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokAlert}{Belum dulu}
+Bertanya ke teman atau AI. Ini simulasi kondisi ujian.
+\end{BlokAlert}
+\end{column}
+\end{columns}
+\note{Catat kesalahan yang sering muncul untuk dibahas di debrief.}
+\end{frame}
+
+\begin{frame}{Apa yang kalian temukan?}
+\framesubtitle{Debrief struggle}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 1}
+Bagian mana yang paling lama dikerjakan?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 2}
+Bagaimana kalian menukar dua elemen struct?
+\end{BlokGelap}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{BlokGelap}{Pertanyaan 3}
+Data uji apa yang kalian pakai?
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Jawaban kalian akan kita uji di bagian berikutnya.\note{Tulis jawaban di papan; buktikan atau patahkan di bagian materi.}
+\end{frame}
+
+\Bagian{3}{Merangkai pertemuan 9 sampai 14}{Peta konsep, strategi soal A, dan strategi soal B}
+\note{Materi 40 menit. Tunjukkan setiap contoh langsung di GDB Online.}
+
+\begin{frame}{Peta materi UAS}
+\framesubtitle{Pertemuan 9 sampai 14}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{124pt}>{\raggedright\arraybackslash}p{345pt}>{\raggedright\arraybackslash}p{393pt}@{}}
+\kepala{Pertemuan} & \kepala{Konsep kunci} & \kepala{Jebakan yang sering muncul}\\
+P9 & array 1D, maksimum, pergeseran & indeks di luar batas, \texttt{i <= n}\\
+\barisgenap P10 & array 2D, \texttt{string}, \texttt{cctype} & urutan indeks [b][k], \texttt{'A'} vs \texttt{"A"}\\
+P11 & linear dan binary search & \texttt{low < high}, arah pergeseran terbalik\\
+\barisgenap P12 & bubble dan selection sort & tukar tanpa variabel sementara, kurang putaran\\
+P13 & fungsi, prototipe, referensi & pass by value pada fungsi tukar, jalur tanpa \texttt{return}\\
+\barisgenap P14 & rekursi, struct & basis salah, lupa \texttt{;} sesudah struct\\
+\garisdasar
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Strategi soal A}
+\framesubtitle{Menulis program}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Rancang struktur}
+Tentukan struct dan daftar fungsi beserta parameternya sebelum mengetik.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Bangun bertahap}
+Tulis satu fungsi, panggil dari \texttt{main}, kompilasi, uji. Lanjut ke fungsi berikutnya.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Uji kasus tepi}
+Data kosong, satu data, nilai sama, dan data yang tidak ditemukan.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Fungsi yang sudah teruji satu per satu jauh lebih mudah dirangkai daripada satu \texttt{main} panjang yang belum pernah dijalankan.
+\end{frame}
+
+\begin{frame}{Strategi soal B}
+\framesubtitle{Tracing dan penjelasan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Array: tulis isinya}
+Tulis isi array sesudah setiap putaran atau setiap pemanggilan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Rekursi: gambar pohon}
+Tulis setiap pemanggilan beserta argumennya, lalu nilai kembali dari bawah ke atas.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Jelaskan}
+Pakai istilah tepat: kasus basis, referensi, indeks batas, putaran.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{8pt}
+Jawaban B tanpa langkah hanya mendapat sebagian poin, walaupun hasil akhirnya benar.
+\end{frame}
+
+\begin{frame}[fragile]{Contoh tracing gabungan}
+\framesubtitle{Soal B}
+\begin{columns}[T]
+\begin{column}{0.60\textwidth}
+\begin{Kode}[listing options={style=ITERACodeKecil}]{gabungan.cpp}
+int hitung(int a[], int n, int x) {
+    if (n == 0) return 0;
+    int c = (a[n - 1] > x) ? 1 : 0;
+    return c + hitung(a, n - 1, x);
+}
+
+int main() {
+    int a[6] = {7, 2, 9, 4, 9, 1};
+    cout << hitung(a, 6, 4) << endl;
+    return 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.36\textwidth}
+\only<1>{\begin{TebakDulu}
+{\ITERAKickerFont\fontsize{10pt}{12pt}\selectfont\color{ITERAAlert}TEBAK DULU}\par\vspace{4pt}
+Sebelum dijalankan, tulis keluarannya di kertas.
+\end{TebakDulu}
+}\only<2>{\KeluaranFile[listing options={style=ITERAPlainKecil}]{keluaran/P15/k001.txt}
+\begin{Catatan}
+Fungsi menghitung elemen yang lebih besar dari x secara rekursif dari belakang: 9, 9, dan 7, jadi 3.
+\end{Catatan}
+}
+\end{column}
+\end{columns}
+\note<1>{Minta mahasiswa menebak keluaran sebelum membuka slide berikutnya. Tanyakan satu atau dua tebakan yang berbeda, lalu buktikan.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya}
+\framesubtitle{Latihan menjelaskan, 3 menit}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[listing options={style=ITERACodeMini}]{tebak.cpp}
+struct P { int x; };
+
+void naik(P p) { p.x++; }
+void naikRef(P &p) { p.x++; }
+
+int main() {
+    P a = {5};
+    naik(a);
+    naikRef(a);
+    naikRef(a);
+    cout << a.x << endl;
+    return 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Catatan}
+Tulis keluarannya di kertas, karakter demi karakter. Jangan dijalankan dulu.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Contoh soal Bagian B. Beri waktu 3 menit sebelum slide jawaban.}
+\end{frame}
+
+\begin{frame}[fragile]{Tebak keluarannya: jawaban}
+\framesubtitle{Latihan menjelaskan}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{Kode}[listing options={style=ITERACodeMini}]{tebak.cpp}
+struct P { int x; };
+
+void naik(P p) { p.x++; }
+void naikRef(P &p) { p.x++; }
+
+int main() {
+    P a = {5};
+    naik(a);
+    naikRef(a);
+    naikRef(a);
+    cout << a.x << endl;
+    return 0;
+}
+\end{Kode}
+\end{column}
+\begin{column}{0.40\textwidth}
+\begin{Keluaran}[]
+7
+\end{Keluaran}
+\begin{Catatan}
+\texttt{naik} menerima salinan sehingga \texttt{a.x} tidak berubah. Dua pemanggilan \texttt{naikRef} menambah \texttt{a.x} aslinya dua kali: 5 menjadi 7.
+\end{Catatan}
+\end{column}
+\end{columns}
+\note{Tanyakan jawaban yang paling sering salah, lalu telusuri bersama.}
+\end{frame}
+
+\begin{frame}{Error yang sering muncul minggu ini}
+\framesubtitle{Pesan diambil langsung dari g++}
+\footnotesize
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{208pt}>{\raggedright\arraybackslash}p{256pt}>{\raggedright\arraybackslash}p{398pt}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Lupa ; sesudah struct & \texttt{struct P \{ int x; \}} & \texttt{error: expected ';' after struct definition}\\
+\barisgenap Fungsi dipanggil sebelum dikenal & \texttt{panggil sebelum definisi} & \texttt{error: 'f' was not declared in this scope}\\
+Array 2D tanpa ukuran kolom & \texttt{void f(int m[][])} & \texttt{error: declaration of 'm' as multidimensional array must have bounds for all ...}\\
+\barisgenap Literal ke parameter referensi & \texttt{tukar(a, 5)} & \texttt{error: cannot bind non-const lvalue reference of type 'int\&' to an rvalue of ...}\\
+Tidak ada return di semua jalur & \texttt{if (...) return 1; saja} & \texttt{warning: control reaches end of non-void function}\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Pesan di tabel ini dihasilkan dengan g++ dan opsi -Wall, sama seperti di cek.sh.}
+\note{Minta mahasiswa memotret slide ini.}
+\end{frame}
+
+\Bagian{4}{Hands-on bertingkat}{45 menit, dari dasar sampai tantangan}
+\note{Mahasiswa membuka folder 02 Hands-on/P15 - Review UAS - Hands-on.}
+
+\begin{frame}{Peta hands-on}
+\framesubtitle{Folder 02 Hands-on/P15 - Review UAS - Hands-on}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{36pt}>{\raggedright\arraybackslash}p{267pt}>{\raggedright\arraybackslash}p{110pt}>{\raggedright\arraybackslash}p{83pt}>{\raggedright\arraybackslash}p{341pt}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Waktu} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-kata.cpp} & Dasar & 20' & array string, fungsi, karakter pertama\\
+\barisgenap 2 & \texttt{handson2-ranking.cpp} & Menengah & 20' & struct, fungsi pengurutan, pencarian\\
+3 & \texttt{handson3-telusur.cpp} & Tantangan & 10' & pohon pemanggilan dan isi array\\
+\barisgenap + & \texttt{bonus-matriks.cpp} & Pengayaan & sisa & fungsi dengan parameter array 2D\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+Kerjakan berurutan. Cocokkan keluaran dengan folder \texttt{expected/}; latihan yang membaca masukan memakai data di folder \texttt{input/}.\note{Saat berkeliling, minta mahasiswa yang mengerjakan latihan tantangan menjelaskan blok PENJELASAN mereka.}
+\end{frame}
+
+\begin{frame}{Cara mengecek dan aturannya}
+\framesubtitle{Hands-on}
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{Blok}{Di GDB Online}
+Salin isi file latihan, lengkapi TODO, klik Run. Bila program membaca masukan, ketik isi file di \texttt{input/}. Bandingkan dengan \texttt{expected/}.
+\end{Blok}
+\end{column}
+\begin{column}{0.47\textwidth}
+\begin{BlokGelap}{Di komputer sendiri}
+Jalankan \texttt{bash cek.sh}. Skrip mengompilasi dengan \texttt{-Wall -Werror}, memberi masukan dari \texttt{input/}, lalu mencocokkan keluaran.
+\end{BlokGelap}
+\end{column}
+\end{columns}
+\vspace{6pt}
+\begin{Catatan}
+AI boleh untuk memahami pesan error, tidak untuk meminta solusi utuh. Exit Ticket dikerjakan tanpa bantuan apa pun.
+\end{Catatan}
+\note{Hands-on tidak dinilai langsung; yang dinilai Exit Ticket dan tugas.}
+\end{frame}
+
+\Bagian{5}{Exit Ticket dan tugas}{25 menit terakhir, lalu pekerjaan rumah}
+\note{Mulai Exit Ticket tepat waktu.}
+
+\begin{frame}{Exit Ticket 15}
+\framesubtitle{Individual, 25 menit, tanpa AI dan internet}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{60pt}>{\raggedright\arraybackslash}p{560pt}>{\raggedright\arraybackslash}p{80pt}>{\raggedright\arraybackslash}p{150pt}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis fungsi yang mengembalikan banyak elemen array yang lebih kecil dari rata-ratanya & 25 & CPMK0607\\
+\barisgenap A2 & Lengkapi program array of struct agar terurut berdasarkan satu field & 25 & CPMK0607\\
+B1 & Gambar pohon pemanggilan sebuah fungsi rekursif pada array & 20 & CPMK0608\\
+\barisgenap B2 & Jelaskan perbedaan hasil pemanggilan fungsi dengan dan tanpa referensi & 20 & CPMK0608\\
+B3 & Sebutkan materi pertemuan yang dipakai sebuah soal dan alasannya & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}
+\vspace{10pt}
+
+{\small Soal A dinilai dari keluaran yang tepat sama. Soal B dinilai dari ketepatan dan alasan. Pelanggaran aturan membuat nilai Exit Ticket ini 0.}
+\note{Soal lengkap dibagikan terpisah dan tidak disimpan di repo publik.}
+\end{frame}
+
+\begin{frame}{Sebelum Pertemuan 16}
+\framesubtitle{Persiapan}
+\begin{columns}[T]
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{1}{Selesaikan}
+Hands-on yang belum lulus \texttt{cek.sh}, terutama latihan tantangan.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{2}{Latih}
+Tidak ada tugas minggu ini. Kerjakan ulang ketiga simulasi dengan batas waktu ujian.
+\end{Langkah}
+\end{column}
+\begin{column}{0.31\textwidth}
+\begin{Langkah}{3}{Baca}
+Modul Belajar 15 untuk mengulang, lalu bagian awal modul berikutnya.
+\end{Langkah}
+\end{column}
+\end{columns}
+\vspace{10pt}
+Pertemuan 16 adalah UAS. Kisi-kisi, tata tertib, dan contoh soal ada di slide P16 dan Modul Belajar 16.\note{Tanyakan satu hal yang paling membingungkan hari ini untuk dibuka di review minggu depan.}
+\end{frame}
+
+\SlidePenutup{Terima kasih}{Sampai jumpa di UAS. Kerjakan contoh soal P16 dengan batas waktu.}
+\note{Slide penutup.}
+\end{document}

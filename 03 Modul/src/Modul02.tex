@@ -1,0 +1,377 @@
+% Modul Belajar 2, dihasilkan oleh tools/build.py dari tools/konten/p02.py
+\documentclass[a4paper]{article}
+\usepackage{modulITERA}
+\begin{document}
+\Sampul{2}{Variabel, Tipe Data, Ekspresi, dan Input}{Menyimpan data di memori, memilih tipe yang tepat, dan membaca masukan pengguna}{CPMK0607 (menerapkan) dan CPMK0608 (menjelaskan) pada konsep dasar algoritma dan sistem komputer}{sekitar 3 jam belajar mandiri, ditambah 150 menit di kelas}{\texttt{02 Hands-on/P2 - Variabel dan Input - Hands-on/}}
+\Bagian{Modul 2}{Peta belajar}
+Ikuti urutan ini dari atas ke bawah. Setiap bagian memakai apa yang sudah dibahas di bagian sebelumnya.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.140\textwidth}>{\raggedright\arraybackslash}p{0.840\textwidth}@{}}
+\kepala{Urutan} & \kepala{Bagian}\\
+1 & Tentang modul ini\\\garis
+2 & Masalah pembuka: Kasir kantin\\\garis
+3 & Langkah 1: Variabel: wadah bernama untuk nilai\\\garis
+4 & Langkah 2: Memilih tipe data\\\garis
+5 & Langkah 3: Menelusuri penugasan\\\garis
+6 & Langkah 4: Membaca masukan dengan cin\\\garis
+7 & Langkah 5: Teks dengan spasi: getline\\\garis
+8 & Langkah 6: Pembagian bilangan bulat\\\garis
+9 & Langkah 7: Mengatur angka di belakang koma\\\garis
+10 & Pesan error yang sering muncul\\\garis
+11 & Latihan mandiri\\\garis
+12 & Rangkuman\\\garis
+13 & Cek pemahaman\\\garis
+14 & Exit Ticket dan tugas\\\garis
+15 & Bacaan lanjut dan persiapan minggu depan\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Pembuka}{Tentang modul ini}
+Modul ini mendampingi Pertemuan 2. Minggu lalu program kalian hanya menampilkan teks yang sudah ditulis. Minggu ini program mulai menyimpan data, menghitung, dan menerima masukan dari pengguna. Setelah modul ini kalian bisa memilih tipe data yang tepat dan menelusuri nilai variabel baris demi baris.
+
+Isinya sama dengan slide di kelas, tetapi ditulis lebih pelan dan lebih lengkap, supaya kalian bisa mengulang sendiri di rumah tanpa harus menebak maksud slide.
+
+\Sub{Setelah menyelesaikan modul ini, kalian bisa}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.680\textwidth}>{\raggedright\arraybackslash}p{0.230\textwidth}@{}}
+\kepala{No} & \kepala{Kemampuan} & \kepala{Dibahas di}\\
+1 & Menulis program yang menyimpan data dalam variabel bertipe tepat (\texttt{int}, \texttt{double}, \texttt{char}, \texttt{string}, \texttt{bool}), membaca masukan dengan \texttt{cin}, dan menampilkan hasil ekspresi (Sub-CPMK 2.1, CPMK0607) & Langkah 1 sampai 7\\\garis
+2 & Menjelaskan pemilihan tipe data dan menelusuri nilai variabel setelah serangkaian penugasan, termasuk akibat pembagian bilangan bulat (Sub-CPMK 2.2, CPMK0608) & kotak Tebak dulu, Latihan 3\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Karena setiap instrumen penilaian dibagi rata antara Bagian A (menulis kode) dan Bagian B (menelusuri dan menjelaskan), yang dinilai bukan hanya program kalian jalan, tetapi juga kalian bisa menjelaskan mengapa program itu jalan.
+
+\Sub{Cara memakai modul ini}
+Setiap langkah punya pola yang sama: penjelasan konsep, kadang contoh dari kehidupan sehari-hari, lalu kode yang bisa langsung kalian ketik. Sesudah kode ada kotak \textbf{Tebak dulu}. Tulis tebakan kalian di kertas sebelum membaca \textbf{Jawaban} di bawahnya. Kebiasaan menebak lalu membuktikan inilah yang membuat konsep menempel, bukan sekadar membaca.
+
+\begin{Penting}[Ketik, jangan salin]
+Ketik ulang setiap contoh di GDB Online atau editor kalian, jangan disalin-tempel. Saat mengetik, kalian akan membuat salah ketik, membaca pesan error, dan memperbaikinya. Itu bagian dari belajar.
+\end{Penting}
+\Sub{Yang perlu disiapkan}
+Peramban dengan akses ke onlinegdb.com, atau g++ di komputer kalian sendiri. Kertas dan alat tulis untuk menebak keluaran dan membuat trace table. Folder hands-on pertemuan ini dari repo mata kuliah.
+
+\Bagian{Pembuka}{Masalah pembuka: Kasir kantin}
+Kantin kampus ingin program kasir sederhana. Kasir mengetik nama barang, harga, dan jumlah; program menghitung totalnya.
+
+Program minggu lalu tidak bisa melakukan ini, karena semua teksnya sudah ditulis sebelum program jalan. Kali ini datanya baru diketahui saat program berjalan.
+
+\begin{MKeluaran}[title={Tampilan yang diinginkan}]
+Barang: Nasi
+Harga: 12000
+Jumlah: 3
+
+=== STRUK KANTIN ===
+Nasi
+12000 x 3
+Total: 36000
+\end{MKeluaran}
+\begin{Tebak}[Coba pikirkan]
+Di mana program menyimpan angka 12000 sebelum dikalikan? Apa bedanya menyimpan nama barang dengan menyimpan harga?
+\end{Tebak}
+\begin{Jawaban}[Cara memecahnya]
+Identifikasi data: Barang berupa teks, harga dan jumlah berupa bilangan bulat. Tentukan proses: Total adalah harga dikali jumlah. Terjemahkan: Buat variabel bertipe tepat, baca dengan \texttt{cin}, hitung, tampilkan.
+\end{Jawaban}
+\Bagian{Langkah 1}{Variabel: wadah bernama untuk nilai}
+Variabel adalah wadah bernama di memori. Setiap variabel punya tipe yang menentukan jenis nilai yang boleh disimpan. Pola penulisannya selalu tipe, nama, lalu nilai awal: \texttt{int umur = 18;}.
+
+Perhatikan kutipnya: satu karakter memakai kutip tunggal (\texttt{'A'}), teks memakai kutip ganda (\texttt{"Rani"}). Nilai \texttt{bool} ditampilkan \texttt{cout} sebagai 1 atau 0.
+
+\begin{MKode}{variabel.cpp}
+int umur = 18;
+double ipk = 3.75;
+char grade = 'A';
+string nama = "Rani";
+bool lulus = true;
+cout << nama << " " << umur << " " << ipk << endl;
+cout << grade << " " << lulus << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Rani 18 3.75
+A 1
+\end{MKeluaran}
+\texttt{bool} tampil sebagai 1 (true) atau 0 (false).
+\end{Jawaban}
+\Bagian{Langkah 2}{Memilih tipe data}
+Memilih tipe adalah keputusan desain. Tipe yang terlalu sempit memotong data, misalnya suhu 36.6 yang disimpan di \texttt{int} menjadi 36. Tabel berikut merangkum lima tipe yang dipakai di mata kuliah ini.
+
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.163\textwidth}>{\raggedright\arraybackslash}p{0.283\textwidth}>{\raggedright\arraybackslash}p{0.534\textwidth}@{}}
+\kepala{Tipe} & \kepala{Contoh nilai} & \kepala{Dipakai untuk}\\
+\texttt{int} & \texttt{18}, \texttt{-5}, \texttt{36000} & bilangan bulat: umur, jumlah, harga dalam rupiah\\\garis
+\texttt{double} & \texttt{3.75}, \texttt{36.6} & bilangan pecahan: IPK, suhu, berat\\\garis
+\texttt{char} & \texttt{'A'}, \texttt{'O'} & satu karakter: grade, golongan darah\\\garis
+\texttt{string} & \texttt{"Rani Puspita"} & teks: nama, alamat (perlu \texttt{\#include <string>})\\\garis
+\texttt{bool} & \texttt{true}, \texttt{false} & keadaan ya atau tidak: lulus, aktif\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\begin{Penting}[]
+Pertanyaan yang membantu: apakah nilainya bisa pecahan? Apakah berupa teks? Apakah hanya ya atau tidak?
+\end{Penting}
+\Bagian{Langkah 3}{Menelusuri penugasan}
+Tanda \texttt{=} di C++ berarti penugasan, bukan persamaan. \texttt{a = a + 3} dibaca: ambil nilai \texttt{a} sekarang, tambah 3, simpan kembali ke \texttt{a}. Nilai lama ditimpa.
+
+Cara paling aman memahami program adalah menelusurinya dengan trace table, sama seperti di Algoritma. Setelah baris 2, \texttt{a} dan \texttt{b} sama-sama 5. Setelah baris 3, \texttt{a} menjadi 8 tetapi \texttt{b} tetap 5, karena baris 2 hanya menyalin nilai, bukan mengikat kedua variabel.
+
+\begin{MKode}{telusur.cpp}
+int a = 5;
+int b = a;
+a = a + 3;
+b = b * 2;
+cout << "a = " << a << ", b = " << b << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+a = 8, b = 10
+\end{MKeluaran}
+\texttt{b = a} menyalin nilai saat itu. Mengubah \texttt{a} sesudahnya tidak mengubah \texttt{b}.
+\end{Jawaban}
+\begin{Penting}[]
+Ini jenis soal Bagian B: tuliskan nilai setiap variabel sesudah setiap baris, seperti trace table di Algoritma.
+\end{Penting}
+\Bagian{Langkah 4}{Membaca masukan dengan cin}
+\texttt{cin >> x} membaca satu nilai dari keyboard dan menyimpannya di \texttt{x}. Arah panahnya menunjuk ke variabel: data mengalir dari \texttt{cin} ke variabel. Beberapa nilai bisa dibaca sekaligus, dipisahkan spasi atau enter.
+
+Di program sungguhan, tampilkan dulu teks petunjuk dengan \texttt{cout} sebelum \texttt{cin}, misalnya \texttt{cout << "Harga: ";}, supaya pengguna tahu apa yang harus diketik. Contoh berikut menghilangkan petunjuk agar ringkas; masukan dan keluaran ditampilkan terpisah.
+
+\begin{MKode}{masukan.cpp}
+string barang;
+int harga, jumlah;
+cin >> barang;
+cin >> harga >> jumlah;
+int total = harga * jumlah;
+cout << barang << ": " << total << endl;
+\end{MKode}
+\begin{MKeluaran}[title={Masukan}]
+Teh
+5000 2
+\end{MKeluaran}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Teh: 10000
+\end{MKeluaran}
+
+\end{Jawaban}
+\Bagian{Langkah 5}{Teks dengan spasi: getline}
+\texttt{cin >>} berhenti membaca di spasi, jadi nama "Rani Puspita" hanya terbaca "Rani". Untuk membaca satu baris penuh, gunakan \texttt{getline(cin, nama)}.
+
+Ada satu jebakan: setelah \texttt{cin >> nim}, tombol enter yang diketik masih tersisa. Bila langsung memanggil \texttt{getline}, yang terbaca adalah baris kosong itu. \texttt{cin.ignore()} membuang sisa enter tersebut.
+
+\begin{MKode}{getline.cpp}
+string nama;
+int nim;
+cin >> nim;
+cin.ignore();
+getline(cin, nama);
+cout << nama << " (" << nim << ")" << endl;
+\end{MKode}
+\begin{MKeluaran}[title={Masukan}]
+126140001
+Rani Puspita
+\end{MKeluaran}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Rani Puspita (126140001)
+\end{MKeluaran}
+\texttt{cin.ignore()} membuang enter sisa sesudah \texttt{cin >> nim}. Tanpa itu, \texttt{getline} langsung membaca baris kosong.
+\end{Jawaban}
+\Bagian{Langkah 6}{Pembagian bilangan bulat}
+Operator aritmetika \texttt{+ - * /} bekerja seperti di matematika, dengan satu pengecualian penting. Bila kedua operand pembagian bertipe bulat, hasilnya juga bulat dan bagian pecahannya dibuang.
+
+Menyimpan hasilnya ke variabel \texttt{double} tidak menolong, karena pembagian sudah selesai sebelum disimpan. Supaya hasilnya pecahan, salah satu operand harus pecahan: tulis \texttt{2.0}, atau ubah tipenya dengan \texttt{(double) a}.
+
+\begin{MKode}{bagi.cpp}
+int a = 7, b = 2;
+cout << a / b << endl;
+cout << a / 2.0 << endl;
+cout << (double) a / b << endl;
+double hasil = a / b;
+cout << hasil << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+3
+3.5
+3.5
+3
+\end{MKeluaran}
+Kalau kedua operand bulat, hasilnya bulat dan sisanya dibuang, bahkan bila disimpan ke \texttt{double}.
+\end{Jawaban}
+\Bagian{Langkah 7}{Mengatur angka di belakang koma}
+Secara bawaan \texttt{cout} menampilkan sampai enam digit bermakna. Untuk menampilkan tepat dua angka di belakang koma, gunakan \texttt{fixed} dan \texttt{setprecision(2)} dari pustaka \texttt{<iomanip>}. Pengaturan ini menempel: semua angka pecahan sesudahnya ikut tampil dua desimal.
+
+\begin{MKode}{presisi.cpp}
+double rata = 82.333333;
+cout << rata << endl;
+cout << fixed << setprecision(2) << rata << endl;
+cout << 12.5 << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+82.3333
+82.33
+12.50
+\end{MKeluaran}
+Perlu \texttt{\#include <iomanip>}. Pengaturan ini berlaku untuk semua \texttt{cout} sesudahnya.
+\end{Jawaban}
+\Bagian{Waspada}{Pesan error yang sering muncul}
+Semua pesan di tabel ini dihasilkan g++ dengan opsi \texttt{-Wall}, sama seperti yang dipakai \texttt{cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.270\textwidth}>{\raggedright\arraybackslash}p{0.470\textwidth}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Variabel belum dideklarasikan & \texttt{cout << total;} & \texttt{error: 'total' was not declared in this scope}\\\garis
+Tipe tidak cocok & \texttt{int x = "lima";} & \texttt{error: invalid conversion from 'const char*' to 'int'}\\\garis
+Arah operator cin terbalik & \texttt{cin << x;} & \texttt{error: no match for 'operator<<'}\\\garis
+Deklarasi dua kali & \texttt{int x = 1; int x = 2;} & \texttt{error: redeclaration of 'int x'}\\\garis
+Variabel tidak dipakai & \texttt{int sisa;} & \texttt{warning: unused variable 'sisa'}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Baris terakhir adalah peringatan, bukan error. Program tetap jalan, tetapi peringatan sering menandakan ada yang terlupa. \texttt{cek.sh} memakai \texttt{-Werror}, jadi peringatan dianggap belum lulus.
+
+Pembagian bulat tidak muncul di tabel ini karena bukan error kompilasi. Itu kesalahan logika: program jalan, tetapi hasilnya salah. Kesalahan seperti ini hanya bisa ditemukan dengan menelusuri nilai.
+
+\Bagian{Latihan}{Latihan mandiri}
+Latihan ini sama dengan hands-on di kelas. Semua file ada di \texttt{02 Hands-on/P2 - Variabel dan Input - Hands-on/latihan/}. Kerjakan berurutan, lalu cocokkan dengan \texttt{expected/} atau jalankan \texttt{bash cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.360\textwidth}>{\raggedright\arraybackslash}p{0.150\textwidth}>{\raggedright\arraybackslash}p{0.400\textwidth}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-identitas.cpp} & Dasar & lima tipe data dasar\\\garis
+2 & \texttt{handson2-kantin.cpp} & Menengah & \texttt{cin}, ekspresi perkalian\\\garis
+3 & \texttt{handson3-suhu.cpp} & Tantangan & telusuri dan perbaiki tiga kesalahan logika\\\garis
++ & \texttt{bonus-ipk.cpp} & Pengayaan & \texttt{fixed}, \texttt{setprecision}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Sub{Latihan 1: handson1-identitas.cpp}
+Simpan data identitas di variabel dengan tipe yang tepat dan tampilkan lima baris.
+
+\Sub{Latihan 2: handson2-kantin.cpp}
+Baca nama barang, harga, dan jumlah, lalu tampilkan struk. Masukan uji: \texttt{Nasi 12000 3}.
+
+\Sub{Latihan 3: handson3-suhu.cpp}
+Program konversi suhu terkompilasi tetapi hasilnya salah. Telusuri dengan masukan 36.6, perbaiki tiga kesalahan logika, dan isi blok \texttt{PENJELASAN}.
+
+\Sub{Bonus: bonus-ipk.cpp}
+Hitung rata-rata tiga nilai dan tampilkan dua angka di belakang koma.
+
+\Sub{Latihan menelusuri}
+\begin{MKode}{tebak.cpp}
+int x = 10, y = 4;
+double p = x / y;
+double q = x / 4.0;
+x = x + y;
+y = x - y;
+cout << p << " " << q << endl;
+cout << x << " " << y << endl;
+\end{MKode}
+\begin{Tebak}[]
+Tulis keluarannya di kertas tanpa menjalankan program. Buat trace table bila perlu.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+2 2.5
+14 10
+\end{MKeluaran}
+\texttt{p} bernilai 2 karena \texttt{10 / 4} dihitung sebagai pembagian bulat. \texttt{y} dihitung dari \texttt{x} yang sudah berubah menjadi 14.
+\end{Jawaban}
+\Bagian{Penutup}{Rangkuman}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.320\textwidth}>{\raggedright\arraybackslash}p{0.660\textwidth}@{}}
+\kepala{Konsep} & \kepala{Yang perlu diingat}\\
+Variabel: wadah bernama untuk nilai & \texttt{bool} tampil sebagai 1 (true) atau 0 (false).\\\garis
+Memilih tipe data & Pertanyaan yang membantu: apakah nilainya bisa pecahan?\\\garis
+Menelusuri penugasan & \texttt{b = a} menyalin nilai saat itu.\\\garis
+Membaca masukan dengan cin & \texttt{cin >> x} membaca satu nilai dari keyboard dan menyimpannya di \texttt{x}.\\\garis
+Teks dengan spasi: getline & \texttt{cin.ignore()} membuang enter sisa sesudah \texttt{cin >> nim}.\\\garis
+Pembagian bilangan bulat & Kalau kedua operand bulat, hasilnya bulat dan sisanya dibuang, bahkan bila disimpan ke \texttt{double}.\\\garis
+Mengatur angka di belakang koma & Perlu \texttt{\#include <iomanip>}.\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penutup}{Cek pemahaman}
+Jawab tanpa menjalankan program, lalu periksa dengan menjalankannya.
+\begin{enumerate}
+\item Tipe apa yang tepat untuk menyimpan berat badan 52.5 kg?
+\item Apa nilai \texttt{a} dan \texttt{b} sesudah \texttt{int a = 3; int b = a; a = 10;}?
+\item Apa keluaran \texttt{cout << 9 / 2;} dan \texttt{cout << 9 / 2.0;}?
+\item Nama "Budi Santoso" dibaca dengan \texttt{cin >> nama;}. Apa isi \texttt{nama}?
+\item Mengapa \texttt{double h = 5 / 2;} bernilai 2, bukan 2.5?
+\end{enumerate}
+\begin{Jawaban}[]
+\begin{enumerate}[leftmargin=16pt]
+\item \texttt{double}.
+\item \texttt{a} = 10, \texttt{b} = 3.
+\item 4 dan 4.5.
+\item \texttt{Budi}, karena \texttt{cin >>} berhenti di spasi.
+\item Pembagian bulat dihitung lebih dulu, baru hasilnya 2 disimpan ke \texttt{double}.
+\end{enumerate}
+\end{Jawaban}
+\Bagian{Penilaian}{Exit Ticket 2}
+Dikerjakan di 25 menit terakhir kelas, sendiri, tanpa AI, internet, atau diskusi. Exit Ticket 2 adalah satu dari 14 Exit Ticket; rata-ratanya menjadi komponen berbobot 25\%.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.080\textwidth}>{\raggedright\arraybackslash}p{0.600\textwidth}>{\raggedright\arraybackslash}p{0.100\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang membaca dua bilangan bulat dan menampilkan jumlah serta hasil kalinya & 25 & CPMK0607\\\garis
+A2 & Baca nama lengkap dengan spasi dan tinggi badan, tampilkan dengan dua desimal & 25 & CPMK0607\\\garis
+B1 & Telusuri nilai tiga variabel sesudah lima baris penugasan & 20 & CPMK0608\\\garis
+B2 & Jelaskan mengapa sebuah ekspresi pembagian menghasilkan nilai yang tidak diharapkan & 20 & CPMK0608\\\garis
+B3 & Pilih tipe data untuk empat data yang diberikan dan beri alasannya & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penilaian}{Tugas 2: Program Pendaftaran Mahasiswa Baru}
+Kumpulkan sebelum Pertemuan 3 lewat kanal pengumpulan yang diumumkan dosen.
+
+\Sub{Bagian A: program (50 poin)}
+Buat program yang meminta masukan berikut, lalu menampilkan kartu pendaftaran dengan format rapi dan border.
+\begin{enumerate}
+\item Nama lengkap (\texttt{string}, boleh berspasi, baca dengan \texttt{getline})
+\item Tempat lahir (\texttt{string}) dan tanggal lahir sebagai tiga \texttt{int}: dd, mm, yyyy
+\item Asal sekolah (\texttt{string}, boleh berspasi)
+\item Nilai rata-rata ujian sekolah (\texttt{double}), ditampilkan dua desimal
+\item Kartu pendaftaran dengan border yang memuat semua data
+\end{enumerate}
+\begin{Contoh}[Bonus, tidak wajib]
+Hitung dan tampilkan umur dalam tahun dari tahun lahir, dengan tahun sekarang 2026.
+\end{Contoh}
+\Sub{Bagian B: penjelasan (50 poin)}
+Komentar maksimal 150 kata: alasan memilih tipe untuk setiap variabel, satu jebakan yang kalian temui (misalnya \texttt{getline} sesudah \texttt{cin}), dan trace table singkat untuk perhitungan umur atau format dua desimal.
+
+\Sub{Rubrik Tugas 2}
+\par\vspace{4pt}\noindent{\fontsize{8.5pt}{11.5pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.190\textwidth}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}>{\raggedright\arraybackslash}p{0.180\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85–100} & \kepala{Baik 70–84} & \kepala{Cukup 55–69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\\garis
+A2 Ketepatan tipe data & 15 & semua tipe tepat & satu kurang tepat & dua kurang tepat & tiga atau lebih salah\\\garis
+A3 Masukan dan keluaran & 15 & nama berspasi terbaca, kartu rapi & satu masalah masukan & kartu tidak rapi & masukan gagal\\\garis
+B1 Alasan tipe dan trace table & 30 & semua beralasan, trace tepat & satu alasan kurang & trace tidak lengkap & tidak ada atau disalin\\\garis
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Nilai kriteria = poin × skor level. Contoh: A1 di level Baik dengan skor 80 memberi 20 × 0,80 = 16 poin.
+
+\Bagian{Penutup}{Bacaan lanjut dan persiapan minggu depan}
+\begin{enumerate}
+\item Deitel, P. dan Deitel, H. C++ How to Program, edisi ke-10, Bab 2.
+\item learncpp.com, Bab 1 dan 4 (variabel, tipe dasar).
+\item cplusplus.com, referensi \texttt{iomanip}.
+\item Slide \texttt{01 Slide/P2 Variabel, Tipe Data, Ekspresi, dan Input.pdf} dan hands-on di \texttt{02 Hands-on/P2 - Variabel dan Input - Hands-on/}.
+\end{enumerate}
+\begin{Penting}[Minggu depan]
+Pertemuan 3 membahas operator dan precedence: sisa bagi \texttt{\%}, operator penugasan majemuk, increment, operator relasional dan logika, sejalan dengan Algoritma Pertemuan 3.
+\end{Penting}
+\end{document}

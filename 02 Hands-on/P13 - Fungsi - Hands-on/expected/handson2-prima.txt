@@ -1,0 +1,7 @@
+2 prima
+9 bukan
+13 prima
+1 bukan
+21 bukan
+29 prima
+Banyak prima: 3

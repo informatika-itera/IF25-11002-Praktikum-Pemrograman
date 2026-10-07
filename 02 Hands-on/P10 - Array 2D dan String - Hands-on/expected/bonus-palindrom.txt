@@ -1,0 +1,3 @@
+Katak palindrom
+radar palindrom
+Algoritma bukan palindrom

@@ -1,0 +1,2 @@
+simetris; 6 13 18
+tidak simetris; 5 7 5

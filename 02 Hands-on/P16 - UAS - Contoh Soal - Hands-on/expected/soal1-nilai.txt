@@ -1,0 +1,4 @@
+Rani 81.7 A
+Budi 61.7 C
+Siti 91.7 A
+Tertinggi: Siti

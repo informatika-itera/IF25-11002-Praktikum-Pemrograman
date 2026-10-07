@@ -1,0 +1,5 @@
+Jadwal Praktikum Minggu 1
+Hari  : Senin
+Ruang : Lab Komputer
+Alat  : GDB Online
+Folder: C:\praktikum\p1

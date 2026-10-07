@@ -1,0 +1,3 @@
+genap      : false
+kelipatan 5: true
+dua digit  : true

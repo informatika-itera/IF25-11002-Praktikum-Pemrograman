@@ -1,0 +1,280 @@
+% Modul Belajar 1, dihasilkan oleh tools/build.py dari tools/konten/p01.py
+\documentclass[a4paper]{article}
+\usepackage{modulITERA}
+\begin{document}
+\Sampul{1}{Hello World dan Struktur Program C++}{Program pertama, cara compiler membacanya, dan cara membaca pesan error-nya}{CPMK0607 (menerapkan) dan CPMK0608 (menjelaskan) pada konsep dasar algoritma dan sistem komputer}{sekitar 3 jam belajar mandiri, ditambah 150 menit di kelas}{\texttt{02 Hands-on/P1 - Hello World - Hands-on/}}
+\Bagian{Modul 1}{Peta belajar}
+Ikuti urutan ini dari atas ke bawah. Setiap bagian memakai apa yang sudah dibahas di bagian sebelumnya.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.140\textwidth}>{\raggedright\arraybackslash}p{0.840\textwidth}@{}}
+\kepala{Urutan} & \kepala{Bagian}\\
+1 & Tentang modul ini\\\garis
+2 & Masalah pembuka: Kartu nama di layar\\\garis
+3 & Langkah 1: Apa itu program, dan mengapa harus dikompilasi\\\garis
+4 & Langkah 2: Membedah Hello World baris demi baris\\\garis
+5 & Langkah 3: Menyusun keluaran dengan cout, endl, dan \textbackslash{}n\\\garis
+6 & Langkah 4: Escape sequence untuk karakter khusus\\\garis
+7 & Pesan error yang sering muncul\\\garis
+8 & Latihan mandiri\\\garis
+9 & Rangkuman\\\garis
+10 & Cek pemahaman\\\garis
+11 & Exit Ticket dan tugas\\\garis
+12 & Bacaan lanjut dan persiapan minggu depan\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Pembuka}{Tentang modul ini}
+Modul ini mendampingi Pertemuan 1. Setelah menyelesaikannya, kalian bisa menulis, mengompilasi, dan menjalankan program C++ pertama kalian, lalu menjelaskan apa yang dikerjakan setiap barisnya. Alat utama di kelas adalah GDB Online (onlinegdb.com); g++ di komputer sendiri boleh dipakai.
+
+Isinya sama dengan slide di kelas, tetapi ditulis lebih pelan dan lebih lengkap, supaya kalian bisa mengulang sendiri di rumah tanpa harus menebak maksud slide.
+
+\Sub{Setelah menyelesaikan modul ini, kalian bisa}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.680\textwidth}>{\raggedright\arraybackslash}p{0.230\textwidth}@{}}
+\kepala{No} & \kepala{Kemampuan} & \kepala{Dibahas di}\\
+1 & Menulis, mengompilasi, dan menjalankan program C++ yang menampilkan keluaran terformat dengan \texttt{cout}, \texttt{endl}, dan escape sequence (Sub-CPMK 1.1, CPMK0607) & Langkah 1 sampai 4\\\garis
+2 & Menjelaskan peran setiap bagian program C++ dan alur dari kode sumber sampai program berjalan, termasuk membaca pesan error kompilasi (Sub-CPMK 1.2, CPMK0608) & kotak Tebak dulu, Latihan 3\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Karena setiap instrumen penilaian dibagi rata antara Bagian A (menulis kode) dan Bagian B (menelusuri dan menjelaskan), yang dinilai bukan hanya program kalian jalan, tetapi juga kalian bisa menjelaskan mengapa program itu jalan.
+
+\Sub{Cara memakai modul ini}
+Setiap langkah punya pola yang sama: penjelasan konsep, kadang contoh dari kehidupan sehari-hari, lalu kode yang bisa langsung kalian ketik. Sesudah kode ada kotak \textbf{Tebak dulu}. Tulis tebakan kalian di kertas sebelum membaca \textbf{Jawaban} di bawahnya. Kebiasaan menebak lalu membuktikan inilah yang membuat konsep menempel, bukan sekadar membaca.
+
+\begin{Penting}[Ketik, jangan salin]
+Ketik ulang setiap contoh di GDB Online atau editor kalian, jangan disalin-tempel. Saat mengetik, kalian akan membuat salah ketik, membaca pesan error, dan memperbaikinya. Itu bagian dari belajar.
+\end{Penting}
+\Sub{Yang perlu disiapkan}
+Peramban dengan akses ke onlinegdb.com, atau g++ di komputer kalian sendiri. Kertas dan alat tulis untuk menebak keluaran dan membuat trace table. Folder hands-on pertemuan ini dari repo mata kuliah.
+
+\Bagian{Pembuka}{Masalah pembuka: Kartu nama di layar}
+Bayangkan panitia PKKMB meminta setiap mahasiswa baru menampilkan kartu nama di layar komputer lab. Isinya nama, NIM, dan program studi, dengan garis pembatas di atas dan bawah.
+
+Kalian tidak boleh mengetik teks itu di Word atau Notepad. Teks harus muncul karena sebuah program menyuruh komputer menampilkannya.
+
+\begin{MKeluaran}[title={Tampilan yang diinginkan}]
+========================
+    KARTU MAHASISWA
+========================
+Nama  : Rani Puspita
+NIM   : 126140001
+Prodi : Teknik Informatika
+========================
+\end{MKeluaran}
+\begin{Tebak}[Coba pikirkan]
+Kalau komputer hanya mengerti instruksi yang sangat persis, instruksi seperti apa yang perlu kalian tulis? Bagaimana komputer tahu kapan harus pindah baris?
+\end{Tebak}
+\begin{Jawaban}[Cara memecahnya]
+Di Algoritma minggu ini kalian memecah masalah menjadi langkah. Masalah kartu nama pecahannya sederhana: tampilkan baris pertama, pindah baris, tampilkan baris kedua, dan seterusnya. Yang belum kalian punya adalah bahasa untuk menuliskan langkah itu agar dimengerti komputer.
+\end{Jawaban}
+\Bagian{Langkah 1}{Apa itu program, dan mengapa harus dikompilasi}
+Program adalah kumpulan instruksi yang ditulis dalam bahasa tertentu agar komputer mengerjakan sesuatu. Komputer hanya menjalankan bahasa mesin, sedangkan C++ dibuat agar mudah dibaca manusia. Penerjemahnya disebut compiler, dan alurnya selalu sama.
+
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.218\textwidth}>{\raggedright\arraybackslash}p{0.762\textwidth}@{}}
+\kepala{Tahap} & \kepala{Yang terjadi}\\
+1. Kode sumber & Kalian menulis instruksi C++ di file berakhiran \texttt{.cpp}.\\\garis
+2. Kompilasi & Compiler (misalnya \texttt{g++}) memeriksa tata bahasa lalu menerjemahkan ke bahasa mesin.\\\garis
+3. Executable & Hasil terjemahan berupa program yang siap dijalankan.\\\garis
+4. Jalankan & Program menampilkan keluaran di layar.\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Kalau ada satu saja kesalahan tata bahasa di tahap 2, executable tidak pernah dibuat. Itulah alasan error kompilasi muncul sebelum program sempat berjalan. Di GDB Online, tombol Run mengerjakan tahap 2 sampai 4 sekaligus. Di komputer sendiri perintahnya \texttt{g++ hello.cpp -o hello} lalu \texttt{./hello}.
+
+\Bagian{Langkah 2}{Membedah Hello World baris demi baris}
+Ini program C++ paling sederhana yang lengkap. Baris 1 menyertakan pustaka input dan output, tempat \texttt{cout} berada. Baris 2 mengizinkan kita menulis \texttt{cout} tanpa awalan \texttt{std::}. Baris 4 adalah titik awal: komputer selalu mulai dari \texttt{main}. Baris 5 mengirim teks ke layar lalu pindah baris; titik koma menandai akhir pernyataan. Baris 6 mengakhiri \texttt{main} dan melapor bahwa program selesai tanpa masalah.
+
+\begin{MKode}{hello.cpp}
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello World!" << endl;
+    return 0;
+}
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+Hello World!
+\end{MKeluaran}
+
+\end{Jawaban}
+Coba hapus baris 1, lalu jalankan. Pesan error yang muncul adalah bukti bahwa setiap baris punya peran.
+
+\Bagian{Langkah 3}{Menyusun keluaran dengan cout, endl, dan \textbackslash{}n}
+Operator \texttt{<<} bisa dirangkai. Setiap potongan dikirim ke layar berurutan dari kiri ke kanan, tanpa spasi tambahan. Potongan kode di bawah adalah isi \texttt{main}; bagian \texttt{\#include} dan \texttt{main} sengaja tidak ditulis ulang.
+
+\begin{MKode}{rangkai.cpp}
+cout << "Hai" << "Dunia";
+cout << "Hai " << "Dunia" << endl;
+cout << "Baris 1" << endl << "Baris 2\n";
+cout << "Baris 3\nBaris 4" << endl;
+\end{MKode}
+\begin{Tebak}[]
+Sebelum menjalankan program, tulis keluarannya di kertas, karakter demi karakter.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+HaiDuniaHai Dunia
+Baris 1
+Baris 2
+Baris 3
+Baris 4
+\end{MKeluaran}
+
+\end{Jawaban}
+\texttt{endl} dan \texttt{\textbackslash{}n} sama-sama memindahkan kursor ke baris baru; \texttt{endl} juga memaksa keluaran langsung tampil. Perhatikan baris pertama keluaran: dua pernyataan \texttt{cout} berurutan tidak otomatis menghasilkan dua baris.
+
+\Bagian{Langkah 4}{Escape sequence untuk karakter khusus}
+Beberapa karakter tidak bisa ditulis langsung di dalam tanda kutip. Karakter itu ditulis dengan garis miring terbalik di depannya. Karena garis miring terbalik punya arti khusus, ia sendiri pun harus ditulis dua kali.
+
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.131\textwidth}>{\raggedright\arraybackslash}p{0.283\textwidth}>{\raggedright\arraybackslash}p{0.283\textwidth}>{\raggedright\arraybackslash}p{0.283\textwidth}@{}}
+\kepala{Escape} & \kepala{Arti} & \kepala{Ditulis} & \kepala{Tampil}\\
+\texttt{\textbackslash{}n} & baris baru & \texttt{"A\textbackslash{}nB"} & A dan B di dua baris\\\garis
+\texttt{\textbackslash{}t} & tab & \texttt{"A\textbackslash{}tB"} & A, jarak tab, B\\\garis
+\texttt{\textbackslash{}\textbackslash{}} & garis miring terbalik & \texttt{"C:\textbackslash{}\textbackslash{}data"} & \texttt{C:\textbackslash{}data}\\\garis
+\texttt{\textbackslash{}"} & kutip ganda & \texttt{"Dia \textbackslash{}"hai\textbackslash{}""} & \texttt{Dia "hai"}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Waspada}{Pesan error yang sering muncul}
+Semua pesan di tabel ini dihasilkan g++ dengan opsi \texttt{-Wall}, sama seperti yang dipakai \texttt{cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.240\textwidth}>{\raggedright\arraybackslash}p{0.270\textwidth}>{\raggedright\arraybackslash}p{0.470\textwidth}@{}}
+\kepala{Kesalahan} & \kepala{Contoh} & \kepala{Pesan pertama dari g++}\\
+Lupa titik koma & \texttt{cout << "Hai"} & \texttt{error: expected ';' before 'return'}\\\garis
+Salah ketik nama & \texttt{count << "Hai";} & \texttt{error: 'count' was not declared in this scope}\\\garis
+Lupa \#include & \texttt{tanpa baris 1} & \texttt{error: 'cout' was not declared in this scope}\\\garis
+Kutip tidak ditutup & \texttt{cout << "Hai;} & \texttt{error: missing terminating " character}\\\garis
+Garis miring tunggal & \texttt{"C:\textbackslash{}data"} & \texttt{warning: unknown escape sequence: '\textbackslash{}d'}\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Pesan lupa titik koma biasanya menyebut kata pertama di baris berikutnya, misalnya \texttt{before 'return'}, karena compiler baru sadar ada yang kurang saat bertemu kata itu. Jadi kalau baris yang ditunjuk terlihat benar, periksa baris di atasnya.
+
+\Bagian{Latihan}{Latihan mandiri}
+Latihan ini sama dengan hands-on di kelas. Semua file ada di \texttt{02 Hands-on/P1 - Hello World - Hands-on/latihan/}. Kerjakan berurutan, lalu cocokkan dengan \texttt{expected/} atau jalankan \texttt{bash cek.sh}.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.360\textwidth}>{\raggedright\arraybackslash}p{0.150\textwidth}>{\raggedright\arraybackslash}p{0.400\textwidth}@{}}
+\kepala{No} & \kepala{File} & \kepala{Tingkat} & \kepala{Yang dilatih}\\
+1 & \texttt{handson1-biodata.cpp} & Dasar & \texttt{cout}, \texttt{endl}, tiga baris keluaran\\\garis
+2 & \texttt{handson2-kartu.cpp} & Menengah & garis pembatas, perataan, \texttt{\textbackslash{}t}, \texttt{\textbackslash{}"}\\\garis
+3 & \texttt{handson3-perbaiki.cpp} & Tantangan & lima kesalahan, perbaiki dan jelaskan\\\garis
++ & \texttt{bonus-rumah.cpp} & Pengayaan & \texttt{\textbackslash{}\textbackslash{}} di dalam ASCII art\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Sub{Latihan 1: handson1-biodata.cpp}
+Tampilkan biodata contoh tiga baris persis seperti di \texttt{expected/}.
+
+\Sub{Latihan 2: handson2-kartu.cpp}
+Lengkapi kartu mahasiswa: titik dua rata, baris Motto diawali tab dan memakai kutip ganda yang ikut tampil.
+
+\Sub{Latihan 3: handson3-perbaiki.cpp}
+Program punya lima kesalahan: tiga error kompilasi dan dua peringatan. Perbaiki satu per satu, lalu isi blok \texttt{PENJELASAN} dengan kalimat kalian sendiri.
+
+\Sub{Bonus: bonus-rumah.cpp}
+Gambar rumah ASCII enam baris; garis miring terbalik ditulis dua kali.
+
+\Sub{Latihan menelusuri}
+\begin{MKode}{tebak.cpp}
+cout << "A" << "B" << endl;
+cout << "C\tD\n" << "E";
+cout << "\"F\"" << endl;
+\end{MKode}
+\begin{Tebak}[]
+Tulis keluarannya di kertas tanpa menjalankan program. Buat trace table bila perlu.
+\end{Tebak}
+\begin{Jawaban}[]
+\begin{MKeluaran}[]
+AB
+C       D
+E"F"
+\end{MKeluaran}
+Baris ketiga: \texttt{E} dan \texttt{"F"} menyatu karena tidak ada pindah baris di antaranya. Jarak antara C dan D adalah satu tab.
+\end{Jawaban}
+\Bagian{Penutup}{Rangkuman}
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.320\textwidth}>{\raggedright\arraybackslash}p{0.660\textwidth}@{}}
+\kepala{Konsep} & \kepala{Yang perlu diingat}\\
+Apa itu program, dan mengapa harus dikompilasi & Program adalah kumpulan instruksi yang ditulis dalam bahasa tertentu agar komputer mengerjakan sesuatu.\\\garis
+Membedah Hello World baris demi baris & Ini program C++ paling sederhana yang lengkap.\\\garis
+Menyusun keluaran dengan cout, endl, dan \textbackslash{}n & Operator \texttt{<<} bisa dirangkai.\\\garis
+Escape sequence untuk karakter khusus & Beberapa karakter tidak bisa ditulis langsung di dalam tanda kutip.\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penutup}{Cek pemahaman}
+Jawab tanpa menjalankan program, lalu periksa dengan menjalankannya.
+\begin{enumerate}
+\item Apa keluaran \texttt{cout << "A" << "B" << endl << "C";}?
+\item Mengapa \texttt{cout << 'Halo';} tidak menampilkan \texttt{Halo}?
+\item Program menampilkan \texttt{'cout' was not declared in this scope}. Sebutkan dua kemungkinan penyebabnya.
+\item Tulis satu pernyataan yang menampilkan \texttt{C:\textbackslash{}Users\textbackslash{}rani}.
+\item Mengapa program dengan satu error kompilasi tidak bisa dijalankan sama sekali?
+\end{enumerate}
+\begin{Jawaban}[]
+\begin{enumerate}[leftmargin=16pt]
+\item \texttt{AB}, lalu \texttt{C} di baris berikutnya.
+\item Kutip tunggal hanya untuk satu karakter; teks memakai kutip ganda.
+\item Lupa \texttt{\#include <iostream>}, atau lupa \texttt{using namespace std;}.
+\item \texttt{cout << "C:\textbackslash{}\textbackslash{}Users\textbackslash{}\textbackslash{}rani";}
+\item Compiler berhenti sebelum membuat executable.
+\end{enumerate}
+\end{Jawaban}
+\Bagian{Penilaian}{Exit Ticket 1}
+Dikerjakan di 25 menit terakhir kelas, sendiri, tanpa AI, internet, atau diskusi. Exit Ticket 1 adalah satu dari 14 Exit Ticket; rata-ratanya menjadi komponen berbobot 25\%.
+\par\vspace{4pt}\noindent{\fontsize{9.5pt}{13pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.080\textwidth}>{\raggedright\arraybackslash}p{0.600\textwidth}>{\raggedright\arraybackslash}p{0.100\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}@{}}
+\kepala{Soal} & \kepala{Isi} & \kepala{Poin} & \kepala{CPMK}\\
+A1 & Tulis program yang menampilkan tiga baris teks yang diberikan & 25 & CPMK0607\\\garis
+A2 & Tampilkan teks berisi kutip ganda dan garis miring terbalik & 25 & CPMK0607\\\garis
+B1 & Tuliskan keluaran persis dari potongan kode dengan \texttt{endl} dan \texttt{\textbackslash{}n} & 20 & CPMK0608\\\garis
+B2 & Temukan dua error pada program dan jelaskan penyebabnya & 20 & CPMK0608\\\garis
+B3 & Jelaskan akibat menghapus \texttt{\#include <iostream>} & 10 & CPMK0608\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+\Bagian{Penilaian}{Tugas 1: Kartu Perkenalan Digital}
+Kumpulkan sebelum Pertemuan 2 lewat kanal pengumpulan yang diumumkan dosen.
+
+\Sub{Bagian A: program (50 poin)}
+Buat program C++ yang menampilkan kartu perkenalan dengan informasi berikut. Kumpulkan lewat tautan GDB Online (Share) atau kanal yang diumumkan dosen.
+\begin{enumerate}
+\item Header dengan border (karakter \texttt{=} atau \texttt{*})
+\item Nama lengkap
+\item NIM
+\item Asal kota
+\item Hobi, minimal dua
+\item Cita-cita setelah lulus
+\item Footer dengan border; gunakan minimal satu \texttt{\textbackslash{}t} dan satu \texttt{\textbackslash{}"}
+\end{enumerate}
+\begin{Contoh}[Bonus, tidak wajib]
+Kreasikan desain kartu, misalnya bingkai ganda atau inisial nama dalam ASCII art.
+\end{Contoh}
+\Sub{Bagian B: penjelasan (50 poin)}
+Komentar maksimal 150 kata di atas program: peran \texttt{\#include}, \texttt{main}, dan \texttt{return 0} dengan kalimat kalian sendiri, ditambah satu error yang kalian temui, bunyi pesannya, dan cara memperbaikinya.
+
+\Sub{Rubrik Tugas 1}
+\par\vspace{4pt}\noindent{\fontsize{8.5pt}{11.5pt}\selectfont
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.190\textwidth}>{\raggedright\arraybackslash}p{0.070\textwidth}>{\raggedright\arraybackslash}p{0.200\textwidth}>{\raggedright\arraybackslash}p{0.180\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}>{\raggedright\arraybackslash}p{0.170\textwidth}@{}}
+\kepala{Kriteria} & \kepala{Poin} & \kepala{Sangat baik 85–100} & \kepala{Baik 70–84} & \kepala{Cukup 55–69} & \kepala{Kurang <55}\\
+A1 Program berjalan & 20 & tanpa error dan peringatan & ada peringatan & perlu satu perbaikan & tidak terkompilasi\\\garis
+A2 Kelengkapan informasi & 15 & tujuh unsur lengkap & enam unsur & lima unsur & empat atau kurang\\\garis
+A3 Format dan kerapian & 15 & rapi, \texttt{\textbackslash{}t} dan \texttt{\textbackslash{}"} tepat & satu escape belum dipakai & ada baris tidak rata & berantakan\\\garis
+B1 Penjelasan struktur & 30 & tiga bagian tepat & satu kurang tepat & hanya dua bagian & satu atau disalin\\\garis
+B2 Cerita error dan pengujian & 20 & pesan, sebab, perbaikan, uji & pesan tidak dikutip & hanya perbaikan & tidak ada\\
+\garisdasar
+\end{tabular}}\par\vspace{6pt}
+Nilai kriteria = poin × skor level. Contoh: A1 di level Baik dengan skor 80 memberi 20 × 0,80 = 16 poin.
+
+\Bagian{Penutup}{Bacaan lanjut dan persiapan minggu depan}
+\begin{enumerate}
+\item Deitel, P. dan Deitel, H. C++ How to Program, edisi ke-10, Bab 2.
+\item Stroustrup, B. Programming: Principles and Practice Using C++, edisi ke-2, Bab 2.
+\item learncpp.com, Bab 0 dan 1.
+\item GDB Online, onlinegdb.com.
+\item Slide \texttt{01 Slide/P1 Hello World dan Struktur Program C++.pdf} dan hands-on di \texttt{02 Hands-on/P1 - Hello World - Hands-on/}.
+\end{enumerate}
+\begin{Penting}[Minggu depan]
+Pertemuan 2 membahas variabel, tipe data, ekspresi, serta input dengan \texttt{cin}, sejalan dengan Algoritma Pertemuan 2.
+\end{Penting}
+\end{document}

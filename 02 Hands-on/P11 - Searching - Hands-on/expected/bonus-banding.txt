@@ -1,0 +1,4 @@
+1: linear 1, binary 6
+99: linear 50, binary 1
+199: linear 100, binary 7
+200: linear 100, binary 7

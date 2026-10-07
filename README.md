@@ -1,107 +1,142 @@
-# IF25-11002-Praktikum-Pemrograman
+# IF25-11002 Praktikum Pemrograman
 
-Mata kuliah Praktikum Pemrograman mengimplementasikan konsep algoritma dan logika pemrograman mahasiswa Teknik Informatika ke dalam bahasa C++ secara *hands-on*, sebagai pasangan sinergi dari mata kuliah [**Algoritma Pemrograman (IF25-11001)**](https://github.com/informatika-itera/IF25-11001-Algoritma-Pemrograman) yang membangun fondasi *computational thinking*, pseudocode, dan flowchart-nya.
+Praktikum Pemrograman melatih mahasiswa Teknik Informatika menerjemahkan algoritma ke dalam program C++ yang berjalan, lalu menjelaskan mengapa program itu berjalan. Mata kuliah ini berpasangan dengan [Algoritma Pemrograman (IF25-11001)](https://github.com/informatika-itera/IF25-11001-Algoritma-Pemrograman): topik yang sama dibahas di minggu yang sama, Algoritma lewat pseudocode dan flowchart, Praktikum lewat kode C++.
 
-Repo ini berisi seluruh materi ajar: slide deck per pertemuan, RPS, contoh UTS/UAS beserta kunci jawaban, dan dokumen sinkronisasi dengan Algoritma.
+Setiap pertemuan punya tiga bahan yang saling melengkapi: slide di `01 Slide/` untuk kelas, hands-on di `02 Hands-on/` untuk latihan bertingkat, dan modul di `03 Modul/` untuk belajar mandiri. Dokumen resmi mata kuliah ada di akar repo: [Rencana Pembelajaran Semester](Rencana%20Pembelajaran%20Semester.pdf) dan [Kontrak Kuliah](Kontrak%20Kuliah.pdf).
 
-## Informasi Umum
+## Identitas Mata Kuliah
 
-| | |
+| Data | Deskripsi |
 |---|---|
-| Kode Mata Kuliah | IF25-11002 |
-| Nama Mata Kuliah | Praktikum Pemrograman |
-| Bobot | 2 SKS (Praktikum) |
-| Program Studi | S1 Teknik Informatika |
-| Institusi | Institut Teknologi Sumatera (ITERA) |
-| Dosen Penyusun | [M Habib Algifari](https://github.com/mh4Scripts) |
-| Bahasa dan Platform | C++ · Replit / GDB Online |
-| Mata Kuliah Sinergi | IF25-11001 - Algoritma Pemrograman (2 SKS) |
+| Kode | IF25-11002 |
+| Nama | Praktikum Pemrograman |
+| Bobot | 2 SKS praktikum (16 pertemuan × 150 menit) |
+| Semester | 1 (Ganjil) |
+| Prasyarat | Tidak ada |
+| Mata kuliah pasangan | IF25-11001 Algoritma Pemrograman |
+| Program Studi | S1 Teknik Informatika, Institut Teknologi Sumatera |
+| Bahasa dan alat | C++17; GDB Online di kelas, g++ di komputer sendiri (pilihan) |
+| Tim pengajar | Tim Pengajar Praktikum Pemrograman, Program Studi Teknik Informatika ITERA |
+| Tahun | 2026 |
+
+## Capaian Pembelajaran
+
+**CPL06** — Mampu menganalisis dan mengimplementasi konsep dasar matematika, statistika, algoritma dan sistem komputer sebagai fondasi komputasional.
+
+| CPMK | Deskripsi | Diukur lewat |
+|---|---|---|
+| CPMK0607 | Mahasiswa mampu **menerapkan** konsep dasar algoritma dan sistem komputer untuk menyelesaikan masalah komputasi | Bagian A setiap instrumen (implementasi kode) |
+| CPMK0608 | Mahasiswa mampu **menjelaskan** konsep dasar algoritma dan sistem komputer untuk menyelesaikan masalah komputasi | Bagian B setiap instrumen (tracing dan penjelasan) |
+
+Setiap pertemuan menurunkan dua CPMK ini menjadi Sub-CPMK n.1 (menerapkan) dan n.2 (menjelaskan). Daftar lengkapnya ada di RPS.
+
+## Siklus Setiap Pertemuan
+
+| Fase | Waktu | Isi |
+|---|---|---|
+| Review | 15 menit | Mengulang pertemuan sebelumnya dan masalah pembuka |
+| Struggle | 25 menit | Tantangan yang memancing kebutuhan konsep baru |
+| Materi | 40 menit | Penjelasan dengan pola tebak lalu buktikan: setiap contoh kode ditebak dulu keluarannya |
+| Hands-on | 45 menit | Latihan bertingkat di `02 Hands-on/` |
+| Exit Ticket | 25 menit | Asesmen individual tanpa bantuan |
 
 ## Peta 16 Pertemuan
 
-| Pertemuan | Topik | Fase |
-|---|---|---|
-| P1 | Hello World | Pondasi |
-| P2 | Variabel, Tipe Data dan I/O | Pondasi |
-| P3 | Operator dan Ekspresi | Pondasi |
-| P4 | Percabangan (if / switch) | Kontrol Alur |
-| P5 | Perulangan 1 | Kontrol Alur |
-| P6 | Perulangan 2 dan Pattern | Kontrol Alur |
-| P7 | Review dan Latihan Intensif | UTS |
-| P8 | UTS | UTS |
-| P9 | Array 1 Dimensi | Struktur Data |
-| P10 | Array 2 Dimensi (Matrix) | Struktur Data |
-| P11 | String dan Character Array | Struktur Data |
-| P12 | Function | Abstraksi |
-| P13 | Rekursi | Abstraksi |
-| P14 | Struct | Abstraksi |
-| P15 | File Handling | Persistensi Data |
-| P16 | UAS | UAS |
+Peta ini disamakan dengan Algoritma Pemrograman agar pasangan topik jatuh di minggu yang sama.
 
-## Capaian Pembelajaran dan Skema Penilaian
-
-Penilaian mengacu pada dua CPMK yang dinilai paralel pada **setiap instrumen** — Exit Ticket, Tugas, UTS, maupun UAS — bukan hanya per pertemuan. CPMK0607 (Menerapkan) dinilai lewat Bagian A (implementasi kode) dan CPMK0608 (Menjelaskan) lewat Bagian B (tracing/konsep) pada setiap instrumen tersebut, sehingga masing-masing CPMK **dijamin secara matematis** berkontribusi tepat 50 poin terhadap nilai akhir (total 100), bukan sekadar pendekatan.
-
-| Komponen | Bobot | CPMK0607 | CPMK0608 |
+| Pertemuan | Topik Praktikum | Pasangan di Algoritma | Tugas |
 |---|---|---|---|
-| Exit Ticket (P1–P7, P9–P15) | 25% | 12,5 | 12,5 |
-| Tugas Mingguan (P1–P7, P9–P15) | 25% | 12,5 | 12,5 |
-| UTS (P8) | 25% | 12,5 | 12,5 |
-| UAS (P16) | 25% | 12,5 | 12,5 |
-| **TOTAL** | **100%** | **50** | **50** |
+| P1 | Hello World dan Struktur Program C++ | Computational Thinking | Tugas 1: Kartu Perkenalan Digital |
+| P2 | Variabel, Tipe Data, Ekspresi, dan Input | Tipe Data, Variabel dan Ekspresi | Tugas 2: Program Pendaftaran Mahasiswa Baru |
+| P3 | Operator dan Precedence | Operator dan Precedence | Tugas 3: Kalkulator Lengkap dengan Validasi |
+| P4 | Percabangan | Percabangan | Tugas 4: Sistem Tiket Bioskop |
+| P5 | Perulangan Bagian 1 | Perulangan Bagian 1 | Tugas 5: Program Statistik Nilai |
+| P6 | Perulangan Bagian 2 dan Pola | Perulangan Bagian 2 dan Pattern | Tugas 6: Pattern Generator |
+| P7 | Review dan Simulasi UTS | Review dan Simulasi UTS | tanpa tugas (simulasi ujian) |
+| P8 | **Ujian Tengah Semester** | UTS | contoh soal, kisi-kisi, kunci di-gitignore |
+| P9 | Array Satu Dimensi | Array 1D | Tugas 9: Sistem Nilai Mahasiswa |
+| P10 | Array Dua Dimensi dan String | Array 2D dan String | Tugas 10: Sistem Nilai Kelas |
+| P11 | Searching | Searching | Tugas 11: Direktori Kontak |
+| P12 | Sorting | Sorting | Tugas 12: Sistem Leaderboard |
+| P13 | Fungsi dan Modularitas | Fungsi dan Modularitas | Tugas 13: Library Matematika |
+| P14 | Rekursi dan Struct | Rekursi dan Struct | Tugas 14: Perpustakaan Mini dengan Struct dan Rekursi |
+| P15 | Review dan Simulasi UAS | Review dan Simulasi UAS | tanpa tugas (simulasi ujian) |
+| P16 | **Ujian Akhir Semester** | UAS | contoh soal, kisi-kisi, kunci di-gitignore |
 
-**Catatan kelulusan:** nilai minimum lulus per CPMK adalah 50 (dari skala capaian 0–100 pada CPMK tersebut, sebelum dikalikan bobot). Jika salah satu CPMK tidak lulus, mahasiswa wajib mengikuti remedial agar dapat lulus mata kuliah.
+## Penilaian
 
-Pertemuan 8 (UTS) dan Pertemuan 16 (UAS) adalah pelaksanaan ujian; masing-masing terdiri dari 4 soal komprehensif (100 poin), setiap soal terbagi rata 50% Bagian A (implementasi) dan 50% Bagian B (tracing/konsep).
+Setiap instrumen dibagi rata menjadi **Bagian A** (implementasi kode, CPMK0607) dan **Bagian B** (tracing dan penjelasan, CPMK0608).
 
-## Tugas Mingguan (Take-Home Project)
+| Komponen | Pelaksanaan | Bobot | CPMK0607 | CPMK0608 |
+|---|---|---|---|---|
+| Exit Ticket | 14 kali (P1–P7, P9–P15), rata-rata | 25% | 12,5 | 12,5 |
+| Tugas | 12 kali (P1–P6, P9–P14), rata-rata | 25% | 12,5 | 12,5 |
+| UTS | P8, 4 soal, 120 menit | 25% | 12,5 | 12,5 |
+| UAS | P16, 4 soal, 150 menit | 25% | 12,5 | 12,5 |
+| **Total** | | **100%** | **50** | **50** |
 
-Peran setara PBL pada Praktikum diwujudkan sebagai proyek mingguan per topik, dikumpulkan sebelum pertemuan berikutnya.
+Karena setiap komponen selalu memberi setengah poinnya ke tiap CPMK, kontribusi setiap CPMK pasti 50 poin. Nilai minimum lulus setiap CPMK adalah 50; di bawah itu ada remedial. Setiap tugas dinilai dengan rubrik empat level (Sangat baik 85–100, Baik 70–84, Cukup 55–69, Kurang di bawah 55) dan lima kriteria: A1 program berjalan (20), A2 dan A3 kriteria isi (15 dan 15), B1 penjelasan (30), dan B2 cerita error dan pengujian (20). Konversi nilai huruf mengikuti A-03 Standar Penilaian Pembelajaran ITERA.
 
-| Pertemuan | Tugas | Fokus |
-|---|---|---|
-| P1 | Program Pendaftaran Mahasiswa Baru | Variabel, I/O dasar |
-| P4 | Sistem Tiket Bioskop | Percabangan, ternary |
-| P6 | Pattern Generator | Nested loop, pola |
-| P9 | Sistem Nilai Mahasiswa | Array 1D, statistik |
-| P10 | Sistem Nilai Kelas | Array 2D, matrix |
-| P11 | Text Analyzer | String, manipulasi karakter |
-| P12 | Library Matematika | Function, modularitas |
-| P13 | Library Rekursi | Rekursi |
-| P14 | Sistem Manajemen Toko Sederhana | Struct, array of struct |
-| P15 | Sistem Perpustakaan dengan File | Struct + file handling |
+**Penggunaan AI.** Boleh dipakai saat hands-on dan tugas untuk memahami pesan error atau konsep, tidak untuk meminta solusi utuh. Exit Ticket, UTS, dan UAS dikerjakan tanpa AI.
 
-## Sinergi dengan Algoritma Pemrograman
+## Bahan per Pertemuan
 
-Setiap pertemuan Praktikum (2 SKS Hands-on) dirancang sejajar dengan Algoritma Pemrograman — IF25-11001 (2 SKS Teori): konsep dan pseudocode dibahas terlebih dahulu di Algoritma, lalu diimplementasikan dalam C++ pada sesi Praktikum di minggu yang sama.
+| P | Slide | Hands-on | Modul |
+|---|---|---|---|
+| P1 | `01 Slide/P1 Hello World dan Struktur Program C++.pdf` | `02 Hands-on/P1 - Hello World - Hands-on/` | `03 Modul/Modul 01 - Hello World dan Struktur Program C++.pdf` |
+| P2 | `01 Slide/P2 Variabel, Tipe Data, Ekspresi, dan Input.pdf` | `02 Hands-on/P2 - Variabel dan Input - Hands-on/` | `03 Modul/Modul 02 - Variabel, Tipe Data, Ekspresi, dan Input.pdf` |
+| P3 | `01 Slide/P3 Operator dan Precedence.pdf` | `02 Hands-on/P3 - Operator - Hands-on/` | `03 Modul/Modul 03 - Operator dan Precedence.pdf` |
+| P4 | `01 Slide/P4 Percabangan.pdf` | `02 Hands-on/P4 - Percabangan - Hands-on/` | `03 Modul/Modul 04 - Percabangan.pdf` |
+| P5 | `01 Slide/P5 Perulangan Bagian 1.pdf` | `02 Hands-on/P5 - Perulangan 1 - Hands-on/` | `03 Modul/Modul 05 - Perulangan Bagian 1.pdf` |
+| P6 | `01 Slide/P6 Perulangan Bagian 2 dan Pola.pdf` | `02 Hands-on/P6 - Perulangan 2 dan Pola - Hands-on/` | `03 Modul/Modul 06 - Perulangan Bagian 2 dan Pola.pdf` |
+| P7 | `01 Slide/P7 Review dan Simulasi UTS.pdf` | `02 Hands-on/P7 - Review UTS - Hands-on/` | `03 Modul/Modul 07 - Review dan Simulasi UTS.pdf` |
+| P8 | `01 Slide/P8 Ujian Tengah Semester.pdf` | `02 Hands-on/P8 - UTS - Contoh Soal - Hands-on/` | `03 Modul/Modul 08 - Ujian Tengah Semester.pdf` |
+| P9 | `01 Slide/P9 Array Satu Dimensi.pdf` | `02 Hands-on/P9 - Array 1D - Hands-on/` | `03 Modul/Modul 09 - Array Satu Dimensi.pdf` |
+| P10 | `01 Slide/P10 Array Dua Dimensi dan String.pdf` | `02 Hands-on/P10 - Array 2D dan String - Hands-on/` | `03 Modul/Modul 10 - Array Dua Dimensi dan String.pdf` |
+| P11 | `01 Slide/P11 Searching.pdf` | `02 Hands-on/P11 - Searching - Hands-on/` | `03 Modul/Modul 11 - Searching.pdf` |
+| P12 | `01 Slide/P12 Sorting.pdf` | `02 Hands-on/P12 - Sorting - Hands-on/` | `03 Modul/Modul 12 - Sorting.pdf` |
+| P13 | `01 Slide/P13 Fungsi dan Modularitas.pdf` | `02 Hands-on/P13 - Fungsi - Hands-on/` | `03 Modul/Modul 13 - Fungsi dan Modularitas.pdf` |
+| P14 | `01 Slide/P14 Rekursi dan Struct.pdf` | `02 Hands-on/P14 - Rekursi dan Struct - Hands-on/` | `03 Modul/Modul 14 - Rekursi dan Struct.pdf` |
+| P15 | `01 Slide/P15 Review dan Simulasi UAS.pdf` | `02 Hands-on/P15 - Review UAS - Hands-on/` | `03 Modul/Modul 15 - Review dan Simulasi UAS.pdf` |
+| P16 | `01 Slide/P16 Ujian Akhir Semester.pdf` | `02 Hands-on/P16 - UAS - Contoh Soal - Hands-on/` | `03 Modul/Modul 16 - Ujian Akhir Semester.pdf` |
 
-## Struktur Direktori
+Setiap slide punya pasangan `... - Catatan Pembicara.pdf` untuk tim pengajar.
+
+## Struktur Repo
 
 ```
 .
 ├── README.md
-├── P1 - Hello World.pdf
-├── P2 - Variabel, TipeData dan IO.pdf
-├── P3 - Operator dan Ekspresi.pdf
-├── P4 - Percabangan.pdf
-├── P5 - Perulangan Bagian 1.pdf
-├── P6 - Perulangan Bagian 2 dan Pattern.pdf
-├── P7 - Review Intensif.pdf
-├── P8 - Contoh Soal UTS.pdf
-├── P9 - Array 1D.pdf
-├── P10 - Array 2D.pdf
-├── P11 - String.pdf
-├── P12 - Function.pdf
-├── P13 - Rekursi.pdf
-├── P14 - Struct.pdf
-├── P15 - File Handling.pdf
-├── P16 - Contoh Soal UAS (coming soon).pdf
-└── Rencana Pembelajaran Semester (coming soon).pdf
+├── Rencana Pembelajaran Semester.pdf
+├── Kontrak Kuliah.pdf
+├── 01 Slide/          # slide PDF dan catatan pembicara; sumber Beamer di src/
+├── 02 Hands-on/       # satu folder per pertemuan: latihan/, expected/, input/, cek.sh, README
+├── 03 Modul/          # modul belajar mandiri PDF; sumber LaTeX di src/
+└── tools/             # generator: data per pertemuan, build.py, dokumen.py, pptx_render.js
 ```
 
-## Referensi Utama
+Folder `solusi/` di setiap hands-on dan berkas `tools/konten/**/*.solusi.cpp` berisi kunci dan tercantum di `.gitignore`, sehingga tidak ikut ter-commit.
 
-- Deitel, P. dan Deitel, H. — *C++ How to Program* (10th ed.)
-- Stroustrup, B. — *Programming: Principles and Practice Using C++* (2nd ed.)
-- Gaddis, T. — *Starting Out with C++*
-- learncpp.com · cplusplus.com · geeksforgeeks.org
+## Cara Kerja Hands-on
+
+Setiap folder hands-on berisi `latihan/` (file dengan bagian `TODO`), `expected/` (keluaran yang benar), `input/` (masukan uji bila program membaca `cin`), dan `cek.sh`. Jalankan `bash cek.sh` untuk mengompilasi setiap latihan dengan `-std=c++17 -Wall -Werror`, memberi masukan dari `input/`, dan mencocokkan keluarannya dengan `expected/`. Di GDB Online, bandingkan keluaran secara manual.
+
+## Memperbarui Bahan
+
+Semua bahan dihasilkan dari satu sumber data per pertemuan di `tools/konten/pNN.py` beserta kode hands-on di `tools/konten/pNN/`. Ubah datanya, lalu bangun ulang:
+
+```bash
+python3 tools/build.py 5          # slide, catatan, modul, dan hands-on Pertemuan 5
+python3 tools/build.py            # semua pertemuan
+python3 tools/dokumen.py          # RPS dan Kontrak Kuliah
+python3 tools/build.py --spec /tmp/spec && node tools/pptx_render.js /tmp/spec "keluaran-pptx"   # versi PPTX
+```
+
+Generator menjamin konsistensi: semua keluaran program dan pesan error di slide dan modul diambil dari kompilasi g++ yang sebenarnya, solusi hands-on harus lulus `cek.sh` sebelum bahan dibuat, dan contoh kode yang terlalu panjang untuk satu slide ditolak. Kebutuhan: Python 3, g++, XeLaTeX (TeX Live), Node.js dengan `pptxgenjs`, serta font Poppins, Open Sans, dan JetBrains Mono (semuanya gratis di Google Fonts). Font yang sama perlu terpasang untuk membuka versi PPTX dengan tampilan yang sesuai.
+
+## Referensi
+
+1. Deitel, P. dan Deitel, H. *C++ How to Program*, edisi ke-10. Pearson.
+2. Stroustrup, B. *Programming: Principles and Practice Using C++*, edisi ke-2. Addison-Wesley.
+3. Gaddis, T. *Starting Out with C++*. Pearson.
+4. [learncpp.com](https://www.learncpp.com/), [cppreference.com](https://cppreference.com/), [GDB Online](https://www.onlinegdb.com/online_c++_compiler)
