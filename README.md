@@ -112,8 +112,6 @@ Karena setiap komponen selalu memberi setengah poinnya ke tiap CPMK, kontribusi 
 | P15 | `01 Slide/P15 Review dan Simulasi UAS.pdf` | `02 Hands-on/P15 - Review UAS - Hands-on/` | `03 Modul/Modul 15 - Review dan Simulasi UAS.pdf` |
 | P16 | `01 Slide/P16 Ujian Akhir Semester.pdf` | `02 Hands-on/P16 - UAS - Contoh Soal - Hands-on/` | `03 Modul/Modul 16 - Ujian Akhir Semester.pdf` |
 
-Catatan pembicara untuk tim pengajar tersimpan sebagai `\note{}` di sumber Beamer `01 Slide/src/PNN.tex`.
-
 ## Struktur Repo
 
 ```
@@ -122,10 +120,8 @@ Catatan pembicara untuk tim pengajar tersimpan sebagai `\note{}` di sumber Beame
 ├── Rencana Pembelajaran Semester.pdf
 ├── Kontrak Kuliah.pdf
 ├── 01 Slide/          # 16 slide PDF
-│   └── src/           # sumber Beamer P01–P16.tex, tema ITERA, logo, keluaran/ (hasil run program per pertemuan)
 ├── 02 Hands-on/       # satu folder per pertemuan: latihan/, expected/, input/, solusi/, cek.sh, README.md
 └── 03 Modul/          # 16 modul belajar mandiri PDF dan README.md
-    └── src/           # sumber LaTeX Modul01–16.tex, RPS.tex, Kontrak.tex, modulITERA.sty, logo
 ```
 
 Folder `solusi/` di setiap hands-on berisi kunci jawaban latihan.
@@ -136,14 +132,7 @@ Setiap folder hands-on berisi `latihan/` (file dengan bagian `TODO`), `expected/
 
 ## Memperbarui Bahan
 
-Sumber slide ada di `01 Slide/src/PNN.tex` (Beamer, tema `beamerthemeITERA.sty`), sumber modul di `03 Modul/src/ModulNN.tex` (gaya `modulITERA.sty`), serta RPS dan Kontrak Kuliah di `03 Modul/src/RPS.tex` dan `03 Modul/src/Kontrak.tex`. Kompilasi dengan XeLaTeX dari folder `src/` masing-masing, lalu salin PDF hasilnya ke folder induknya, misalnya:
-
-```bash
-(cd "01 Slide/src" && xelatex P05.tex)
-(cd "03 Modul/src" && xelatex Modul05.tex)
-```
-
-Kebutuhan: g++ (C++17), XeLaTeX (TeX Live), serta font Poppins, Open Sans, dan JetBrains Mono (gratis di Google Fonts). Jika kode contoh di slide atau modul diubah, perbarui juga keluarannya di `01 Slide/src/keluaran/PNN/` dan pastikan solusi hands-on tetap lulus `bash cek.sh`.
+Sumber LaTeX slide, modul, RPS, dan Kontrak Kuliah tidak disertakan di repo ini (folder `src/` diabaikan lewat `.gitignore`); yang dipublikasikan hanya PDF hasilnya. Jika kode contoh di slide atau modul diubah, pastikan solusi hands-on tetap lulus `bash cek.sh` (butuh g++ C++17).
 
 ## Referensi
 

@@ -1,2 +1,0 @@
-Jumlah: 55
-Genap : 5

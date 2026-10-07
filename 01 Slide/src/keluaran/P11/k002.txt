@@ -1,3 +1,0 @@
-indeks 1
-indeks 5
-muncul 2 kali
