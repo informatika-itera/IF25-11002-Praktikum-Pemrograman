@@ -16,20 +16,8 @@ Setiap pertemuan punya tiga bahan yang saling melengkapi: slide di `01 Slide/` u
 | Mata kuliah pasangan | IF25-11001 Algoritma Pemrograman |
 | Program Studi | S1 Teknik Informatika, Institut Teknologi Sumatera |
 | Bahasa dan alat | C++17; GDB Online di kelas, g++ di komputer sendiri (pilihan) |
-| Tim pengajar | Lihat [Tim Pengajar](#tim-pengajar) |
+| Tim pengajar | Tim Pengajar Praktikum Pemrograman, Program Studi Teknik Informatika ITERA |
 | Tahun | 2026 |
-
-## Tim Pengajar
-
-| No | Nama | Gelar |
-|---|---|---|
-| 1 | I Wayan Wiprayoga Wisesa | S.Kom., M.Kom. |
-| 2 | Eko Dwi Nugroho | S.Kom., M.Cs. |
-| 3 | Arkham Zahri Rakhman | S.Kom., M.Eng. |
-| 4 | Leslie Anggraini | S.Kom., M.Cs. |
-| 5 | Muhammad Habib Algifari | S.Kom., M.T.I. |
-
-Dosen Program Studi Teknik Informatika, Institut Teknologi Sumatera ([daftar staf](https://if.itera.ac.id/staff/)).
 
 ## Capaian Pembelajaran
 
@@ -65,7 +53,7 @@ Peta ini disamakan dengan Algoritma Pemrograman agar pasangan topik jatuh di min
 | P5 | Perulangan Bagian 1 | Perulangan Bagian 1 | Tugas 5: Program Statistik Nilai |
 | P6 | Perulangan Bagian 2 dan Pola | Perulangan Bagian 2 dan Pattern | Tugas 6: Pattern Generator |
 | P7 | Review dan Simulasi UTS | Review dan Simulasi UTS | tanpa tugas (simulasi ujian) |
-| P8 | **Ujian Tengah Semester** | UTS | contoh soal dan kisi-kisi |
+| P8 | **Ujian Tengah Semester** | UTS | contoh soal, kisi-kisi, kunci di-gitignore |
 | P9 | Array Satu Dimensi | Array 1D | Tugas 9: Sistem Nilai Mahasiswa |
 | P10 | Array Dua Dimensi dan String | Array 2D dan String | Tugas 10: Sistem Nilai Kelas |
 | P11 | Searching | Searching | Tugas 11: Direktori Kontak |
@@ -73,7 +61,7 @@ Peta ini disamakan dengan Algoritma Pemrograman agar pasangan topik jatuh di min
 | P13 | Fungsi dan Modularitas | Fungsi dan Modularitas | Tugas 13: Library Matematika |
 | P14 | Rekursi dan Struct | Rekursi dan Struct | Tugas 14: Perpustakaan Mini dengan Struct dan Rekursi |
 | P15 | Review dan Simulasi UAS | Review dan Simulasi UAS | tanpa tugas (simulasi ujian) |
-| P16 | **Ujian Akhir Semester** | UAS | contoh soal dan kisi-kisi |
+| P16 | **Ujian Akhir Semester** | UAS | contoh soal, kisi-kisi, kunci di-gitignore |
 
 ## Penilaian
 
@@ -112,6 +100,7 @@ Karena setiap komponen selalu memberi setengah poinnya ke tiap CPMK, kontribusi 
 | P15 | `01 Slide/P15 Review dan Simulasi UAS.pdf` | `02 Hands-on/P15 - Review UAS - Hands-on/` | `03 Modul/Modul 15 - Review dan Simulasi UAS.pdf` |
 | P16 | `01 Slide/P16 Ujian Akhir Semester.pdf` | `02 Hands-on/P16 - UAS - Contoh Soal - Hands-on/` | `03 Modul/Modul 16 - Ujian Akhir Semester.pdf` |
 
+
 ## Struktur Repo
 
 ```
@@ -119,20 +108,20 @@ Karena setiap komponen selalu memberi setengah poinnya ke tiap CPMK, kontribusi 
 ├── README.md
 ├── Rencana Pembelajaran Semester.pdf
 ├── Kontrak Kuliah.pdf
-├── 01 Slide/          # 16 slide PDF
-├── 02 Hands-on/       # satu folder per pertemuan: latihan/, expected/, input/, solusi/, cek.sh, README.md
-└── 03 Modul/          # 16 modul belajar mandiri PDF dan README.md
+├── 01 Slide/          # slide PDF per pertemuan
+├── 02 Hands-on/       # satu folder per pertemuan: latihan/, expected/, input/, cek.sh, README
+└── 03 Modul/          # modul belajar mandiri PDF
 ```
 
-Folder `solusi/` di setiap hands-on berisi kunci jawaban latihan.
+Kunci hands-on (`solusi/`) dan sumber bahan (`src/`) disimpan tim pengajar dan tercantum di `.gitignore`, sehingga tidak ikut ter-commit. Versi PowerPoint setiap slide dibagikan terpisah.
 
 ## Cara Kerja Hands-on
 
-Setiap folder hands-on berisi `latihan/` (file dengan bagian `TODO`), `expected/` (keluaran yang benar), `input/` (masukan uji bila program membaca `cin`; P1 tidak punya karena belum ada input), `solusi/`, dan `cek.sh`. Jalankan `bash cek.sh` untuk mengompilasi setiap latihan dengan `-std=c++17 -Wall -Werror`, memberi masukan dari `input/`, dan mencocokkan keluarannya dengan `expected/`. Di GDB Online, bandingkan keluaran secara manual.
+Setiap folder hands-on berisi `latihan/` (file dengan bagian `TODO`), `expected/` (keluaran yang benar), `input/` (masukan uji bila program membaca `cin`), dan `cek.sh`. Jalankan `bash cek.sh` untuk mengompilasi setiap latihan dengan `-std=c++17 -Wall -Werror`, memberi masukan dari `input/`, dan mencocokkan keluarannya dengan `expected/`. Di GDB Online, bandingkan keluaran secara manual.
 
 ## Memperbarui Bahan
 
-Jika kode contoh di slide atau modul diubah, pastikan solusi hands-on tetap lulus `bash cek.sh` (butuh g++ C++17).
+Semua bahan dihasilkan dari satu sumber data per pertemuan yang disimpan tim pengajar di `src/tools/konten/` (tidak ikut ter-commit). Dari sumber itu dibuat slide PDF (HTML 1920×1080 yang dicetak dengan Chromium, gaya yang sama dengan repo Pengembangan Aplikasi Mobile), versi PPTX, modul, hands-on, RPS, dan Kontrak Kuliah. Semua keluaran program dan pesan error di slide dan modul diambil dari kompilasi g++ yang sebenarnya, dan solusi hands-on harus lulus `cek.sh` sebelum bahan dibuat.
 
 ## Referensi
 

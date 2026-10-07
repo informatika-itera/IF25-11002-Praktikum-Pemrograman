@@ -20,3 +20,5 @@ Modul belajar mandiri per pertemuan, mengikuti template modul Pengembangan Aplik
 | Modul 14 | P14 | `Modul 14 - Rekursi dan Struct.pdf` |
 | Modul 15 | P15 | `Modul 15 - Review dan Simulasi UAS.pdf` |
 | Modul 16 | P16 | `Modul 16 - Ujian Akhir Semester.pdf` |
+
+Sumber LaTeX ada di `src/` dan dihasilkan oleh `python3 tools/build.py`.
