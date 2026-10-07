@@ -132,7 +132,7 @@ Setiap folder hands-on berisi `latihan/` (file dengan bagian `TODO`), `expected/
 
 ## Memperbarui Bahan
 
-Sumber LaTeX slide, modul, RPS, dan Kontrak Kuliah tidak disertakan di repo ini (folder `src/` diabaikan lewat `.gitignore`); yang dipublikasikan hanya PDF hasilnya. Jika kode contoh di slide atau modul diubah, pastikan solusi hands-on tetap lulus `bash cek.sh` (butuh g++ C++17).
+Jika kode contoh di slide atau modul diubah, pastikan solusi hands-on tetap lulus `bash cek.sh` (butuh g++ C++17).
 
 ## Referensi
 

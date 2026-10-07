@@ -1,2 +1,4 @@
-# Sumber LaTeX slide dan modul tidak disertakan di repo
 src/
+
+# State lokal oh-my-claudecode
+.omc/
