@@ -1,0 +1,7 @@
+5
+L04 Proyektor 3
+L01 Laptop 20
+L05 Router 4
+L02 Monitor 18
+L03 Keyboard 25
+L03 L06 L01

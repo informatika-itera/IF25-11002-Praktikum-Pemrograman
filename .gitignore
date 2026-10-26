@@ -1,0 +1,7 @@
+src/
+.omc/
+.DS_Store
+
+solusi
+expected
+*.sh
